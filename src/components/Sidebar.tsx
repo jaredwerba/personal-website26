@@ -90,7 +90,7 @@ const NAV_ITEMS: NavItem[] = [
   { id: "software", label: "SOFTWARE", href: "/software", icon: <IconCode /> },
   { id: "sales", label: "SALES", href: "/sales", icon: <IconTrending /> },
   { id: "x", label: "X", href: "https://x.com/jaredwerba", icon: <IconX />, external: true },
-  { id: "linkedin", label: "LINKEDIN", href: "https://linkedin.com/in/jaredwerba", icon: <IconLinkedin />, external: true },
+  { id: "linkedin", label: "LINKEDIN", href: "https://www.linkedin.com/in/jwerba", icon: <IconLinkedin />, external: true },
 ];
 
 function NavIcon({ item, active }: { item: NavItem; active: boolean }) {

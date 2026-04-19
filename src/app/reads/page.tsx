@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect } from "react";
 import {
   Badge,
   Divider,
@@ -85,14 +85,9 @@ function formatDate(dateStr: string): string {
   return d.toLocaleDateString("en-US", { year: "numeric", month: "short" });
 }
 
-type SortKey = "title" | "author" | "rating" | "date";
-type SortDir = "asc" | "desc" | null;
-
 export default function ReadsPage() {
   const [books, setBooks] = useState<BookEntry[]>([]);
   const [loaded, setLoaded] = useState(false);
-  const [sortKey, setSortKey] = useState<SortKey | null>(null);
-  const [sortDir, setSortDir] = useState<SortDir>(null);
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -110,45 +105,6 @@ export default function ReadsPage() {
       })
       .catch(() => {});
   }, []);
-
-  const handleSort = useCallback((key: SortKey) => {
-    if (sortKey !== key) {
-      setSortKey(key);
-      setSortDir("asc");
-    } else if (sortDir === "asc") {
-      setSortDir("desc");
-    } else {
-      setSortKey(null);
-      setSortDir(null);
-    }
-  }, [sortKey, sortDir]);
-
-  const sortedBooks = useMemo(() => {
-    if (!sortKey || !sortDir) return books;
-    return [...books].sort((a, b) => {
-      let cmp = 0;
-      switch (sortKey) {
-        case "rating":
-          cmp = a.rating - b.rating;
-          break;
-        case "title":
-          cmp = a.title.localeCompare(b.title);
-          break;
-        case "author":
-          cmp = a.author.localeCompare(b.author);
-          break;
-        case "date":
-          cmp = (a.dateRead || "").localeCompare(b.dateRead || "");
-          break;
-      }
-      return sortDir === "desc" ? -cmp : cmp;
-    });
-  }, [books, sortKey, sortDir]);
-
-  const sortIndicator = (key: SortKey) => {
-    if (sortKey !== key) return "—";
-    return sortDir === "asc" ? "▲" : "▼";
-  };
 
   return (
     <div className="space-y-2">
@@ -174,39 +130,12 @@ export default function ReadsPage() {
             </span>
           </div>
 
-          {/* Sort controls */}
-          <div className="flex items-center gap-1 px-2 py-1 border-b border-nerv-mid-gray/30 bg-nerv-cyan/5 overflow-x-auto">
-            <span className="text-[9px] font-nerv-mono text-nerv-mid-gray shrink-0 mr-1">SORT:</span>
-            {([
-              { key: "title" as SortKey, label: "TITLE" },
-              { key: "author" as SortKey, label: "AUTHOR" },
-              { key: "rating" as SortKey, label: "RATING" },
-              { key: "date" as SortKey, label: "DATE" },
-            ]).map((col) => (
-              <button
-                key={col.key}
-                onClick={() => handleSort(col.key)}
-                className={`px-2 py-1 text-[9px] uppercase tracking-wider font-bold cursor-pointer select-none shrink-0 border transition-colors ${
-                  sortKey === col.key
-                    ? "text-nerv-cyan border-nerv-cyan/50 bg-nerv-cyan/10"
-                    : "text-nerv-mid-gray border-nerv-mid-gray/20 hover:text-nerv-cyan"
-                }`}
-                style={{ fontFamily: "var(--font-nerv-display)" }}
-              >
-                {col.label}
-                {sortKey === col.key && (
-                  <span className="ml-1 text-[8px]">{sortDir === "asc" ? "▲" : "▼"}</span>
-                )}
-              </button>
-            ))}
-          </div>
-
           {/* Scrollable content */}
           <div className="overflow-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none]" style={{ maxHeight: "calc(100dvh - 160px)" }}>
             {isMobile ? (
               /* Mobile: stacked list */
               <div style={{ fontFamily: "var(--font-nerv-mono)" }}>
-                {sortedBooks.map((book, i) => (
+                {books.map((book, i) => (
                   <motion.div
                     key={`${i}-${book.title}`}
                     initial={{ opacity: 0 }}
@@ -249,26 +178,19 @@ export default function ReadsPage() {
                     <th className="px-2 py-2 text-[10px] uppercase tracking-wider font-bold text-left border-r border-black/20">
                       #
                     </th>
-                    {([
-                      { key: "title" as SortKey, label: "TITLE" },
-                      { key: "author" as SortKey, label: "AUTHOR" },
-                      { key: "rating" as SortKey, label: "RATING" },
-                      { key: "date" as SortKey, label: "DATE" },
-                    ]).map((col) => (
+                    {(["TITLE", "AUTHOR", "RATING", "DATE"]).map((label) => (
                       <th
-                        key={col.key}
-                        onClick={() => handleSort(col.key)}
-                        className="px-2 py-2 text-[10px] uppercase tracking-wider font-bold border-r border-black/20 last:border-r-0 cursor-pointer select-none text-left"
+                        key={label}
+                        className="px-2 py-2 text-[10px] uppercase tracking-wider font-bold border-r border-black/20 last:border-r-0 text-left"
                         style={{ fontFamily: "var(--font-nerv-display)" }}
                       >
-                        {col.label}
-                        <span className="ml-1.5 text-[8px] opacity-80">{sortIndicator(col.key)}</span>
+                        {label}
                       </th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {sortedBooks.map((book, i) => (
+                  {books.map((book, i) => (
                     <motion.tr
                       key={`${i}-${book.title}`}
                       initial={{ opacity: 0 }}

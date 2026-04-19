@@ -40,7 +40,7 @@ export default function ContactPage() {
           <Textarea
             label="MESSAGE"
             color="orange"
-            hint="Write anything you'd like to say."
+
             value={body}
             onChange={(e) => setBody(e.target.value)}
           />

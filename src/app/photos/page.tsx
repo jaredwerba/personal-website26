@@ -1,19 +1,52 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Badge,
-  Divider,
-  TerminalDisplay,
   Button,
 } from "@mdrbx/nerv-ui";
 import { motion, AnimatePresence, type PanInfo } from "framer-motion";
 
+const LOCATIONS = [
+  "ANDORRA",
+  "BOSTON",
+  "CALIFORNIA",
+  "CAMBODIA",
+  "CHINA",
+  "COLOMBIA",
+  "COLORADO",
+  "COSTA RICA",
+  "DOMINICAN REPUBLIC",
+  "DUBAI",
+  "EL SALVADOR",
+  "GUATEMALA",
+  "HONDURAS",
+  "ICELAND",
+  "ITALY",
+  "JAPAN",
+  "MAINE",
+  "MEXICO",
+  "MOROCCO",
+  "NICARAGUA",
+  "PERU",
+  "PUERTO RICO",
+  "SPAIN",
+  "THAILAND",
+  "VERMONT",
+];
+
+const COUNT_DURATION = 2200; // ms for count-up animation
+
 export default function PhotosPage() {
   const [photos, setPhotos] = useState<string[]>([]);
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [count, setCount] = useState(0);
+  const [targetCount, setTargetCount] = useState(0);
+  const [preloadDone, setPreloadDone] = useState(false);
+  const [animDone, setAnimDone] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [swipeDirection, setSwipeDirection] = useState(0);
+  const countRef = useRef(0);
 
   useEffect(() => {
     fetch("/api/photos")
@@ -25,10 +58,50 @@ export default function PhotosPage() {
           [arr[i], arr[j]] = [arr[j], arr[i]];
         }
         setPhotos(arr);
-        setLoading(false);
+        setTargetCount(arr.length);
+
+        // Preload all images in background
+        let loaded = 0;
+        const total = arr.length;
+        if (total === 0) { setPreloadDone(true); return; }
+        arr.forEach((src) => {
+          const img = new window.Image();
+          img.onload = img.onerror = () => {
+            loaded++;
+            if (loaded >= total) setPreloadDone(true);
+          };
+          img.src = src;
+        });
       })
-      .catch(() => setLoading(false));
+      .catch(() => { setPreloadDone(true); setAnimDone(true); });
   }, []);
+
+  // Count-up animation
+  useEffect(() => {
+    if (targetCount === 0) return;
+    const start = Date.now();
+    const tick = () => {
+      const elapsed = Date.now() - start;
+      const progress = Math.min(elapsed / COUNT_DURATION, 1);
+      // ease-out curve
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(eased * targetCount);
+      countRef.current = current;
+      setCount(current);
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        setCount(targetCount);
+        setAnimDone(true);
+      }
+    };
+    requestAnimationFrame(tick);
+  }, [targetCount]);
+
+  // Show grid once both preload and animation are done
+  useEffect(() => {
+    if (preloadDone && animDone) setLoading(false);
+  }, [preloadDone, animDone]);
 
   const goNext = useCallback(() => {
     if (selectedIndex === null || photos.length === 0) return;
@@ -70,29 +143,61 @@ export default function PhotosPage() {
         </h2>
         <Badge label={loading ? "—" : `${photos.length}`} variant="success" size="sm" />
       </div>
+
       {loading ? (
-        <TerminalDisplay
-          lines={["> SCANNING IMAGE DIRECTORY...", "> LOADING VISUAL ASSETS..."]}
-          typewriter
-          color="green"
-          title="SCAN.STATUS"
-          maxHeight="100px"
-        />
+        <div
+          className="border border-nerv-green/40 bg-nerv-black text-nerv-green overflow-hidden"
+          style={{ fontFamily: "var(--font-nerv-mono)" }}
+        >
+          {/* Terminal title bar */}
+          <div className="flex items-center justify-between px-3 py-1 border-b border-nerv-green/20 bg-nerv-green/5">
+            <span className="text-[10px] uppercase tracking-[0.2em] font-bold" style={{ fontFamily: "var(--font-nerv-display)" }}>
+              SCAN.STATUS
+            </span>
+            <span className="text-[10px] text-nerv-green/50">LOADING</span>
+          </div>
+
+          <div className="p-3 space-y-1 text-xs">
+            {/* Animated count line */}
+            <div className="flex items-baseline gap-2">
+              <span className="text-nerv-green/50">&gt;</span>
+              <span>
+                LOADING PHOTOS{" "}
+                <span className="text-nerv-orange font-bold tabular-nums">
+                  {count}
+                </span>
+                {targetCount > 0 && count >= targetCount ? "+" : ""}
+                {" "}/ {targetCount > 0 ? `${targetCount}+` : "..."}
+              </span>
+            </div>
+
+            {/* Locations */}
+            <div className="flex items-baseline gap-2">
+              <span className="text-nerv-green/50">&gt;</span>
+              <span className="text-nerv-green/70">LOCATIONS:</span>
+            </div>
+            <div className="pl-4 grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-0.5">
+              {LOCATIONS.map((loc, i) => (
+                <motion.span
+                  key={loc}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: i * 0.06, duration: 0.2 }}
+                  className="text-[11px] text-nerv-green/60 tracking-wider"
+                >
+                  — {loc}
+                </motion.span>
+              ))}
+            </div>
+          </div>
+        </div>
       ) : photos.length === 0 ? (
-        <TerminalDisplay
-          lines={[
-            "> NO IMAGES FOUND IN /public/photos/",
-            "> DROP IMAGE FILES INTO THE PROJECT FOLDER:",
-            ">   personal-website26/public/photos/",
-            "> SUPPORTED: .jpg .jpeg .png .gif .webp",
-            "> RELOAD PAGE AFTER ADDING FILES.",
-          ]}
-          color="green"
-          title="EMPTY.STATE"
-          typewriter
-          typeSpeed={20}
-          maxHeight="160px"
-        />
+        <div
+          className="border border-nerv-green/40 bg-nerv-black text-nerv-green p-4 text-xs"
+          style={{ fontFamily: "var(--font-nerv-mono)" }}
+        >
+          <p>&gt; NO IMAGES FOUND IN /public/photos/</p>
+        </div>
       ) : (
         <>
           <div className="flex flex-col gap-2 md:gap-3">
@@ -104,7 +209,7 @@ export default function PhotosPage() {
                 whileTap={{ scale: 0.98 }}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: i * 0.03 }}
+                transition={{ delay: i * 0.015 }}
                 onClick={() => {
                   setSwipeDirection(0);
                   setSelectedIndex(i);
@@ -114,7 +219,6 @@ export default function PhotosPage() {
                   src={photo}
                   alt={`Photo ${i + 1}`}
                   className="w-full h-auto block"
-                  loading="lazy"
                 />
               </motion.div>
             ))}
