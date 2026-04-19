@@ -2,8 +2,6 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { Badge } from "@mdrbx/nerv-ui";
-import { motion } from "framer-motion";
-import { useIsMobile } from "@/hooks/useIsMobile";
 
 interface BookEntry {
   title: string;
@@ -157,7 +155,6 @@ export default function ReadsPage() {
   const [query, setQuery] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("dateRead");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     fetch("/goodreads.csv")
@@ -197,13 +194,6 @@ export default function ReadsPage() {
     }
   }
 
-  function cycleMobileSort() {
-    const idx = SORT_KEYS.indexOf(sortKey);
-    const next = SORT_KEYS[(idx + 1) % SORT_KEYS.length];
-    setSortKey(next);
-    setSortDir(next === "dateRead" || next === "rating" ? "desc" : "asc");
-  }
-
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-3">
@@ -219,7 +209,6 @@ export default function ReadsPage() {
 
       {loaded && (
         <div className="bg-nerv-black border border-nerv-mid-gray">
-          {/* Controls bar */}
           <div className="flex items-center gap-2 px-2 py-1.5 border-b border-nerv-mid-gray bg-nerv-dark-gray">
             <span className="font-nerv-mono text-[10px] text-nerv-cyan tracking-[0.2em] shrink-0">
               &gt;
@@ -241,138 +230,85 @@ export default function ReadsPage() {
                 [X]
               </button>
             )}
-            {isMobile && (
-              <button
-                type="button"
-                onClick={cycleMobileSort}
-                className="font-nerv-mono text-[10px] text-nerv-orange border border-nerv-orange/40 px-2 py-0.5 tracking-wider shrink-0"
-              >
-                {SORT_LABELS[sortKey]} {sortDir === "asc" ? "↑" : "↓"}
-              </button>
-            )}
           </div>
 
-          {/* Scrollable content */}
           <div
             className="overflow-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
             style={{ maxHeight: "calc(100dvh - 200px)" }}
           >
-            {isMobile ? (
-              <div style={{ fontFamily: "var(--font-nerv-mono)" }}>
+            <table
+              className="w-full border-collapse table-fixed min-w-[640px]"
+              style={{ fontFamily: "var(--font-nerv-mono)" }}
+            >
+              <colgroup>
+                <col style={{ width: "36px" }} />
+                <col style={{ width: "34%" }} />
+                <col style={{ width: "22%" }} />
+                <col style={{ width: "28%" }} />
+                <col style={{ width: "16%" }} />
+              </colgroup>
+              <thead className="sticky top-0 z-10">
+                <tr className="bg-nerv-black text-nerv-cyan border-b border-nerv-cyan/30">
+                  <th className="px-2 py-2 text-[10px] uppercase tracking-wider font-bold text-left border-r border-black/20">
+                    #
+                  </th>
+                  {SORT_KEYS.map((key) => {
+                    const active = sortKey === key;
+                    return (
+                      <th
+                        key={key}
+                        className="px-2 py-2 text-[10px] uppercase tracking-wider font-bold border-r border-black/20 last:border-r-0 text-left"
+                        style={{ fontFamily: "var(--font-nerv-display)" }}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => handleSort(key)}
+                          className={`inline-flex items-center uppercase tracking-wider transition-colors hover:text-nerv-orange ${
+                            active ? "text-nerv-orange" : "text-nerv-cyan"
+                          }`}
+                        >
+                          {SORT_LABELS[key]}
+                          <SortIndicator active={active} dir={sortDir} />
+                        </button>
+                      </th>
+                    );
+                  })}
+                </tr>
+              </thead>
+              <tbody>
                 {displayed.map((book, i) => (
-                  <motion.div
+                  <tr
                     key={`${i}-${book.title}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: Math.min(i * 0.005, 1) }}
-                    className="px-3 py-1.5 border-b border-nerv-mid-gray/30 hover:bg-nerv-cyan/5 transition-colors"
+                    className="text-nerv-cyan hover:bg-nerv-cyan/5 border-b border-nerv-mid-gray/30 transition-colors duration-75 cursor-default text-xs"
                   >
-                    <div className="flex items-start gap-2">
-                      <span className="text-[10px] text-nerv-mid-gray shrink-0 pt-0.5 w-7">
-                        {String(i + 1).padStart(3, "0")}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <a
-                          href={amazonUrl(book)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="block text-xs text-nerv-cyan truncate hover:text-nerv-orange underline underline-offset-2 decoration-dotted decoration-nerv-cyan/40 hover:decoration-nerv-orange transition-colors"
-                        >
-                          {book.title}
-                        </a>
-                        <div className="text-[10px] text-nerv-mid-gray truncate">{book.author}</div>
-                        <div className="flex items-center gap-3 mt-0.5">
-                          <div className="w-36">
-                            <RatingBar value={book.rating} />
-                          </div>
-                          <span className="text-[9px] text-nerv-mid-gray/60">
-                            {formatDate(book.dateRead)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            ) : (
-              <table
-                className="w-full border-collapse table-fixed"
-                style={{ fontFamily: "var(--font-nerv-mono)" }}
-              >
-                <colgroup>
-                  <col style={{ width: "36px" }} />
-                  <col style={{ width: "34%" }} />
-                  <col style={{ width: "22%" }} />
-                  <col style={{ width: "28%" }} />
-                  <col style={{ width: "16%" }} />
-                </colgroup>
-                <thead className="sticky top-0 z-10">
-                  <tr className="bg-nerv-black text-nerv-cyan border-b border-nerv-cyan/30">
-                    <th className="px-2 py-2 text-[10px] uppercase tracking-wider font-bold text-left border-r border-black/20">
-                      #
-                    </th>
-                    {SORT_KEYS.map((key) => {
-                      const active = sortKey === key;
-                      return (
-                        <th
-                          key={key}
-                          className="px-2 py-2 text-[10px] uppercase tracking-wider font-bold border-r border-black/20 last:border-r-0 text-left"
-                          style={{ fontFamily: "var(--font-nerv-display)" }}
-                        >
-                          <button
-                            type="button"
-                            onClick={() => handleSort(key)}
-                            className={`inline-flex items-center uppercase tracking-wider transition-colors hover:text-nerv-orange ${
-                              active ? "text-nerv-orange" : "text-nerv-cyan"
-                            }`}
-                          >
-                            {SORT_LABELS[key]}
-                            <SortIndicator active={active} dir={sortDir} />
-                          </button>
-                        </th>
-                      );
-                    })}
+                    <td className="px-2 py-1 text-nerv-mid-gray border-r border-nerv-mid-gray/20">
+                      {String(i + 1).padStart(3, "0")}
+                    </td>
+                    <td className="px-2 py-1 border-r border-nerv-mid-gray/20 truncate">
+                      <a
+                        href={amazonUrl(book)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="block truncate text-nerv-cyan hover:text-nerv-orange underline underline-offset-2 decoration-dotted decoration-nerv-cyan/40 hover:decoration-nerv-orange transition-colors"
+                      >
+                        {book.title}
+                      </a>
+                    </td>
+                    <td className="px-2 py-1 border-r border-nerv-mid-gray/20 truncate">
+                      {book.author}
+                    </td>
+                    <td className="px-2 py-1 border-r border-nerv-mid-gray/20">
+                      <RatingBar value={book.rating} />
+                    </td>
+                    <td className="px-2 py-1 text-nerv-mid-gray truncate">
+                      {formatDate(book.dateRead)}
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {displayed.map((book, i) => (
-                    <motion.tr
-                      key={`${i}-${book.title}`}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: Math.min(i * 0.005, 1) }}
-                      className="text-nerv-cyan hover:bg-nerv-cyan/5 border-b border-nerv-mid-gray/30 transition-colors duration-75 cursor-default text-xs"
-                    >
-                      <td className="px-2 py-1 text-nerv-mid-gray border-r border-nerv-mid-gray/20">
-                        {String(i + 1).padStart(3, "0")}
-                      </td>
-                      <td className="px-2 py-1 border-r border-nerv-mid-gray/20 truncate">
-                        <a
-                          href={amazonUrl(book)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="block truncate text-nerv-cyan hover:text-nerv-orange underline underline-offset-2 decoration-dotted decoration-nerv-cyan/40 hover:decoration-nerv-orange transition-colors"
-                        >
-                          {book.title}
-                        </a>
-                      </td>
-                      <td className="px-2 py-1 border-r border-nerv-mid-gray/20 truncate">
-                        {book.author}
-                      </td>
-                      <td className="px-2 py-1 border-r border-nerv-mid-gray/20">
-                        <RatingBar value={book.rating} />
-                      </td>
-                      <td className="px-2 py-1 text-nerv-mid-gray truncate">
-                        {formatDate(book.dateRead)}
-                      </td>
-                    </motion.tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+                ))}
+              </tbody>
+            </table>
           </div>
 
-          {/* Footer */}
           <div className="flex items-center justify-between px-3 py-1 border-t border-nerv-mid-gray bg-nerv-dark-gray text-[10px] font-mono text-nerv-mid-gray">
             <span>
               ROWS: {displayed.length}
