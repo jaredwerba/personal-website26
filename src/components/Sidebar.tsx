@@ -83,7 +83,7 @@ function IconLinkedin() {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { id: "contact", label: "CONTACT", href: "/contact", icon: <IconMail /> },
+  { id: "contact", label: "CONTACT", href: "/", icon: <IconMail /> },
   { id: "reads", label: "READS", href: "/reads", icon: <IconBook /> },
   { id: "photos", label: "PHOTOS", href: "/photos", icon: <IconCamera /> },
   { id: "health", label: "HEALTH", href: "/health", icon: <IconHeart /> },
@@ -98,8 +98,8 @@ function NavIcon({ item, active }: { item: NavItem; active: boolean }) {
     <Tooltip content={item.label} side="top" color={active ? "orange" : "green"} delay={100}>
       <motion.div
         className={`
-          relative flex items-center justify-center w-10 h-10
-          transition-colors cursor-pointer
+          relative flex items-center justify-center w-11 h-11
+          transition-colors cursor-pointer touch-manipulation
           ${active
             ? "text-nerv-orange"
             : "text-nerv-mid-gray hover:text-nerv-white"
@@ -133,13 +133,22 @@ function NavIcon({ item, active }: { item: NavItem; active: boolean }) {
 
 export default function Sidebar({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const activeId = NAV_ITEMS.find((item) => !item.external && pathname.startsWith(item.href))?.id;
+  const activeId = NAV_ITEMS.find(
+    (item) =>
+      !item.external &&
+      (item.href === "/" ? pathname === "/" : pathname.startsWith(item.href)),
+  )?.id;
 
   return (
     <div className="flex flex-col min-h-[100dvh]">
       {/* Main content */}
       <main className="flex-1 min-w-0">
-        <div className="p-4 md:p-8 max-w-4xl mx-auto pb-16">
+        <div
+          className="px-4 md:px-8 max-w-4xl mx-auto pb-24"
+          style={{
+            paddingTop: "max(1rem, env(safe-area-inset-top))",
+          }}
+        >
           {children}
         </div>
       </main>

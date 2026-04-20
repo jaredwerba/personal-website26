@@ -28,7 +28,7 @@ function amazonUrl(book: BookEntry): string {
   return `https://www.amazon.com/s?k=${q}&i=stripbooks`;
 }
 
-type SortKey = "title" | "author" | "rating" | "dateRead";
+type SortKey = "title" | "rating" | "dateRead";
 type SortDir = "asc" | "desc";
 
 function parseGoodreadsCSV(text: string): BookEntry[] {
@@ -81,31 +81,24 @@ function RatingBar({ value, max = 5 }: { value: number; max?: number }) {
   const pct = (value / max) * 100;
   const isMax = value === max;
   return (
-    <div className="flex items-center gap-2 w-full">
+    <div
+      className={`h-2 w-full bg-nerv-dark-gray overflow-hidden border ${isMax ? "border-nerv-orange shadow-[0_0_6px_rgba(255,153,0,0.6)]" : "border-nerv-mid-gray/20"}`}
+    >
       <div
-        className={`flex-1 h-2 bg-nerv-dark-gray overflow-hidden border ${isMax ? "border-nerv-orange shadow-[0_0_6px_rgba(255,153,0,0.6)]" : "border-nerv-mid-gray/20"}`}
-      >
-        <div
-          className="h-full transition-all"
-          style={{
-            width: `${pct}%`,
-            backgroundColor: isMax
-              ? "#FFD700"
-              : value >= 4
-                ? "#FF9900"
-                : value >= 3
-                  ? "#FFAA00"
-                  : value >= 2
-                    ? "#555555"
-                    : "#333333",
-          }}
-        />
-      </div>
-      <span
-        className={`font-nerv-mono text-[10px] w-6 text-right shrink-0 tracking-tight ${isMax ? "text-nerv-orange font-bold" : "text-nerv-mid-gray"}`}
-      >
-        {isMax ? "5★" : value || "—"}
-      </span>
+        className="h-full transition-all"
+        style={{
+          width: `${pct}%`,
+          backgroundColor: isMax
+            ? "#FFD700"
+            : value >= 4
+              ? "#FF9900"
+              : value >= 3
+                ? "#FFAA00"
+                : value >= 2
+                  ? "#555555"
+                  : "#333333",
+        }}
+      />
     </div>
   );
 }
@@ -114,7 +107,9 @@ function formatDate(dateStr: string): string {
   if (!dateStr) return "—";
   const d = new Date(dateStr);
   if (isNaN(d.getTime())) return "—";
-  return d.toLocaleDateString("en-US", { year: "numeric", month: "short" });
+  const mon = d.toLocaleDateString("en-US", { month: "short" }).toUpperCase();
+  const yy = String(d.getFullYear()).slice(-2);
+  return `${mon} '${yy}`;
 }
 
 function compareBy(a: BookEntry, b: BookEntry, key: SortKey, dir: SortDir): number {
@@ -130,19 +125,17 @@ function compareBy(a: BookEntry, b: BookEntry, key: SortKey, dir: SortDir): numb
       return (av - bv) * mult;
     }
     case "title":
-    case "author":
-      return a[key].localeCompare(b[key]) * mult;
+      return a.title.localeCompare(b.title) * mult;
   }
 }
 
 const SORT_LABELS: Record<SortKey, string> = {
   title: "TITLE",
-  author: "AUTHOR",
   rating: "RATING",
   dateRead: "DATE",
 };
 
-const SORT_KEYS: SortKey[] = ["title", "author", "rating", "dateRead"];
+const SORT_KEYS: SortKey[] = ["title", "rating", "dateRead"];
 
 function SortIndicator({ active, dir }: { active: boolean; dir: SortDir }) {
   if (!active) return <span className="text-nerv-mid-gray/40 ml-1">↕</span>;
@@ -209,7 +202,7 @@ export default function ReadsPage() {
 
       {loaded && (
         <div className="bg-nerv-black border border-nerv-mid-gray">
-          <div className="flex items-center gap-2 px-2 py-1.5 border-b border-nerv-mid-gray bg-nerv-dark-gray">
+          <div className="flex items-center gap-2 px-1.5 py-1 md:px-2.5 border-b border-nerv-mid-gray bg-nerv-dark-gray">
             <span className="font-nerv-mono text-[10px] text-nerv-cyan tracking-[0.2em] shrink-0">
               &gt;
             </span>
@@ -237,27 +230,22 @@ export default function ReadsPage() {
             style={{ maxHeight: "calc(100dvh - 200px)" }}
           >
             <table
-              className="w-full border-collapse table-fixed min-w-[640px]"
+              className="w-full border-collapse table-fixed"
               style={{ fontFamily: "var(--font-nerv-mono)" }}
             >
               <colgroup>
-                <col style={{ width: "36px" }} />
-                <col style={{ width: "34%" }} />
+                <col style={{ width: "60%" }} />
+                <col style={{ width: "18%" }} />
                 <col style={{ width: "22%" }} />
-                <col style={{ width: "28%" }} />
-                <col style={{ width: "16%" }} />
               </colgroup>
               <thead className="sticky top-0 z-10">
                 <tr className="bg-nerv-black text-nerv-cyan border-b border-nerv-cyan/30">
-                  <th className="px-2 py-2 text-[10px] uppercase tracking-wider font-bold text-left border-r border-black/20">
-                    #
-                  </th>
                   {SORT_KEYS.map((key) => {
                     const active = sortKey === key;
                     return (
                       <th
                         key={key}
-                        className="px-2 py-2 text-[10px] uppercase tracking-wider font-bold border-r border-black/20 last:border-r-0 text-left"
+                        className="px-1.5 py-2 md:px-2 text-[10px] uppercase tracking-wider font-bold border-r border-black/20 last:border-r-0 text-left"
                         style={{ fontFamily: "var(--font-nerv-display)" }}
                       >
                         <button
@@ -281,10 +269,7 @@ export default function ReadsPage() {
                     key={`${i}-${book.title}`}
                     className="text-nerv-cyan hover:bg-nerv-cyan/5 border-b border-nerv-mid-gray/30 transition-colors duration-75 cursor-default text-xs"
                   >
-                    <td className="px-2 py-1 text-nerv-mid-gray border-r border-nerv-mid-gray/20">
-                      {String(i + 1).padStart(3, "0")}
-                    </td>
-                    <td className="px-2 py-1 border-r border-nerv-mid-gray/20 truncate">
+                    <td className="px-1.5 py-1 md:px-2 border-r border-nerv-mid-gray/20 truncate">
                       <a
                         href={amazonUrl(book)}
                         target="_blank"
@@ -294,13 +279,10 @@ export default function ReadsPage() {
                         {book.title}
                       </a>
                     </td>
-                    <td className="px-2 py-1 border-r border-nerv-mid-gray/20 truncate">
-                      {book.author}
-                    </td>
-                    <td className="px-2 py-1 border-r border-nerv-mid-gray/20">
+                    <td className="px-1.5 py-1 md:px-2 border-r border-nerv-mid-gray/20">
                       <RatingBar value={book.rating} />
                     </td>
-                    <td className="px-2 py-1 text-nerv-mid-gray truncate">
+                    <td className="px-1.5 py-1 md:px-2 text-nerv-mid-gray truncate">
                       {formatDate(book.dateRead)}
                     </td>
                   </tr>

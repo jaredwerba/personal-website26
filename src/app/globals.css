@@ -79,6 +79,14 @@ html, body {
   font-family: var(--font-nerv-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+/* Touch-friendly tap targets on iOS */
+button, a, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Hide scrollbar for cleaner look but keep scrolling */

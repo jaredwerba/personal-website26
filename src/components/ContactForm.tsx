@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Textarea, Button, Badge, Divider } from "@mdrbx/nerv-ui";
+import { Textarea, Button, Badge } from "@mdrbx/nerv-ui";
 import { motion } from "framer-motion";
 
 type Props = {
@@ -23,18 +23,10 @@ export default function ContactForm({ centered = true }: Props) {
     <div className="w-full max-w-lg mx-auto space-y-6">
       <div className={`flex items-center gap-3 ${centered ? "justify-center" : ""}`}>
         <h2 className="font-nerv-display text-2xl md:text-3xl tracking-[0.16em] text-nerv-orange">
-          CONTACT
+          CONTACT JARED
         </h2>
         <Badge label="COMMS" variant="warning" size="sm" />
       </div>
-
-      <p
-        className={`font-nerv-mono text-xs text-nerv-mid-gray tracking-wider ${centered ? "text-center" : ""}`}
-      >
-        // DIRECT.CHANNEL
-      </p>
-
-      <Divider color="orange" variant="dashed" />
 
       <div className="border border-nerv-orange/30 p-4 md:p-6 space-y-4">
         <Textarea
@@ -44,7 +36,13 @@ export default function ContactForm({ centered = true }: Props) {
           onChange={(e) => setBody(e.target.value)}
         />
 
-        <Button variant="primary" size="lg" onClick={handleSend} fullWidth>
+        <Button
+          variant="primary"
+          size="lg"
+          onClick={handleSend}
+          fullWidth
+          className="!bg-nerv-orange !text-nerv-black !border-nerv-orange hover:!bg-nerv-amber hover:!text-nerv-black font-bold tracking-[0.2em]"
+        >
           SEND.TRANSMISSION
         </Button>
 
