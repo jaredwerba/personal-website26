@@ -122,12 +122,20 @@ type RecoveryRecord = {
     recovery_score?: number;
     hrv_rmssd_milli?: number;
     resting_heart_rate?: number;
+    spo2_percentage?: number;
+    skin_temp_celsius?: number;
   };
 };
 
 type SleepRecord = {
   score?: {
     sleep_performance_percentage?: number;
+    sleep_efficiency_percentage?: number;
+    sleep_consistency_percentage?: number;
+    respiratory_rate?: number;
+    sleep_needed?: {
+      need_from_sleep_debt_milli?: number;
+    };
   };
 };
 
@@ -136,6 +144,12 @@ type CycleRecord = {
     strain?: number;
   };
 };
+
+function numField<T>(records: T[], pick: (r: T) => number | undefined): number[] {
+  return records
+    .map(pick)
+    .filter((n): n is number => typeof n === "number" && !isNaN(n));
+}
 
 export async function pullMonthlySnapshot(
   accessToken: string,
@@ -150,26 +164,26 @@ export async function pullMonthlySnapshot(
     fetchAll<CycleRecord>("/v2/cycle", accessToken, start, end),
   ]);
 
-  const recoveryScores = recoveries
-    .map((r) => r.score?.recovery_score)
-    .filter((n): n is number => typeof n === "number");
-  const hrvValues = recoveries
-    .map((r) => r.score?.hrv_rmssd_milli)
-    .filter((n): n is number => typeof n === "number");
-  const sleepPerfValues = sleeps
-    .map((s) => s.score?.sleep_performance_percentage)
-    .filter((n): n is number => typeof n === "number");
-  const strainValues = cycles
-    .map((c) => c.score?.strain)
-    .filter((n): n is number => typeof n === "number");
+  const sleepDebtMinutes = numField(sleeps, (s) =>
+    typeof s.score?.sleep_needed?.need_from_sleep_debt_milli === "number"
+      ? s.score.sleep_needed.need_from_sleep_debt_milli / 60000
+      : undefined,
+  );
 
   return {
     generated_at: new Date().toISOString(),
     window_days: windowDays,
-    recovery_pct_avg: avg(recoveryScores),
-    hrv_rmssd_avg: avg(hrvValues),
-    sleep_performance_pct_avg: avg(sleepPerfValues),
-    day_strain_avg: avg(strainValues, 1),
+    recovery_pct_avg: avg(numField(recoveries, (r) => r.score?.recovery_score)),
+    hrv_rmssd_avg: avg(numField(recoveries, (r) => r.score?.hrv_rmssd_milli)),
+    sleep_performance_pct_avg: avg(numField(sleeps, (s) => s.score?.sleep_performance_percentage)),
+    day_strain_avg: avg(numField(cycles, (c) => c.score?.strain), 1),
+    resting_hr_avg: avg(numField(recoveries, (r) => r.score?.resting_heart_rate)),
+    spo2_pct_avg: avg(numField(recoveries, (r) => r.score?.spo2_percentage), 1),
+    skin_temp_c_avg: avg(numField(recoveries, (r) => r.score?.skin_temp_celsius), 1),
+    respiratory_rate_avg: avg(numField(sleeps, (s) => s.score?.respiratory_rate), 1),
+    sleep_efficiency_pct_avg: avg(numField(sleeps, (s) => s.score?.sleep_efficiency_percentage)),
+    sleep_consistency_pct_avg: avg(numField(sleeps, (s) => s.score?.sleep_consistency_percentage)),
+    sleep_debt_min_avg: avg(sleepDebtMinutes),
     samples: {
       recovery: recoveries.length,
       sleep: sleeps.length,

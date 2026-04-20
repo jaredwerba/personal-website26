@@ -13,6 +13,13 @@ export type WhoopSnapshot = {
   hrv_rmssd_avg: number | null;
   sleep_performance_pct_avg: number | null;
   day_strain_avg: number | null;
+  resting_hr_avg: number | null;
+  spo2_pct_avg: number | null;
+  skin_temp_c_avg: number | null;
+  respiratory_rate_avg: number | null;
+  sleep_efficiency_pct_avg: number | null;
+  sleep_consistency_pct_avg: number | null;
+  sleep_debt_min_avg: number | null;
   samples: {
     recovery: number;
     sleep: number;

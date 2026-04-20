@@ -34,6 +34,13 @@ export default function HealthView({ snapshot }: Props) {
   const hrv = snapshot?.hrv_rmssd_avg ?? null;
   const sleep = snapshot?.sleep_performance_pct_avg ?? null;
   const strain = snapshot?.day_strain_avg ?? null;
+  const rhr = snapshot?.resting_hr_avg ?? null;
+  const spo2 = snapshot?.spo2_pct_avg ?? null;
+  const skinTemp = snapshot?.skin_temp_c_avg ?? null;
+  const respRate = snapshot?.respiratory_rate_avg ?? null;
+  const sleepEff = snapshot?.sleep_efficiency_pct_avg ?? null;
+  const sleepCons = snapshot?.sleep_consistency_pct_avg ?? null;
+  const sleepDebt = snapshot?.sleep_debt_min_avg ?? null;
 
   const terminalLines = connected
     ? [
@@ -129,7 +136,7 @@ export default function HealthView({ snapshot }: Props) {
           <SyncProgressBar value={connected ? 100 : 0} label="DATA.SYNC" />
 
           <PhaseStatusStack
-            title="VITALS.STATUS"
+            title="RECOVERY.VITALS"
             color="cyan"
             phases={[
               {
@@ -143,14 +150,56 @@ export default function HealthView({ snapshot }: Props) {
                 value: fmt(hrv, " MS"),
               },
               {
-                label: "SLEEP.SCORE",
-                status: sleep !== null ? "ok" : "inactive",
-                value: fmt(sleep, "%"),
+                label: "RESTING.HR",
+                status: rhr !== null ? "ok" : "inactive",
+                value: fmt(rhr, " BPM"),
+              },
+              {
+                label: "SPO2",
+                status: spo2 !== null ? "ok" : "inactive",
+                value: fmt(spo2, "%"),
+              },
+              {
+                label: "SKIN.TEMP",
+                status: skinTemp !== null ? "ok" : "inactive",
+                value: fmt(skinTemp, "°C"),
               },
               {
                 label: "STRAIN",
                 status: strain !== null ? "ok" : "inactive",
                 value: fmt(strain),
+              },
+            ]}
+          />
+
+          <PhaseStatusStack
+            title="SLEEP.VITALS"
+            color="cyan"
+            phases={[
+              {
+                label: "PERFORMANCE",
+                status: sleep !== null ? "ok" : "inactive",
+                value: fmt(sleep, "%"),
+              },
+              {
+                label: "EFFICIENCY",
+                status: sleepEff !== null ? "ok" : "inactive",
+                value: fmt(sleepEff, "%"),
+              },
+              {
+                label: "CONSISTENCY",
+                status: sleepCons !== null ? "ok" : "inactive",
+                value: fmt(sleepCons, "%"),
+              },
+              {
+                label: "DEBT",
+                status: sleepDebt !== null ? "ok" : "inactive",
+                value: fmt(sleepDebt, " MIN"),
+              },
+              {
+                label: "RESP.RATE",
+                status: respRate !== null ? "ok" : "inactive",
+                value: fmt(respRate, " BPM"),
               },
             ]}
           />
