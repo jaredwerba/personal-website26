@@ -16,8 +16,32 @@ export const runtime = "nodejs";
 
 export async function GET() {
   const session = await auth.api.getSession({ headers: await headers() });
-  if (!isAdmin(session?.user?.email)) {
-    return NextResponse.json({ ok: false, error: "forbidden" }, { status: 404 });
+
+  // Diagnostic endpoint — we give back *why* it's forbidden, not just a bare
+  // "forbidden", so you can tell whether the session is missing entirely or
+  // whether you're signed in as the wrong account.
+  if (!session?.user) {
+    return NextResponse.json(
+      {
+        ok: false,
+        reason: "not_signed_in",
+        hint: "Sign in at /ride first, then reload this URL in the same browser.",
+        expectedAdminEmail: getAdminEmail(),
+      },
+      { status: 401 },
+    );
+  }
+  if (!isAdmin(session.user.email)) {
+    return NextResponse.json(
+      {
+        ok: false,
+        reason: "not_admin",
+        signedInAs: session.user.email ?? null,
+        expectedAdminEmail: getAdminEmail(),
+        hint: "Your session's email doesn't match ADMIN_EMAIL. Either sign in as the admin account, or set ADMIN_EMAIL on Vercel to match the email above.",
+      },
+      { status: 403 },
+    );
   }
 
   const apiKey = process.env.RESEND_API_KEY;
