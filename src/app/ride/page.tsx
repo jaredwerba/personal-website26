@@ -149,9 +149,11 @@ export default async function RidePage({
       <section className="space-y-4">
         <div className="space-y-1.5">
           <p className="font-nerv-body text-sm md:text-base text-nerv-white/90 leading-relaxed max-w-prose">
-            Small group weekend rides out of Boston. Moderate pace, scenic routes,
-            coffee stop at the end. Sign up with a passkey (Face ID / Touch ID) —
-            no passwords — pick a weekend, and I&apos;ll confirm over email.
+            Casual weekend bike tours. Meet at <span className="text-nerv-cyan">891 East 4th St,
+            South Boston</span>, ride a loop around Castle Island out to JFK/UMass and back.
+            Every <span className="text-nerv-cyan">Saturday and Sunday, 10 AM – 4 PM</span>.
+            Optional food + beverage at the meet point. Passkey sign-in, pick a
+            weekend, I confirm over email with a calendar invite.
           </p>
         </div>
       </section>

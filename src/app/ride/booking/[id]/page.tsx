@@ -22,6 +22,7 @@ export default async function BookingConfirmPage({ params }: { params: Params })
       bookingId: rideBooking.id,
       status: rideBooking.status,
       riderCount: rideBooking.riderCount,
+      foodBeverage: rideBooking.foodBeverage,
       notes: rideBooking.notes,
       userId: rideBooking.userId,
       startsAt: rideSlot.startsAt,
@@ -96,6 +97,12 @@ export default async function BookingConfirmPage({ params }: { params: Params })
             <dt className="text-nerv-cyan/70 w-28 shrink-0">PARTY.SIZE</dt>
             <dd className="text-nerv-white/90">
               {b.riderCount} rider{b.riderCount === 1 ? "" : "s"}
+            </dd>
+          </div>
+          <div className="flex">
+            <dt className="text-nerv-cyan/70 w-28 shrink-0">FOOD+BEV</dt>
+            <dd className={b.foodBeverage ? "text-nerv-green" : "text-nerv-white/60"}>
+              {b.foodBeverage ? "INCLUDED" : "not included"}
             </dd>
           </div>
           {(b.distanceKm || b.elevationGainM) && (

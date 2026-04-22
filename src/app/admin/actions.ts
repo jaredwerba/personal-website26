@@ -26,6 +26,7 @@ export async function acceptBooking(
     const [ctx] = await db
       .select({
         riderCount: rideBooking.riderCount,
+        foodBeverage: rideBooking.foodBeverage,
         status: rideBooking.status,
         startsAt: rideSlot.startsAt,
         endsAt: rideSlot.endsAt,
@@ -58,6 +59,7 @@ export async function acceptBooking(
         title: ctx.title,
         startLocation: ctx.startLocation,
         riderCount: ctx.riderCount,
+        foodBeverage: ctx.foodBeverage,
       });
     } catch (err) {
       console.error("[acceptBooking] email dispatch failed:", err);

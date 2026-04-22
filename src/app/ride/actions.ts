@@ -41,7 +41,7 @@ function friendlyDbError(err: unknown): string {
 export async function bookSlot(
   slotId: string,
   riderCount: number,
-  notes?: string,
+  options?: { notes?: string; foodBeverage?: boolean },
 ): Promise<{ ok: true; bookingId: string } | { ok: false; error: string }> {
   try {
     const { userId, userName, userEmail } = await requireUserId();
@@ -49,6 +49,9 @@ export async function bookSlot(
     if (!Number.isInteger(riderCount) || riderCount < 1 || riderCount > 20) {
       return { ok: false, error: "Rider count must be between 1 and 20." };
     }
+
+    const notes = options?.notes;
+    const foodBeverage = options?.foodBeverage ?? false;
 
     const { bookingId, slotInfo } = await db.transaction(async (tx) => {
       // Row-lock the slot to prevent concurrent overbooking.
@@ -100,6 +103,7 @@ export async function bookSlot(
           userId,
           riderCount,
           notes: notes?.trim() || null,
+          foodBeverage,
           status: "pending",
         })
         .returning({ id: rideBooking.id });
@@ -131,6 +135,7 @@ export async function bookSlot(
           title: slotInfo.title,
           startLocation: slotInfo.startLocation,
           riderCount,
+          foodBeverage,
           notes: notes?.trim() || null,
         });
       } catch (err) {

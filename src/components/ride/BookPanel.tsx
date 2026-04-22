@@ -21,6 +21,7 @@ export default function BookPanel({
   const router = useRouter();
   const [riderCount, setRiderCount] = useState(1);
   const [notes, setNotes] = useState("");
+  const [foodBeverage, setFoodBeverage] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,7 +29,10 @@ export default function BookPanel({
     setBusy(true);
     setError(null);
     try {
-      const res = await bookSlot(slot.id, riderCount, notes.trim() || undefined);
+      const res = await bookSlot(slot.id, riderCount, {
+        notes: notes.trim() || undefined,
+        foodBeverage,
+      });
       if (res.ok) {
         router.push(`/ride/booking/${res.bookingId}`);
       } else {
@@ -95,6 +99,23 @@ export default function BookPanel({
         </div>
       </div>
 
+      <label className="flex items-start gap-3 cursor-pointer group">
+        <input
+          type="checkbox"
+          checked={foodBeverage}
+          onChange={(e) => setFoodBeverage(e.target.checked)}
+          className="mt-0.5 w-4 h-4 accent-nerv-orange cursor-pointer"
+        />
+        <div className="min-w-0">
+          <p className="font-nerv-mono text-[11px] tracking-[0.16em] text-nerv-white uppercase group-hover:text-nerv-orange transition-colors">
+            INCLUDE.FOOD + BEVERAGE
+          </p>
+          <p className="font-nerv-mono text-[10px] text-nerv-mid-gray tracking-wider mt-0.5">
+            Coffee, snacks, and lunch at the meet point.
+          </p>
+        </div>
+      </label>
+
       <div className="space-y-2">
         <label
           htmlFor="book-notes"
@@ -106,7 +127,7 @@ export default function BookPanel({
           id="book-notes"
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          placeholder="Pace preference, anything I should know..."
+          placeholder="Pace preference, dietary needs, anything I should know..."
           rows={2}
           className="w-full bg-nerv-black border border-nerv-mid-gray/40 font-nerv-mono text-sm text-nerv-cyan placeholder:text-nerv-mid-gray/50 tracking-wider px-3 py-2 outline-none focus:border-nerv-cyan transition-colors resize-none"
         />

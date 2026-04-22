@@ -51,6 +51,7 @@ export default async function AdminPage() {
     .select({
       bookingId: rideBooking.id,
       riderCount: rideBooking.riderCount,
+      foodBeverage: rideBooking.foodBeverage,
       notes: rideBooking.notes,
       createdAt: rideBooking.createdAt,
       status: rideBooking.status,
@@ -71,6 +72,7 @@ export default async function AdminPage() {
     .select({
       bookingId: rideBooking.id,
       riderCount: rideBooking.riderCount,
+      foodBeverage: rideBooking.foodBeverage,
       notes: rideBooking.notes,
       status: rideBooking.status,
       startsAt: rideSlot.startsAt,
@@ -151,6 +153,11 @@ export default async function AdminPage() {
                     <p className="font-nerv-mono text-[11px] text-nerv-mid-gray tracking-wider">
                       {b.startLocation} · {b.riderCount} rider{b.riderCount === 1 ? "" : "s"}
                     </p>
+                    <p
+                      className={`font-nerv-mono text-[10px] tracking-[0.18em] uppercase ${b.foodBeverage ? "text-nerv-green" : "text-nerv-mid-gray/70"}`}
+                    >
+                      {b.foodBeverage ? "+ FOOD.BEVERAGE" : "// NO.F&B"}
+                    </p>
                     {b.notes && (
                       <p className="font-nerv-body text-[12px] text-nerv-white/80 italic mt-1">
                         &ldquo;{b.notes}&rdquo;
@@ -190,6 +197,9 @@ export default async function AdminPage() {
                   <p className="font-nerv-mono text-[12px] text-nerv-white/90">
                     {b.userName} ({b.userEmail}) · {b.riderCount} rider
                     {b.riderCount === 1 ? "" : "s"}
+                    {b.foodBeverage && (
+                      <span className="text-nerv-green"> · +F&amp;B</span>
+                    )}
                   </p>
                   <p className="font-nerv-mono text-[10px] text-nerv-mid-gray tracking-wider">
                     {b.title}

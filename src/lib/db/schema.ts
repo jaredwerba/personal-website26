@@ -153,6 +153,8 @@ export const rideBooking = pgTable(
       .references(() => user.id, { onDelete: "cascade" }),
     riderCount: integer("rider_count").notNull().default(1),
     notes: text("notes"),
+    // Rider opted in to the food & beverage add-on at the meet point.
+    foodBeverage: boolean("food_beverage").notNull().default(false),
     // pending → admin reviews → accepted. Cancels (user or admin) delete the row
     // and decrement rideSlot.seatsBooked in the same transaction.
     status: text("status", { enum: ["pending", "accepted"] })

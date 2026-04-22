@@ -66,6 +66,7 @@ export async function GET(req: NextRequest) {
     const [ctx] = await db
       .select({
         riderCount: rideBooking.riderCount,
+        foodBeverage: rideBooking.foodBeverage,
         status: rideBooking.status,
         startsAt: rideSlot.startsAt,
         endsAt: rideSlot.endsAt,
@@ -107,6 +108,7 @@ export async function GET(req: NextRequest) {
         title: ctx.title,
         startLocation: ctx.startLocation,
         riderCount: ctx.riderCount,
+        foodBeverage: ctx.foodBeverage,
       });
     } catch (err) {
       console.error("[admin/action accept] rider email failed:", err);

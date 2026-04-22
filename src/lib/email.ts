@@ -1,6 +1,7 @@
 import "server-only";
 import { Resend } from "resend";
 import { signAction } from "@/lib/admin-tokens";
+import { buildRideInvite } from "@/lib/ics";
 
 // All fns are no-ops when RESEND_API_KEY is missing (dev without creds).
 
@@ -62,6 +63,7 @@ export type BookingRequestEmailInput = {
   title: string;
   startLocation: string;
   riderCount: number;
+  foodBeverage: boolean;
   notes: string | null;
 };
 
@@ -83,7 +85,7 @@ export async function sendBookingRequestEmails(
     hour: "numeric",
     minute: "2-digit",
   });
-  const summary = `${input.title} — ${when} ET · ${input.startLocation} · ${input.riderCount} rider${input.riderCount === 1 ? "" : "s"}`;
+  const summary = `${input.title} — ${when} ET · ${input.startLocation} · ${input.riderCount} rider${input.riderCount === 1 ? "" : "s"}${input.foodBeverage ? " · food+drink included" : ""}`;
 
   // One-click approval URLs — HMAC-signed, no login required.
   const host = siteHost();
@@ -110,6 +112,7 @@ Your request is pending review — you'll get another email when it's confirmed.
   const adminText = `${input.userName} (${input.userEmail}) requested:
 
 ${summary}
+Food + beverage: ${input.foodBeverage ? "YES" : "no"}
 ${input.notes ? `\nNotes: ${input.notes}\n` : ""}
 ACCEPT:  ${acceptUrl}
 REJECT:  ${rejectUrl}
@@ -123,7 +126,8 @@ Booking ID: ${input.bookingId}`;
 <p style="color:#e4e4e4;font-size:14px;line-height:1.6;margin:0 0 6px"><strong style="color:#00d4ff">${input.userName}</strong> <span style="color:#a0a0a0">&lt;${input.userEmail}&gt;</span></p>
 <p style="color:#a0a0a0;font-size:13px;line-height:1.6;margin:0 0 4px">${input.title}</p>
 <p style="color:#a0a0a0;font-size:13px;line-height:1.6;margin:0 0 4px">${when} ET · ${input.startLocation}</p>
-<p style="color:#a0a0a0;font-size:13px;line-height:1.6;margin:0 0 16px">${input.riderCount} rider${input.riderCount === 1 ? "" : "s"}</p>
+<p style="color:#a0a0a0;font-size:13px;line-height:1.6;margin:0 0 4px">${input.riderCount} rider${input.riderCount === 1 ? "" : "s"}</p>
+<p style="color:${input.foodBeverage ? "#34d399" : "#a0a0a0"};font-size:13px;line-height:1.6;margin:0 0 16px">Food + beverage: ${input.foodBeverage ? "YES" : "no"}</p>
 ${input.notes ? `<p style="color:#e4e4e4;font-style:italic;font-size:13px;line-height:1.6;border-left:2px solid #00d4ff66;padding-left:12px;margin:16px 0">&ldquo;${input.notes.replace(/</g, "&lt;")}&rdquo;</p>` : ""}
 <div style="margin:24px 0;display:flex;gap:12px;flex-wrap:wrap">
 <a href="${acceptUrl}" style="display:inline-block;background:#34d399;color:#0a0a0a;padding:10px 20px;text-decoration:none;letter-spacing:0.16em;font-size:12px;text-transform:uppercase;font-weight:600">Accept</a>
@@ -153,6 +157,7 @@ export type BookingAcceptedEmailInput = {
   title: string;
   startLocation: string;
   riderCount: number;
+  foodBeverage: boolean;
 };
 
 export async function sendBookingAcceptedEmail(
@@ -173,10 +178,52 @@ export async function sendBookingAcceptedEmail(
     hour: "numeric",
     minute: "2-digit",
   });
+
+  // Build a calendar invite so the rider can add the ride to their calendar
+  // in one tap. Apple Mail / Gmail / Outlook all render the .ics attachment
+  // as an "Add to calendar" button.
+  const ics = buildRideInvite({
+    uid: input.bookingId,
+    startsAt: input.startsAt,
+    endsAt: input.endsAt,
+    summary: input.title,
+    location: input.startLocation,
+    description: [
+      `${input.riderCount} rider${input.riderCount === 1 ? "" : "s"}`,
+      input.foodBeverage ? "Food & beverage included." : null,
+      "",
+      "See you there. — Jared",
+    ]
+      .filter(Boolean)
+      .join("\n"),
+    organizerName: "Jared",
+    organizerEmail: from,
+    attendeeName: input.userName,
+    attendeeEmail: input.userEmail,
+  });
+
   await sendAndLog("accepted", {
     from,
     to: input.userEmail,
     subject: "Ride confirmed — see you out there",
-    text: `Hey ${input.userName},\n\n${input.title}\n${when} ET\nMeet at: ${input.startLocation}\nParty of: ${input.riderCount}\n\nSee you then.\n\n— Jared`,
+    text: `Hey ${input.userName},
+
+${input.title}
+${when} ET
+Meet at: ${input.startLocation}
+Party of: ${input.riderCount}${input.foodBeverage ? "\nFood + beverage: included" : ""}
+
+Calendar invite attached — one tap to add it to your calendar.
+
+See you then.
+
+— Jared`,
+    attachments: [
+      {
+        filename: "ride.ics",
+        content: Buffer.from(ics, "utf-8").toString("base64"),
+        contentType: "text/calendar; charset=utf-8; method=REQUEST",
+      },
+    ],
   });
 }
