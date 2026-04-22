@@ -18,6 +18,26 @@ async function requireUserId(): Promise<{ userId: string; userName: string; user
   };
 }
 
+// Drizzle wraps pg errors as `DrizzleQueryError` where `err.message` is the
+// SQL and `err.cause` is the real pg error with a `.code`. Without this
+// mapping, we leak raw SQL into the UI (see the "Failed query: insert into
+// ride_booking..." screenshot). Codes: https://www.postgresql.org/docs/current/errcodes-appendix.html
+function friendlyDbError(err: unknown): string {
+  const cause = (err as { cause?: unknown })?.cause;
+  if (cause && typeof cause === "object" && "code" in cause) {
+    const code = (cause as { code?: string }).code;
+    if (code === "23505") return "You already have a booking on this ride. Cancel it first to rebook.";
+    if (code === "23503") return "Your account is out of sync — try signing out and back in.";
+    if (code === "23514") return "Booking didn't meet the ride's constraints.";
+  }
+  if (err instanceof Error) {
+    // Strip Drizzle's "Failed query: ..." wrapper — we never want to show SQL.
+    if (err.message.startsWith("Failed query")) return "Booking failed. Please try again.";
+    return err.message;
+  }
+  return "Booking failed.";
+}
+
 export async function bookSlot(
   slotId: string,
   riderCount: number,
@@ -55,6 +75,21 @@ export async function bookSlot(
           remaining === 0
             ? "This ride is full."
             : `Only ${remaining} seat${remaining === 1 ? "" : "s"} left.`,
+        );
+      }
+
+      // Explicit existing-booking check before the insert so we return a
+      // clean error instead of relying on the unique constraint firing.
+      const existing = await tx
+        .select({ id: rideBooking.id })
+        .from(rideBooking)
+        .where(
+          and(eq(rideBooking.slotId, slotId), eq(rideBooking.userId, userId)),
+        )
+        .limit(1);
+      if (existing[0]) {
+        throw new Error(
+          "You already have a booking on this ride. Cancel it first to rebook.",
         );
       }
 
@@ -107,8 +142,8 @@ export async function bookSlot(
     revalidatePath("/ride/booking/" + bookingId);
     return { ok: true, bookingId };
   } catch (err) {
-    const msg = err instanceof Error ? err.message : "Booking failed.";
-    return { ok: false, error: msg };
+    console.error("[bookSlot] failed:", err);
+    return { ok: false, error: friendlyDbError(err) };
   }
 }
 
@@ -138,8 +173,8 @@ export async function cancelBooking(
     revalidatePath("/ride");
     return { ok: true };
   } catch (err) {
-    const msg = err instanceof Error ? err.message : "Cancel failed.";
-    return { ok: false, error: msg };
+    console.error("[cancelBooking] failed:", err);
+    return { ok: false, error: friendlyDbError(err) };
   }
 }
 
