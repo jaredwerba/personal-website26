@@ -13,7 +13,7 @@ export default function ContactForm({ centered = true }: Props) {
   const [sent, setSent] = useState(false);
 
   function handleSend() {
-    const mailto = `mailto:0@jwerba.com?subject=${encodeURIComponent("jwerba.com - new msg")}&body=${encodeURIComponent(body)}`;
+    const mailto = `mailto:jwerba@icloud.com?subject=${encodeURIComponent("jwerba.com - new msg")}&body=${encodeURIComponent(body)}`;
     window.location.href = mailto;
     setSent(true);
     setTimeout(() => setSent(false), 3000);
