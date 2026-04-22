@@ -6,7 +6,7 @@ import { signAction } from "@/lib/admin-tokens";
 
 const apiKey = process.env.RESEND_API_KEY;
 const from = process.env.FROM_EMAIL || "rides@jwerba.com";
-const adminEmail = process.env.ADMIN_EMAIL || "0@jwerba.com";
+const adminEmail = process.env.ADMIN_EMAIL || "jwerba@icloud.com";
 
 const resend = apiKey ? new Resend(apiKey) : null;
 
