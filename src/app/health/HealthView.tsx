@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import {
   Badge,
   Divider,
@@ -205,6 +206,31 @@ export default function HealthView({ snapshot }: Props) {
           />
         </div>
       </Section>
+
+      <Divider color="green" variant="dashed" />
+
+      <Link
+        href="/ride"
+        className="block border border-nerv-orange/40 bg-nerv-orange/[0.04] p-4 md:p-5 hover:border-nerv-orange hover:bg-nerv-orange/[0.08] transition-colors group"
+      >
+        <div className="flex items-start gap-4">
+          <div className="min-w-0 flex-1">
+            <p className="font-nerv-mono text-[10px] tracking-[0.2em] text-nerv-orange uppercase">
+              // TRAIN.WITH.ME
+            </p>
+            <h3 className="font-nerv-display text-lg md:text-xl tracking-[0.14em] text-nerv-white uppercase mt-1 group-hover:text-nerv-orange transition-colors">
+              BOOK.A.WEEKEND.RIDE
+            </h3>
+            <p className="font-nerv-body text-sm text-nerv-white/80 mt-1.5">
+              Small-group weekend bike tours out of Boston. Passkey sign-up, pick a
+              weekend, I confirm over email.
+            </p>
+          </div>
+          <span className="font-nerv-mono text-base text-nerv-orange shrink-0 group-hover:translate-x-0.5 transition-transform">
+            &rarr;
+          </span>
+        </div>
+      </Link>
     </div>
   );
 }
