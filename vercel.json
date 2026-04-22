@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/whoop-monthly",
       "schedule": "0 2 1 * *"
+    },
+    {
+      "path": "/api/cron/extend-rides",
+      "schedule": "0 3 1 * *"
     }
   ]
 }
