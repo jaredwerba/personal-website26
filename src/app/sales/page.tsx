@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 type Phase = "prompt" | "auth" | "glitch" | "denied";
 
@@ -91,6 +92,19 @@ export default function SalesPage() {
                 <span className="text-nerv-red text-[10px] animate-nerv-blink">
                   ●
                 </span>
+              </div>
+
+              {/* hero image */}
+              <div className="relative w-full aspect-[4/3] overflow-hidden">
+                <Image
+                  src="/photos/figher.JPG"
+                  alt=""
+                  fill
+                  className="object-cover object-center"
+                  priority
+                />
+                {/* fade to black at bottom */}
+                <div className="absolute inset-0 bg-gradient-to-t from-nerv-black via-nerv-black/20 to-transparent" />
               </div>
 
               {/* body */}
