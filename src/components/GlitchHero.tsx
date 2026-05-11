@@ -49,24 +49,34 @@ export default function GlitchHero() {
     setSeq(buildSequence());
   }, []);
 
-  // Print lines one by one, then restart
+  // Print lines one by one, spaced over ~1m45s, then hold
   useEffect(() => {
     if (seq.length === 0) return;
+    if (visible >= seq.length) return; // done — stay put
 
-    if (visible < seq.length) {
-      // Vary timing: progress bar lines are faster, commands slower
-      const line = seq[visible];
-      const base = line?.startsWith("  [") ? 120 : 220;
-      const jitter = Math.random() * 180;
-      const t = setTimeout(() => setVisible((v) => v + 1), base + jitter);
-      return () => clearTimeout(t);
+    const line = seq[visible];
+    let base: number;
+    let jitter: number;
+
+    if (visible === 0) {
+      // First line appears quickly after mount
+      base = 800;
+      jitter = Math.random() * 400;
+    } else if (line?.startsWith("  [")) {
+      // Progress bar lines — quick succession
+      base = 2000;
+      jitter = Math.random() * 2000;
+    } else if (line?.startsWith("  ")) {
+      // Sub-output lines (network data, load status)
+      base = 4000;
+      jitter = Math.random() * 2000;
+    } else {
+      // Command lines — dramatic pauses
+      base = 6300;
+      jitter = Math.random() * 2000;
     }
 
-    // All printed → hold, then restart with fresh values
-    const t = setTimeout(() => {
-      setSeq(buildSequence());
-      setVisible(0);
-    }, 4000);
+    const t = setTimeout(() => setVisible((v) => v + 1), base + jitter);
     return () => clearTimeout(t);
   }, [visible, seq]);
 
