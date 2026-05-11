@@ -30,6 +30,7 @@
   --animate-nerv-glow: nerv-glow 2s ease-in-out infinite;
   --animate-cursor-blink: cursor-blink 1s steps(1) infinite;
   --animate-scan-line: scan-line 4s linear infinite;
+  --animate-hero-glitch: hero-glitch 6s ease-in-out infinite;
 }
 
 @keyframes nerv-flicker {
@@ -70,6 +71,53 @@
 @keyframes scan-line {
   0% { transform: translateY(-100%); }
   100% { transform: translateY(100vh); }
+}
+
+@keyframes hero-glitch {
+  0%, 7%, 43%, 52%, 100% {
+    transform: translate(0) skewX(0);
+    opacity: 1;
+  }
+  1% {
+    transform: translate(-5px, 1px) skewX(-0.5deg);
+    opacity: 0.8;
+  }
+  2% {
+    transform: translate(4px, -1px) skewX(0.3deg);
+    opacity: 0.9;
+  }
+  3% {
+    transform: translate(-2px, 0);
+    opacity: 0.65;
+  }
+  4% {
+    transform: translate(3px, 1px) skewX(-0.2deg);
+    opacity: 0.85;
+  }
+  6% {
+    transform: translate(0);
+    opacity: 1;
+  }
+  44% {
+    transform: translate(6px, 0) skewX(-0.8deg);
+    opacity: 0.7;
+  }
+  46% {
+    transform: translate(-4px, 1px);
+    opacity: 0.9;
+  }
+  47% {
+    transform: translate(3px, -1px) skewX(0.5deg);
+    opacity: 0.75;
+  }
+  49% {
+    transform: translate(-1px, 0);
+    opacity: 0.85;
+  }
+  51% {
+    transform: translate(0);
+    opacity: 1;
+  }
 }
 
 /* ── Base Styles ── */
