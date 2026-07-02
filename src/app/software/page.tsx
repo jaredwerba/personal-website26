@@ -7,7 +7,9 @@ import { LIAP_DOCS } from "@/lib/liap-docs";
 
 const GITHUB_URL = "https://github.com/jaredwerba";
 
-const DEMO_VIDEO =
+const DEMO_VIDEO = "/software-demo.mp4";
+const DEMO_VIDEO_POSTER = "/software-demo-poster.jpg";
+const DEMO_VIDEO_FULL =
   "https://objectstorage.us-ashburn-1.oraclecloud.com/p/inAHbFQ2G95YVR8zDx7CjyEloe1ZKeloh6R1LP6hhTa9nsxqe6CZVoVnLhijJWNe/n/id5xzxcsl39s/b/bucket-20210429-2143/o/lip4LIPFeb27.mp4";
 
 export default function SoftwarePage() {
@@ -35,7 +37,16 @@ export default function SoftwarePage() {
           <Badge label="LOCAL LLM" variant="success" size="sm" />
         </div>
 
-        <HeroVideo src={DEMO_VIDEO} />
+        <HeroVideo src={DEMO_VIDEO} poster={DEMO_VIDEO_POSTER} />
+
+        <a
+          href={DEMO_VIDEO_FULL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block font-nerv-mono text-[10px] text-nerv-cyan/70 tracking-wider hover:text-nerv-orange transition-colors"
+        >
+          &gt; WATCH.FULL.DEMO [06:39] &rarr;
+        </a>
 
         <p className="font-nerv-body text-sm md:text-base text-nerv-white/90 leading-relaxed">
           Locally running LLM &amp; browser orchestration to automate sales prospecting.
