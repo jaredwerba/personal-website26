@@ -144,10 +144,9 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     links: [
       {
         label: "LIVE.DEMO",
-        href: "https://vendor-scout-jwerba-jared-werbas-projects.vercel.app",
+        href: "https://vendor-scout-xi.vercel.app",
         primary: true,
         note: "Vercel password: fernwood2027",
-        display: "vendor-scout",
       },
     ],
   },
