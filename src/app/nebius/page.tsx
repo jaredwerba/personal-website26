@@ -118,8 +118,53 @@ const AC_CSS = `
   text-shadow: none;
 }
 
-.ac-link { color: var(--ac-emit-100); text-decoration: none; border-bottom: var(--ac-bw) solid var(--ac-emit-30); }
-.ac-link:hover { background: var(--ac-emit-90); color: var(--ac-screen); text-shadow: none; border-bottom-color: var(--ac-emit-90); }
+/* Soft keys — the system's affordance for anything actionable.
+   2px bright lip + 3px drop edge reads as a physical key. */
+.ac-key {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 14px;
+  font-size: 20px;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+  border: var(--ac-bw) solid var(--ac-emit-100);
+  border-radius: 2px 4px 8px 4px;
+  background: var(--ac-emit-90);
+  color: var(--ac-screen);
+  text-shadow: none;
+  box-shadow: inset 0 2px 0 var(--ac-emit-100), 0 3px 0 var(--ac-emit-30);
+}
+.ac-key:hover, .ac-key:focus-visible {
+  background: var(--ac-emit-100);
+  box-shadow: inset 0 2px 0 #fff3c9, 0 3px 0 var(--ac-emit-50);
+  outline: none;
+}
+.ac-key:active {
+  transform: translateY(2px);
+  box-shadow: inset 0 2px 0 var(--ac-emit-100), 0 1px 0 var(--ac-emit-30);
+}
+
+/* Secondary key — outlined, same tap target. */
+.ac-key--ghost {
+  background: transparent;
+  color: var(--ac-emit-100);
+  border-color: var(--ac-emit-50);
+  box-shadow: inset 0 2px 0 rgba(255,208,82,0.16), 0 3px 0 var(--ac-emit-30);
+  text-shadow: 0 0 1px rgba(255,174,30,0.40);
+}
+.ac-key--ghost:hover, .ac-key--ghost:focus-visible {
+  background: var(--ac-emit-90);
+  color: var(--ac-screen);
+  border-color: var(--ac-emit-100);
+  text-shadow: none;
+}
+
+@keyframes ac-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0.3; } }
+.ac-blink { animation: ac-blink 1.6s steps(1) infinite; }
+@media (prefers-reduced-motion: reduce) { .ac-blink { animation: none; } }
 
 .ac-idx { color: var(--ac-emit-70); text-decoration: none; display: block; }
 .ac-idx:hover { background: var(--ac-on-fill); color: var(--ac-emit-100); }
@@ -130,24 +175,44 @@ const KIND_LABELS = {
   operates: { mid: "WHAT IT DOES", end: "HOW I USE IT" },
 } as const;
 
+/** Live software first, as a filled key; everything else outlined. */
 function Links({ project }: { project: NebiusProject }) {
   if (!project.links?.length) return null;
+  const ordered = [...project.links].sort(
+    (a, b) => Number(Boolean(b.primary)) - Number(Boolean(a.primary)),
+  );
   return (
-    <div className="flex flex-wrap gap-x-5 gap-y-2 pt-1">
-      {project.links.map((l) => (
+    <div className="flex flex-wrap gap-3 pt-2">
+      {ordered.map((l) => (
         <a
           key={l.href}
           href={l.href}
           target="_blank"
           rel="noopener noreferrer"
-          className="ac-link ac-small"
+          className={l.primary ? "ac-key" : "ac-key ac-key--ghost"}
         >
-          &#9658; {l.label}
+          {/* VT323 has no hollow-rectangle glyph, so secondary keys carry no
+              ornament — the outline already separates them. */}
+          {l.primary && <span aria-hidden="true">&#9654;</span>}
+          {l.label}
         </a>
       ))}
     </div>
   );
 }
+
+/** Every running system, pulled off the project list so it can't drift. */
+const LIVE_SYSTEMS = NEBIUS_PROJECTS.flatMap((p) =>
+  (p.links ?? [])
+    .filter((l) => l.primary)
+    .map((l) => ({
+      id: p.id,
+      href: l.href,
+      host: l.href.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, ""),
+    })),
+);
+
+const LIVE_IDS = new Set(LIVE_SYSTEMS.map((l) => l.id));
 
 function Block({ label, items }: { label: string; items: string[] }) {
   return (
@@ -227,6 +292,33 @@ export default function NebiusPage() {
         </p>
       </header>
 
+      {/* ── Live systems — the fastest way in ── */}
+      <section className="ac-panel" aria-label="Live systems">
+        <div className="ac-inv flex items-center justify-between gap-3 px-3 py-1.5">
+          <span className="ac-micro">
+            <span className="ac-blink" aria-hidden="true">
+              &#9646;
+            </span>{" "}
+            LIVE SYSTEMS &mdash; OPEN ONE
+          </span>
+          <span className="ac-micro">{LIVE_SYSTEMS.length}</span>
+        </div>
+        <div className="px-3 py-4 flex flex-wrap gap-3">
+          {LIVE_SYSTEMS.map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ac-key"
+            >
+              <span aria-hidden="true">▶</span>
+              {l.host}
+            </a>
+          ))}
+        </div>
+      </section>
+
       <hr className="ac-rule" />
 
       {/* ── Index ── */}
@@ -235,9 +327,14 @@ export default function NebiusPage() {
         <ul>
           {NEBIUS_PROJECTS.map((p) => (
             <li key={p.id}>
-              <a href={`#p${p.id}`} className="ac-idx ac-small px-1 py-0.5">
+              <a href={`#p${p.id}`} className="ac-idx ac-small px-1 py-1">
                 <span className="ac-dim">{p.id}</span>{" "}
                 <span>{p.name}</span>{" "}
+                {LIVE_IDS.has(p.id) && (
+                  <span aria-label="has a live link" title="Live">
+                    &#9654;
+                  </span>
+                )}{" "}
                 <span className="ac-dim">&middot; {p.status}</span>
               </a>
             </li>

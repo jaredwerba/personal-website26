@@ -1,6 +1,8 @@
 export type ProjectLink = {
   label: string;
   href: string;
+  /** Running software — rendered as a filled soft key and surfaced in the top bar. */
+  primary?: boolean;
 };
 
 export type NebiusProject = {
@@ -61,7 +63,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "55 tests, none requiring an API key or network — a scripted fake model drives the whole graph offline.",
     ],
     links: [
-      { label: "LIVE.DEMO", href: "https://nebius-xword.vercel.app" },
+      { label: "LIVE.DEMO", href: "https://nebius-xword.vercel.app", primary: true },
       { label: "SOURCE", href: "https://github.com/jaredwerba/Nebius-XWord" },
     ],
   },
@@ -97,7 +99,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "A working BCI prototype in 24 hours, built by a team of three, none of whom had a neuroscience background going in.",
     ],
     links: [
-      { label: "LIVE.SITE", href: "https://www.brain-storm.ai" },
+      { label: "LIVE.SITE", href: "https://www.brain-storm.ai", primary: true },
       { label: "DEVPOST", href: "https://devpost.com/software/brainstorm-jcko3f" },
       { label: "SOURCE", href: "https://github.com/jaredwerba/aughacks" },
     ],
@@ -216,7 +218,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     outcome: [
       "Live on a custom domain with real pre-launch work done: terms, privacy, branded 404, social share image, sitemap, and self-serve account deletion.",
     ],
-    links: [{ label: "LIVE.SITE", href: "https://rundog.boston" }],
+    links: [{ label: "LIVE.SITE", href: "https://rundog.boston", primary: true }],
   },
   {
     id: "07",
@@ -237,7 +239,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "The largest codebase I have written, live on a custom domain.",
       "The roadmap includes an honest feature-gap audit against the incumbent — including where their conversational AI builder beats my deterministic one. Worth knowing precisely where you lose.",
     ],
-    links: [{ label: "LIVE.SITE", href: "https://train247.fit" }],
+    links: [{ label: "LIVE.SITE", href: "https://train247.fit", primary: true }],
   },
   {
     id: "08",
