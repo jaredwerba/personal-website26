@@ -184,18 +184,20 @@ function Links({ project }: { project: NebiusProject }) {
   return (
     <div className="flex flex-wrap gap-3 pt-2">
       {ordered.map((l) => (
-        <a
-          key={l.href}
-          href={l.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={l.primary ? "ac-key" : "ac-key ac-key--ghost"}
-        >
-          {/* VT323 has no hollow-rectangle glyph, so secondary keys carry no
-              ornament — the outline already separates them. */}
-          {l.primary && <span aria-hidden="true">&#9654;</span>}
-          {l.label}
-        </a>
+        <div key={l.href} className="flex flex-col gap-1">
+          <a
+            href={l.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={l.primary ? "ac-key" : "ac-key ac-key--ghost"}
+          >
+            {/* VT323 has no hollow-rectangle glyph, so secondary keys carry no
+                ornament — the outline already separates them. */}
+            {l.primary && <span aria-hidden="true">&#9654;</span>}
+            {l.label}
+          </a>
+          {l.note && <span className="ac-micro ac-dim">{l.note}</span>}
+        </div>
       ))}
     </div>
   );
@@ -208,7 +210,9 @@ const LIVE_SYSTEMS = NEBIUS_PROJECTS.flatMap((p) =>
     .map((l) => ({
       id: p.id,
       href: l.href,
-      host: l.href.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, ""),
+      note: l.note,
+      host:
+        l.display ?? l.href.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, ""),
     })),
 );
 
@@ -305,16 +309,18 @@ export default function NebiusPage() {
         </div>
         <div className="px-3 py-4 flex flex-wrap gap-3">
           {LIVE_SYSTEMS.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ac-key"
-            >
-              <span aria-hidden="true">▶</span>
-              {l.host}
-            </a>
+            <div key={l.href} className="flex flex-col gap-1">
+              <a
+                href={l.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ac-key"
+              >
+                <span aria-hidden="true">&#9654;</span>
+                {l.host}
+              </a>
+              {l.note && <span className="ac-micro ac-dim">{l.note}</span>}
+            </div>
           ))}
         </div>
       </section>

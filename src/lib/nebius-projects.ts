@@ -3,6 +3,10 @@ export type ProjectLink = {
   href: string;
   /** Running software — rendered as a filled soft key and surfaced in the top bar. */
   primary?: boolean;
+  /** Shown beneath the key, e.g. an access code for a gated deployment. */
+  note?: string;
+  /** Overrides the host shown in the live-systems bar, for unwieldy preview URLs. */
+  display?: string;
 };
 
 export type NebiusProject = {
@@ -137,10 +141,19 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "Commit history tracks real failure-mode engineering: bounce and complaint handling, a post-research stall fixed by gating before archive, and a start-fresh race where an unload flush was resurrecting the cleared session.",
       "Deliberately gated: access-code protected, and outreach mode defaults to dry run. Built and architected for live sending; not turned loose at scale.",
     ],
+    links: [
+      {
+        label: "LIVE.DEMO",
+        href: "https://vendor-scout-jwerba-jared-werbas-projects.vercel.app",
+        primary: true,
+        note: "Vercel password: fernwood2027",
+        display: "vendor-scout",
+      },
+    ],
   },
   {
     id: "04",
-    name: "INSPACE.GTM.AI",
+    name: "LINKEDIN-AUTOMATOR",
     tagline:
       "A local-first LLM agent that ran real outreach against live LinkedIn, and knew when to stop.",
     tier: 1,
@@ -173,6 +186,9 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "Grew from a personal script into a packaged tool with a one-click launcher for non-technical users — the commit history shows the arc from 'fix' and 'working' to scoped conventional commits.",
       "The acceptance-rate tracker is the honest failure: I built it, the scraper's selectors broke, and it reported zero. Knowing which of your own metrics to trust is part of the job.",
     ],
+    links: [
+      { label: "SOURCE", href: "https://github.com/jaredwerba/linkedin-automator" },
+    ],
   },
   {
     id: "05",
@@ -197,6 +213,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "Deployed and running, with the retrieval layer, auth, and B2B surface all live.",
       "Worth being precise about what this is: context engineering and grounded retrieval done carefully. It is not an agent, and I would not describe it as one.",
     ],
+    links: [{ label: "LIVE.SITE", href: "https://www.covebud.com", primary: true }],
   },
 
   // ── Tier 2 — shipped products ──
@@ -260,6 +277,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     outcome: [
       "A working proposal engine, built over a weekend, that turns a street address into a costed 25-year financial model.",
     ],
+    links: [{ label: "LIVE.SITE", href: "https://sunday-energy.vercel.app", primary: true }],
   },
   {
     id: "09",
@@ -278,6 +296,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     outcome: [
       "73 commits on a real feature-branch workflow, with commit messages that name the production bugs they fix.",
     ],
+    links: [{ label: "LIVE.SITE", href: "https://www.goalslopes.run", primary: true }],
   },
   {
     id: "10",
@@ -314,6 +333,10 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "Real WebAuthn production debugging along the way: forcing the platform authenticator for registration, fixing trusted origins on a custom domain, and tracking down a trailing newline in an environment variable that was breaking auth.",
     ],
     outcome: ["Two live client deployments from one codebase."],
+    links: [
+      { label: "DAVIDWILLFIT.COM", href: "https://www.davidwillfit.com", primary: true },
+      { label: "NICKSCALIHEALTH.COM", href: "https://www.nickscalihealth.com", primary: true },
+    ],
   },
 
   // ── Tier 3 — brief mentions ──
@@ -412,6 +435,9 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     ],
     outcome: [
       "Pure front-end graphics craft. The company is fictional and the site says so.",
+    ],
+    links: [
+      { label: "LIVE.SITE", href: "https://space-forge-taupe.vercel.app/eb", primary: true },
     ],
   },
 ];
