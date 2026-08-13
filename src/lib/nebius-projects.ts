@@ -10,8 +10,13 @@ export type NebiusProject = {
   tier: 1 | 2 | 3;
   stack: string[];
   status: string;
-  /** Colour used for the status chip and section rule. */
+  /** Brightness step — hierarchy is luminance, never hue. */
   accent: "orange" | "cyan" | "green";
+  /**
+   * "built" — I wrote it. "operates" — someone else's tool that I run daily;
+   * the middle block becomes "What it does" and the last "How I use it".
+   */
+  kind?: "built" | "operates";
   problem: string;
   built: string[];
   outcome: string[];
@@ -350,6 +355,49 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
   },
   {
     id: "14",
+    name: "WHOOP-MCP",
+    tagline: "Model Context Protocol server that puts my own biometrics in front of an LLM.",
+    tier: 3,
+    accent: "green",
+    kind: "operates",
+    status: "DAILY DRIVER",
+    stack: ["TypeScript", "MCP SDK", "Zod", "WHOOP API", "OAuth 2.0"],
+    problem:
+      "Recovery, sleep and strain data sits locked inside a phone app. I wanted it queryable in natural language, in the same session as everything else I am working on.",
+    built: [
+      "Exposes six tools over MCP — recovery, sleep, cycles, workouts, profile, and body measurement — each with a Zod-validated schema.",
+      "Runs a full OAuth 2.0 flow against the real WHOOP API, with a local callback server and a persisted token store handling refresh.",
+    ],
+    outcome: [
+      "I run it as a connected MCP server most days, which is where a lot of my practical feel for the protocol comes from — how tool schemas shape what a model will actually call, how much description a tool needs before it gets used correctly, and what token lifecycle management looks like when an agent is the consumer.",
+      "It also set the bar for my own Whoop OAuth client on jwerba.com — having used someone else's implementation daily made the tradeoffs in mine much more obvious.",
+    ],
+    links: [
+      { label: "SOURCE", href: "https://github.com/shashankswe2020-ux/whoop-mcp" },
+    ],
+  },
+  {
+    id: "15",
+    name: "DEXTER",
+    tagline: "A LangGraph research agent I run in the terminal.",
+    tier: 3,
+    accent: "cyan",
+    kind: "operates",
+    status: "DAILY DRIVER",
+    stack: ["TypeScript", "LangGraph", "LangChain", "Ink TUI", "OpenRouter"],
+    problem:
+      "I wanted a working, non-toy agent in my daily rotation — something with subagents, an eval harness and multi-model routing that I could actually use rather than just read about.",
+    built: [
+      "A financial research agent built on LangChain and LangGraph, with delegated subagents, an evaluation harness, OpenRouter routing across model providers, and an Ink-based terminal interface.",
+    ],
+    outcome: [
+      "Running it daily is a large part of how I formed opinions about LangGraph before I built my own graph for the Nebius take-home — particularly around where the prebuilt agent stops being the right abstraction, and why an eval harness needs baselines rather than a single score.",
+      "Reading and operating other people's agent code is underrated. Most of what I know about failure modes came from watching someone else's agent hit them first.",
+    ],
+    links: [{ label: "SOURCE", href: "https://github.com/virattt/dexter" }],
+  },
+  {
+    id: "16",
     name: "LUNARFORGE",
     tagline: "A WebGL showcase disguised as a landing page.",
     tier: 3,

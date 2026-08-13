@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Divider } from "@mdrbx/nerv-ui";
+import { VT323, Silkscreen } from "next/font/google";
 import {
   NEBIUS_PROJECTS,
   TIER_1,
@@ -8,56 +8,158 @@ import {
   type NebiusProject,
 } from "@/lib/nebius-projects";
 
+/**
+ * Fonts are imported per-route, so they load only on /nebius and the rest of
+ * the site keeps its own typography untouched.
+ */
+const term = VT323({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-ac-term",
+  display: "swap",
+});
+const micro = Silkscreen({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-ac-micro",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Technical Brief — Jared Werba",
   description: "Projects, what I owned, and what came out of them.",
   robots: { index: false, follow: false },
 };
 
-const ACCENT_TEXT = {
-  orange: "text-nerv-orange",
-  cyan: "text-nerv-cyan",
-  green: "text-nerv-green",
+/**
+ * Amber Console, CRT P3 phosphor. Hierarchy is brightness — never hue.
+ * Everything is scoped under .ac-root so no other route is affected.
+ */
+const AC_CSS = `
+.ac-root {
+  --ac-emit-100: #ffd052;
+  --ac-emit-90:  #ffae1e;
+  --ac-emit-70:  #d98f13;
+  --ac-emit-50:  #a2690c;
+  --ac-emit-30:  #6b4405;
+  --ac-screen:   #0d0700;
+  --ac-on-fill:  #1e1200;
+  --ac-bw: 2px;
+
+  background: var(--ac-screen);
+  color: var(--ac-emit-90);
+  font-family: var(--font-ac-term), "VT323", ui-monospace, monospace;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-shadow: 0 0 1px rgba(255,174,30,0.40), 0 0 8px rgba(255,174,30,0.14);
+  position: relative;
+}
+
+/* Faint scanlines — kept low so they never fight the text. */
+.ac-root::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    rgba(0,0,0,0.10) 2px,
+    rgba(0,0,0,0.10) 4px
+  );
+  mix-blend-mode: multiply;
+}
+
+.ac-root ::selection { background: var(--ac-emit-90); color: var(--ac-screen); }
+
+.ac-micro {
+  font-family: var(--font-ac-micro), "Silkscreen", ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-shadow: none;
+}
+
+.ac-display { font-size: 40px; line-height: 1.05; letter-spacing: 0.1em; color: var(--ac-emit-100); }
+.ac-title   { font-size: 27px; line-height: 1.1;  letter-spacing: 0.06em; color: var(--ac-emit-100); }
+.ac-body    { font-size: 21px; line-height: 1.5;  color: var(--ac-emit-90); }
+.ac-small   { font-size: 18px; line-height: 1.45; color: var(--ac-emit-70); }
+.ac-dim     { color: var(--ac-emit-50); }
+
+@media (min-width: 768px) {
+  .ac-display { font-size: 52px; }
+  .ac-title   { font-size: 32px; }
+  .ac-body    { font-size: 22px; }
+}
+
+/* 2px rules draw the regions. No elevation, no shadows-as-depth. */
+.ac-panel {
+  border: var(--ac-bw) solid var(--ac-emit-30);
+  border-radius: 2px 4px 8px 4px;
+}
+.ac-rule { border: 0; border-top: var(--ac-bw) solid var(--ac-emit-30); margin: 0; }
+
+/* Inverse video carries emphasis instead of bold — there is no bold here. */
+.ac-inv {
+  background: var(--ac-emit-90);
+  color: var(--ac-screen);
+  text-shadow: none;
+}
+/* Size classes carry their own colour, which would otherwise render
+   amber-on-amber inside an inverse bar. Force descendants back to screen. */
+.ac-inv .ac-display,
+.ac-inv .ac-title,
+.ac-inv .ac-body,
+.ac-inv .ac-small,
+.ac-inv .ac-micro,
+.ac-inv .ac-dim {
+  color: var(--ac-screen);
+  text-shadow: none;
+}
+
+.ac-link { color: var(--ac-emit-100); text-decoration: none; border-bottom: var(--ac-bw) solid var(--ac-emit-30); }
+.ac-link:hover { background: var(--ac-emit-90); color: var(--ac-screen); text-shadow: none; border-bottom-color: var(--ac-emit-90); }
+
+.ac-idx { color: var(--ac-emit-70); text-decoration: none; display: block; }
+.ac-idx:hover { background: var(--ac-on-fill); color: var(--ac-emit-100); }
+`;
+
+const KIND_LABELS = {
+  built: { mid: "BUILT", end: "OUTCOME" },
+  operates: { mid: "WHAT IT DOES", end: "HOW I USE IT" },
 } as const;
 
-function ProjectLinks({ project }: { project: NebiusProject }) {
+function Links({ project }: { project: NebiusProject }) {
   if (!project.links?.length) return null;
   return (
-    <div className="flex flex-wrap gap-x-6 gap-y-2 pt-1">
-      {project.links.map((link) => (
+    <div className="flex flex-wrap gap-x-5 gap-y-2 pt-1">
+      {project.links.map((l) => (
         <a
-          key={link.href}
-          href={link.href}
+          key={l.href}
+          href={l.href}
           target="_blank"
           rel="noopener noreferrer"
-          className="font-nerv-mono text-[10px] text-nerv-cyan/70 tracking-wider hover:text-nerv-orange transition-colors"
+          className="ac-link ac-small"
         >
-          &gt; {link.label} &rarr;
+          &#9658; {l.label}
         </a>
       ))}
     </div>
   );
 }
 
-/** Mono label + hanging list. No boxes — hierarchy comes from type and rules. */
 function Block({ label, items }: { label: string; items: string[] }) {
   return (
-    <div className="space-y-2.5">
-      <p className="font-nerv-mono text-[10px] tracking-[0.2em] text-nerv-mid-gray uppercase">
-        {label}
-      </p>
-      <ul className="space-y-2.5">
+    <div className="space-y-3">
+      <p className="ac-micro ac-dim">{label}:</p>
+      <ul className="space-y-3">
         {items.map((item, i) => (
-          <li key={i} className="flex gap-2.5">
-            <span
-              className="font-nerv-mono text-[10px] text-nerv-mid-gray/60 shrink-0 leading-[1.9]"
-              aria-hidden="true"
-            >
-              &mdash;
+          <li key={i} className="flex gap-3">
+            <span className="ac-body ac-dim shrink-0 select-none" aria-hidden="true">
+              &#9646;
             </span>
-            <span className="font-nerv-body text-sm md:text-base text-nerv-white/90 leading-relaxed">
-              {item}
-            </span>
+            <span className="ac-body">{item}</span>
           </li>
         ))}
       </ul>
@@ -65,199 +167,140 @@ function Block({ label, items }: { label: string; items: string[] }) {
   );
 }
 
-function FeaturedProject({ project }: { project: NebiusProject }) {
+function Project({ project, full }: { project: NebiusProject; full: boolean }) {
+  const labels = KIND_LABELS[project.kind ?? "built"];
   return (
-    <section id={`p${project.id}`} className="space-y-5 scroll-mt-6">
-      <div className="space-y-2">
-        <div className="flex items-baseline gap-3 flex-wrap">
-          <span className="font-nerv-mono text-[11px] text-nerv-mid-gray tracking-[0.2em]">
-            {project.id}
-          </span>
-          <h3
-            className={`font-nerv-display text-lg md:text-xl tracking-[0.16em] ${ACCENT_TEXT[project.accent]}`}
-          >
-            {project.name}
-          </h3>
-          <span className="font-nerv-mono text-[9px] tracking-[0.18em] text-nerv-mid-gray uppercase">
-            {project.status}
-          </span>
+    <section id={`p${project.id}`} className="ac-panel scroll-mt-4">
+      {/* Header bar — inverse video, KEY:VALUE */}
+      <div className="ac-inv flex items-baseline justify-between gap-3 px-3 py-1.5">
+        <span className={full ? "ac-title" : "ac-body"}>
+          {project.id} {project.name}
+        </span>
+        <span className="ac-micro shrink-0">{project.status}</span>
+      </div>
+
+      <div className="px-3 py-4 space-y-5">
+        <div className="space-y-2">
+          <p className="ac-body">{project.tagline}</p>
+          <p className="ac-micro ac-dim">{project.stack.join(" / ")}</p>
         </div>
-        <p className="font-nerv-body text-sm md:text-base text-nerv-white/70 leading-relaxed italic">
-          {project.tagline}
-        </p>
-        <p className="font-nerv-mono text-[10px] text-nerv-mid-gray/80 tracking-wider">
-          {project.stack.join("  ·  ")}
-        </p>
-      </div>
 
-      <div className="space-y-2.5">
-        <p className="font-nerv-mono text-[10px] tracking-[0.2em] text-nerv-mid-gray uppercase">
-          Problem
-        </p>
-        <p className="font-nerv-body text-sm md:text-base text-nerv-white/90 leading-relaxed">
-          {project.problem}
-        </p>
-      </div>
+        <hr className="ac-rule" />
 
-      <Block label="What I built" items={project.built} />
-      <Block label="Outcome" items={project.outcome} />
-      <ProjectLinks project={project} />
-    </section>
-  );
-}
-
-function CompactProject({ project }: { project: NebiusProject }) {
-  return (
-    <section id={`p${project.id}`} className="space-y-3 scroll-mt-6">
-      <div className="space-y-1.5">
-        <div className="flex items-baseline gap-3 flex-wrap">
-          <span className="font-nerv-mono text-[11px] text-nerv-mid-gray tracking-[0.2em]">
-            {project.id}
-          </span>
-          <h3
-            className={`font-nerv-display text-base md:text-lg tracking-[0.16em] ${ACCENT_TEXT[project.accent]}`}
-          >
-            {project.name}
-          </h3>
-          <span className="font-nerv-mono text-[9px] tracking-[0.18em] text-nerv-mid-gray uppercase">
-            {project.status}
-          </span>
+        <div className="space-y-3">
+          <p className="ac-micro ac-dim">Problem:</p>
+          <p className="ac-body">{project.problem}</p>
         </div>
-        <p className="font-nerv-body text-sm text-nerv-white/70 leading-relaxed italic">
-          {project.tagline}
-        </p>
-        <p className="font-nerv-mono text-[10px] text-nerv-mid-gray/80 tracking-wider">
-          {project.stack.join("  ·  ")}
-        </p>
+
+        <Block label={labels.mid} items={project.built} />
+        <Block label={labels.end} items={project.outcome} />
+        <Links project={project} />
       </div>
-
-      <p className="font-nerv-body text-sm text-nerv-white/90 leading-relaxed">
-        {project.problem}
-      </p>
-
-      <Block label="What I built" items={project.built} />
-      <Block label="Outcome" items={project.outcome} />
-      <ProjectLinks project={project} />
     </section>
   );
 }
 
 export default function NebiusPage() {
   return (
-    <div className="space-y-8">
+    <div
+      className={`${term.variable} ${micro.variable} ac-root -mx-4 md:-mx-8 px-4 md:px-6 py-6 space-y-6`}
+    >
+      <style dangerouslySetInnerHTML={{ __html: AC_CSS }} />
+
+      {/* ── Status bar ── */}
+      <div className="ac-inv flex items-center justify-between gap-3 px-3 py-1">
+        <span className="ac-micro">JWERBA // TECHNICAL BRIEF</span>
+        <span className="ac-micro">REC:14</span>
+      </div>
+
       {/* ── Header ── */}
-      <header className="space-y-3">
-        <h2 className="font-nerv-display text-2xl md:text-3xl tracking-[0.16em] text-nerv-orange">
-          TECHNICAL BRIEF
-        </h2>
-        <p className="font-nerv-mono text-xs text-nerv-mid-gray tracking-wider">
-          // PREPARED FOR C.MULDER &mdash; HEAD OF ENGINEERING, AI R&amp;D
+      <header className="space-y-4">
+        <h2 className="ac-display">TECHNICAL BRIEF</h2>
+        <p className="ac-small">
+          PREPARED FOR C.MULDER &mdash; HEAD OF ENGINEERING, AI R&amp;D
         </p>
-        <p className="font-nerv-body text-sm md:text-base text-nerv-white/90 leading-relaxed max-w-2xl">
-          Fourteen projects, ordered by how much they bear on the work at Nebius rather than
+        <p className="ac-body max-w-[62ch]">
+          Sixteen projects, ordered by how much they bear on the work at Nebius rather than
           by date. For each one: the problem I was solving, what I personally built, and what
           came out of it. Everything with a live link is running right now &mdash; the fastest
           way through this page is to open one.
         </p>
       </header>
 
-      <Divider color="orange" variant="dashed" />
+      <hr className="ac-rule" />
 
       {/* ── Index ── */}
       <nav aria-label="Project index" className="space-y-2">
-        <p className="font-nerv-mono text-[10px] tracking-[0.2em] text-nerv-mid-gray uppercase">
-          Index
-        </p>
-        <ul className="space-y-1.5">
+        <p className="ac-micro ac-dim">Index:</p>
+        <ul>
           {NEBIUS_PROJECTS.map((p) => (
             <li key={p.id}>
-              <a
-                href={`#p${p.id}`}
-                className="group flex items-baseline gap-3 font-nerv-mono text-[11px] tracking-wider"
-              >
-                <span className="text-nerv-mid-gray/70 shrink-0">{p.id}</span>
-                <span
-                  className={`${ACCENT_TEXT[p.accent]} opacity-80 group-hover:opacity-100 transition-opacity`}
-                >
-                  {p.name}
-                </span>
-                <span className="text-nerv-mid-gray/50 text-[9px] truncate">{p.status}</span>
+              <a href={`#p${p.id}`} className="ac-idx ac-small px-1 py-0.5">
+                <span className="ac-dim">{p.id}</span>{" "}
+                <span>{p.name}</span>{" "}
+                <span className="ac-dim">&middot; {p.status}</span>
               </a>
             </li>
           ))}
         </ul>
       </nav>
 
-      <Divider color="green" variant="dashed" />
+      <hr className="ac-rule" />
 
-      {/* ── Tier 1 ── */}
-      <div className="space-y-8">
-        {TIER_1.map((project, i) => (
-          <div key={project.id} className="space-y-8">
-            <FeaturedProject project={project} />
-            {i < TIER_1.length - 1 && <Divider color="cyan" variant="dashed" />}
-          </div>
-        ))}
-      </div>
-
-      <Divider color="orange" variant="dashed" />
-
-      {/* ── Tier 2 ── */}
+      {/* ── Featured ── */}
       <div className="space-y-6">
-        <div className="space-y-2">
-          <h3 className="font-nerv-display text-lg md:text-xl tracking-[0.16em] text-nerv-orange">
-            SHIPPED
-          </h3>
-          <p className="font-nerv-mono text-[10px] text-nerv-mid-gray tracking-wider">
-            // PRODUCTS RUNNING ON THEIR OWN DOMAINS
-          </p>
-        </div>
-        {TIER_2.map((project) => (
-          <CompactProject key={project.id} project={project} />
+        {TIER_1.map((p) => (
+          <Project key={p.id} project={p} full />
         ))}
       </div>
 
-      <Divider color="green" variant="dashed" />
-
-      {/* ── Tier 3 ── */}
-      <div className="space-y-6">
-        <div className="space-y-2">
-          <h3 className="font-nerv-display text-lg md:text-xl tracking-[0.16em] text-nerv-cyan">
-            ALSO
-          </h3>
-          <p className="font-nerv-mono text-[10px] text-nerv-mid-gray tracking-wider">
-            // CONTRIBUTIONS AND TOOLING
-          </p>
+      {/* ── Shipped ── */}
+      <div className="space-y-4">
+        <div className="ac-inv px-3 py-1">
+          <span className="ac-micro">SHIPPED / RUNNING ON THEIR OWN DOMAINS</span>
         </div>
-        {TIER_3.map((project) => (
-          <CompactProject key={project.id} project={project} />
-        ))}
+        <div className="space-y-6">
+          {TIER_2.map((p) => (
+            <Project key={p.id} project={p} full={false} />
+          ))}
+        </div>
       </div>
 
-      <Divider color="orange" variant="dashed" />
+      {/* ── Also ── */}
+      <div className="space-y-4">
+        <div className="ac-inv px-3 py-1">
+          <span className="ac-micro">ALSO / CONTRIBUTIONS, TOOLING, DAILY DRIVERS</span>
+        </div>
+        <div className="space-y-6">
+          {TIER_3.map((p) => (
+            <Project key={p.id} project={p} full={false} />
+          ))}
+        </div>
+      </div>
 
-      <footer className="space-y-2 pb-4">
-        <p className="font-nerv-mono text-[10px] text-nerv-mid-gray tracking-wider">
-          // JARED WERBA &middot; BOSTON, MA
-        </p>
-        <div className="flex flex-wrap gap-x-6 gap-y-2">
+      <hr className="ac-rule" />
+
+      <footer className="space-y-3 pb-2">
+        <p className="ac-micro ac-dim">JARED WERBA / BOSTON MA</p>
+        <div className="flex flex-wrap gap-x-5 gap-y-2">
           <a
             href="https://github.com/jaredwerba"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-nerv-mono text-[10px] text-nerv-cyan/70 tracking-wider hover:text-nerv-orange transition-colors"
+            className="ac-link ac-small"
           >
-            &gt; GITHUB &rarr;
+            &#9658; GITHUB
           </a>
           <a
             href="https://linkedin.com/in/jwerba"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-nerv-mono text-[10px] text-nerv-cyan/70 tracking-wider hover:text-nerv-orange transition-colors"
+            className="ac-link ac-small"
           >
-            &gt; LINKEDIN &rarr;
+            &#9658; LINKEDIN
           </a>
         </div>
+        <p className="ac-micro ac-dim">&#10035; END OF RECORD</p>
       </footer>
     </div>
   );
