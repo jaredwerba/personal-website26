@@ -360,6 +360,13 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "It has run on a schedule, through launchd, since July. So far: 7,598 job rows, across 2,220 companies and 28 job-board systems.",
       "The scheduling fix has its own story. The job ran once at 8am. If the machine was asleep, the run just did not happen, with no warning. This cost six lost days before I caught it.",
     ],
+    links: [
+      {
+        label: "LIVE.DASHBOARD",
+        href: "https://careerops-jobboard-public.vercel.app",
+        primary: true,
+      },
+    ],
   },
   {
     id: "13",
