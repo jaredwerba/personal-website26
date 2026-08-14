@@ -94,6 +94,25 @@ export const CAPABILITIES: Capability[] = [
     proof:
       "Ten years at Oracle. I sold and architected every OCI IaaS and PaaS product, including GPU compute for AI training and inference: A100 80GB, H100, A10. I ran Kubernetes architecture for named accounts. Oracle Cloud Architect certified. I also run my own RDMA cluster at home (17).",
   },
+  {
+    label: "Hackathons won",
+    proof:
+      "First place at Augmentation Lab, MIT — AugHacks 2025, Long Track (02). I presented the work to Stephen Wolfram.",
+  },
+  {
+    label: "Open source",
+    proof:
+      "12 career-ops. 33 commits, third-largest contributor. My worker-pool fix came from a measurement, not a hunch.",
+  },
+  {
+    label: "Technical writing",
+    proof:
+      "The 01 README runs 550 lines and states what it does not measure. The 04 architecture set runs nine documents, written by the tool's own logging integration.",
+  },
+  {
+    label: "Public demos",
+    proof: "Twelve, all live right now. Every one is linked at the top of this page.",
+  },
 ];
 
 /** Technical background. No quota figures. */
@@ -200,6 +219,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     ],
     outcome: [
       "First place, Long Track, at AugHacks 2025. Hosted by Augmentation Lab at MIT in Cambridge.",
+      "I presented the work to Stephen Wolfram.",
       "Judges included two MIT Media Lab researchers, plus founders from PRISM, LONG, and MorphoAI. Sponsors included Meta and AWS.",
       "The organizers invited us to show our work at the MIT Media Lab Augmentation Summit.",
       "A working brain-computer interface, built in 24 hours, by a team of three. None of us had a neuroscience background going in.",
