@@ -303,23 +303,7 @@ export default function NebiusPage() {
         </p>
       </header>
 
-      {/* ── Capability map — their bar, and what proves it ── */}
-      <section className="ac-panel" aria-label="Capability map">
-        <div className="ac-inv flex items-center justify-between gap-3 px-3 py-1.5">
-          <span className="ac-micro">CAPABILITY MAP</span>
-          <span className="ac-micro">{CAPABILITIES.length}</span>
-        </div>
-        <div className="px-3 py-4 space-y-4">
-          {CAPABILITIES.map((c) => (
-            <div key={c.label} className="space-y-1">
-              <p className="ac-micro ac-dim">{c.label}:</p>
-              <p className="ac-body">{c.proof}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── Live systems — the fastest way in ── */}
+      {/* ── Live systems — sits right under "open one", where the reader is told to ── */}
       <section className="ac-panel" aria-label="Live systems">
         <div className="ac-inv flex items-center justify-between gap-3 px-3 py-1.5">
           <span className="ac-micro">
@@ -341,8 +325,25 @@ export default function NebiusPage() {
               >
                 <span aria-hidden="true">&#9654;</span>
                 {l.host}
+                <span className="sr-only"> (opens in a new tab)</span>
               </a>
               {l.note && <span className="ac-micro ac-dim">{l.note}</span>}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── Capability map — their bar, and what proves it ── */}
+      <section className="ac-panel" aria-label="Capability map">
+        <div className="ac-inv flex items-center justify-between gap-3 px-3 py-1.5">
+          <span className="ac-micro">CAPABILITY MAP</span>
+          <span className="ac-micro">{CAPABILITIES.length}</span>
+        </div>
+        <div className="px-3 py-4 space-y-4">
+          {CAPABILITIES.map((c) => (
+            <div key={c.label} className="space-y-1">
+              <p className="ac-micro ac-dim">{c.label}:</p>
+              <p className="ac-body">{c.proof}</p>
             </div>
           ))}
         </div>

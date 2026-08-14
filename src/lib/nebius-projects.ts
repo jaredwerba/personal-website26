@@ -107,7 +107,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Technical writing",
     proof:
-      "The 01 README runs 550 lines and states what it does not measure. The 04 architecture set runs nine documents, written by the tool's own logging integration.",
+      "I write in ASD-STE100, the Simplified Technical English standard. This page is written in it. The 01 README runs 550 lines and states plainly what it does not measure. The 04 architecture set runs nine documents, written by the tool's own logging integration.",
   },
   {
     label: "Public demos",
