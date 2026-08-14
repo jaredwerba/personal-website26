@@ -279,7 +279,7 @@ export default function NebiusPage() {
       {/* ── Status bar ── */}
       <div className="ac-inv flex items-center justify-between gap-3 px-3 py-1">
         <span className="ac-micro">JWERBA // TECHNICAL BRIEF</span>
-        <span className="ac-micro">REC:14</span>
+        <span className="ac-micro">REC:{NEBIUS_PROJECTS.length}</span>
       </div>
 
       {/* ── Header ── */}
@@ -289,9 +289,9 @@ export default function NebiusPage() {
           PREPARED FOR C.MULDER &mdash; HEAD OF ENGINEERING, AI R&amp;D
         </p>
         <p className="ac-body max-w-[62ch]">
-          Sixteen projects, ordered by how much they bear on the work at Nebius rather than
-          by date. For each one: the problem I was solving, what I personally built, and what
-          came out of it. Everything with a live link is running right now &mdash; the fastest
+          Sixteen projects. I ordered them by how much they matter to the work at Nebius,
+          not by date. For each one, I give three things: the problem, what I built, and
+          what came of it. Everything with a live link is running right now. The fastest
           way through this page is to open one.
         </p>
       </header>
