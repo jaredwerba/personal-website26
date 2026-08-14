@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { VT323, Silkscreen } from "next/font/google";
 import {
+  BACKGROUND,
+  CAPABILITIES,
   NEBIUS_PROJECTS,
   TIER_1,
   TIER_2,
@@ -289,12 +291,33 @@ export default function NebiusPage() {
           PREPARED FOR C.MULDER &mdash; HEAD OF ENGINEERING, AI R&amp;D
         </p>
         <p className="ac-body max-w-[62ch]">
-          Sixteen projects. I ordered them by how much they matter to the work at Nebius,
-          not by date. For each one, I give three things: the problem, what I built, and
-          what came of it. Everything with a live link is running right now. The fastest
-          way through this page is to open one.
+          Seventeen projects. I ordered them by how much they matter to the work at
+          Nebius, not by date. For each one, I give three things: the problem, what I
+          built, and what came of it. Everything with a live link is running right now.
+          The fastest way through this page is to open one.
+        </p>
+        <p className="ac-body max-w-[62ch]">
+          Before the projects: ten years at Oracle, selling and architecting cloud
+          infrastructure. That included GPU compute for AI training and inference. It is
+          why I build what I build.
         </p>
       </header>
+
+      {/* ── Capability map — their bar, and what proves it ── */}
+      <section className="ac-panel" aria-label="Capability map">
+        <div className="ac-inv flex items-center justify-between gap-3 px-3 py-1.5">
+          <span className="ac-micro">CAPABILITY MAP</span>
+          <span className="ac-micro">{CAPABILITIES.length}</span>
+        </div>
+        <div className="px-3 py-4 space-y-4">
+          {CAPABILITIES.map((c) => (
+            <div key={c.label} className="space-y-1">
+              <p className="ac-micro ac-dim">{c.label}:</p>
+              <p className="ac-body">{c.proof}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* ── Live systems — the fastest way in ── */}
       <section className="ac-panel" aria-label="Live systems">
@@ -377,6 +400,26 @@ export default function NebiusPage() {
         <div className="space-y-6">
           {TIER_3.map((p) => (
             <Project key={p.id} project={p} full={false} />
+          ))}
+        </div>
+      </div>
+
+      {/* ── Background ── */}
+      <div className="space-y-4">
+        <div className="ac-inv px-3 py-1">
+          <span className="ac-micro">BACKGROUND / TEN YEARS IN CLOUD INFRASTRUCTURE</span>
+        </div>
+        <div className="px-1 space-y-3">
+          {BACKGROUND.map((line, i) => (
+            <div key={i} className="flex gap-3">
+              <span
+                className="ac-body ac-dim shrink-0 select-none"
+                aria-hidden="true"
+              >
+                &#9646;
+              </span>
+              <p className="ac-body">{line}</p>
+            </div>
           ))}
         </div>
       </div>

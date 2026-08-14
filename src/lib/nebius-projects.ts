@@ -9,6 +9,103 @@ export type ProjectLink = {
   display?: string;
 };
 
+export type Capability = {
+  /** Their bar, as they name it. */
+  label: string;
+  /** What proves it. Project numbers tie back to the index. */
+  proof: string;
+};
+
+/**
+ * The role spec lists a technical bar. This maps each item to the work that
+ * proves it, so a reader does not have to infer it from sixteen writeups.
+ *
+ * Claim level matters. "Architected and sold" for the Oracle infrastructure
+ * work; "built and ran" for his own code. Nothing here should fail a
+ * follow-up question.
+ */
+export const CAPABILITIES: Capability[] = [
+  {
+    label: "Agentic systems",
+    proof:
+      "01 Nebius-XWord, a hand-built LangGraph. 03 Venus, four specialist sub-agents in parallel. 04 LinkedIn-Automator, which ran against a live site in production.",
+  },
+  {
+    label: "Tool calling",
+    proof:
+      "01 — four tools, and a stop rule that fires on a submit call, not on silence.",
+  },
+  {
+    label: "MCP",
+    proof:
+      "14 whoop-mcp. I run it as a connected server. It pulls my own health metrics into jwerba.com.",
+  },
+  {
+    label: "Evaluation",
+    proof:
+      "01 — a four-solver harness that tests itself. An empty solver must score 0%. An oracle solver must score 100%. If either misses, the scorer is broken.",
+  },
+  {
+    label: "RAG and retrieval",
+    proof:
+      "A retrieval pipeline with Cohere ReRank. 05 COVE builds three context layers per request, each one isolated so a failure degrades the answer instead of killing it.",
+  },
+  {
+    label: "LLM APIs",
+    proof:
+      "Nebius Token Factory, Vercel AI Gateway, OpenAI, Anthropic, Ollama.",
+  },
+  {
+    label: "Inference, self-hosted",
+    proof:
+      "17 — two Mac minis on RDMA, running MLX and EXO, serving Hermes. 04 serves llama3.1:8b locally through Ollama inside a live loop, with temperature and token budget set per task.",
+  },
+  {
+    label: "Inference, hosted",
+    proof:
+      "01 — I tested 13 models across two providers, then raced the same weights on both to compare the providers, not the models.",
+  },
+  {
+    label: "Edge and embedded",
+    proof:
+      "02 — I embedded the NeuroLM model onto OpenBCI hardware, reading 6-channel EEG at 250Hz.",
+  },
+  {
+    label: "Distributed systems",
+    proof:
+      "03 — at-least-once dispatch. A SET NX lease claims each job. A TTL covers a crashed worker. A failed send releases the lease. Idempotency keys stop a double send.",
+  },
+  {
+    label: "Deployment automation",
+    proof:
+      "12 — a two-tier launchd scheduler with a real lock, stale-lock recovery by age, catch-up after the machine sleeps, and a guarded production deploy.",
+  },
+  {
+    label: "Python",
+    proof: "01 and 04.",
+  },
+  {
+    label: "Integrations",
+    proof:
+      "OAuth 2.0 written by hand (10, 14). Signed inbound webhooks (03). Google Solar, NREL, and Stripe Connect (07, 08).",
+  },
+  {
+    label: "Infrastructure",
+    proof:
+      "Ten years at Oracle. I sold and architected every OCI IaaS and PaaS product, including GPU compute for AI training and inference: A100 80GB, H100, A10. I ran Kubernetes architecture for named accounts. Oracle Cloud Architect certified. I also run my own RDMA cluster at home (17).",
+  },
+];
+
+/** Technical background. No quota figures. */
+export const BACKGROUND: string[] = [
+  "Ten years at Oracle. I sold and architected every OCI IaaS and PaaS product over that span.",
+  "GPU compute for AI training and inference: A100 80GB, H100, and A10. Plus HPC and managed databases.",
+  "Kubernetes architecture for named enterprise accounts, including Systems & Software in Vermont, on their Enquesta CIS platform.",
+  "I ran discovery, architecture reviews, live demos, and POC scoping on my own, as a combined account executive and solutions engineer. I escalated to specialists only when scope demanded it.",
+  "Oracle Cloud Architect Associate, 2018 and 2021. I was the first account executive at Oracle to earn it.",
+  "The point for this role: I have spent a decade on the other side of the conversation a Nebius FDE has. I have scoped GPU workloads with CTOs, and I know what the buyer is weighing.",
+];
+
 export type NebiusProject = {
   id: string;
   name: string;
@@ -60,7 +157,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "I split the work in two. A Python engine owns the grid: the slots, the numbers, the crossing rules. The model owns only the answers. If the model gives a wrong answer, the engine rejects it and gives a reason. The model can fail. It can never break the grid.",
       "I built my own LangGraph, not the standard prebuilt agent. My stop rule is different: the run must end on a submit call, not on silence. The graph has three nodes — agent, tools, and a nudge node. The nudge node pushes the model back to tool calls if it answers in plain text. It nudges at most three times, so the run always ends.",
       "I capped the context window. Without a cap, each turn resends the full history, and cost grows with the square of the turn count — one 40-turn solve used 1.09 million tokens. My cap keeps the system prompt, the first grid, and the newest messages. It also drops any orphan tool result, since the API rejects a tool message with no matching call.",
-      "I built a test harness that checks itself. Four solvers run through the same scoring code. An empty solver must score 0%. If it does not, the scorer is broken. An oracle solver must score 100%. A backtrack solver fills real words but ignores every clue — it scores about 9%. Any score above that line is the model's real skill at reading clues.",
+      "I built a test harness that checks itself. Four solvers run through the same scoring code. An empty solver must score 0%. If it does not, the scorer is broken. An oracle solver must score 100%. A backtrack solver fills real words but ignores every clue — it scores about 9%. Any score above that line is the model's real skill at reading clues. The harness is the reusable part. The crossword agent is just what I pointed it at.",
       "I chose models by testing, not by name. I read the live model catalog first, and found that DeepSeek V4 Flash has no tool support at all. I screened 13 candidates, then ran the rest through 5 models, 2 services, 4 puzzles, 2 runs each. The README lists every failure next to every win.",
       "I measured the prompt itself. One rule told the agent to call get_state first — that wasted a turn, since the first message already has the grid. Another rule made the agent confirm before it submits — that cost 200 seconds to recheck a grid the engine had already checked. I removed both rules. One solve dropped from 420 seconds to 153.",
     ],
@@ -94,7 +191,8 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     problem:
       "Our online lives connect to almost everything, but not to our own mind. Most apps guess your interest from your clicks. A system that reads real attention could do better. It could show you what actually holds your focus, not just what you opened. For a student, it could show which lesson is really landing.",
     built: [
-      "A pipeline that reads brain signals and scores attention. It takes 6-channel EEG at 250Hz from an OpenBCI Ultracortex headset. It runs the signal through the NeuroLM neural network. For each 1 to 10 second window, it outputs an attention score, an engagement score, and a 512-number embedding.",
+      "I embedded the NeuroLM model onto the OpenBCI hardware. This is the core of the build: getting a real model to run against a live sensor, not against a saved file.",
+      "A pipeline that reads brain signals and scores attention. It takes 6-channel EEG at 250Hz from an OpenBCI Ultracortex headset. It runs the signal through NeuroLM. For each 1 to 10 second window, it outputs an attention score, an engagement score, and a 512-number embedding.",
       "A way to recommend content. The system compares a live embedding to embeddings from past videos, then suggests the content that best holds that person's attention.",
       "A wearable camera on a Seeed XIAO ESP32S3 board. It takes a photo the moment attention or engagement crosses a threshold. This pairs the brain signal with what the person was really looking at.",
       "The public site, brain-storm.ai. I built and shipped it alone, in the six days after the hackathon: 28 commits, a v0.0/v1.0 roadmap, a signup form, analytics, animation, and a full mobile pass.",
@@ -172,6 +270,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "Prospecting is a lot of low-value, repeat work. Every commercial tool for it is SaaS, and each one wants your LinkedIn password and your prospect data on their servers. I set myself a harder rule on purpose: keep it all local. Use my own Chrome session. Run the model on my own machine. Let no data leave it. No headless scraping. No private APIs.",
     built: [
       "I removed the company name from the connection-note prompt. This killed a whole class of made-up facts — the model was inventing details about companies it did not know. Role alone gives an honest opening line. The company name still exists as a function argument. It just never reaches the prompt.",
+      "I serve the model myself. Ollama runs llama3.1:8b on my own machine, inside a live loop, with no API call leaving the box. The agent uses it to find cloud infrastructure decision makers and to write the first message to each one.",
       "I set temperature and token limits per task, not one default for all. Title scoring runs at temperature 0.1 with a 5-token limit, since it needs one number. Message writing runs at 0.8 with a 120-token limit. One model does the work of four different tools.",
       "A full safety loop for every generated message. First, generate the text. Then check it against a list of common AI tells. If it fails, retry, up to three times. If it still fails, fall back to a fixed safe line. Last, cut the text at a word boundary, so it never breaks LinkedIn's length limit.",
       "A two-step score for seniority. The LLM scores it first. If the LLM fails or is down, a keyword scorer takes over, and the run keeps going. Each row logs which scorer made the call, so I can check every score later.",
@@ -446,6 +545,27 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     ],
     links: [
       { label: "LIVE.SITE", href: "https://space-forge-taupe.vercel.app/eb", primary: true },
+    ],
+  },
+  {
+    id: "17",
+    name: "HOME INFERENCE CLUSTER",
+    tagline: "Two Mac minis on RDMA, serving one model across both.",
+    tier: 3,
+    accent: "orange",
+    status: "RUNNING // SELF-HOSTED",
+    stack: ["MLX", "EXO", "Hermes", "RDMA", "macOS"],
+    problem:
+      "I wanted to run a real model on hardware I own and control, not through an API. I also wanted to learn what actually happens when one model has to run across more than one machine.",
+    built: [
+      "Two Mac minis, networked over RDMA. RDMA moves data between the machines with very little CPU overhead, which is what makes the split worth doing at all.",
+      "MLX runs the model on Apple silicon. EXO splits one model across both machines, so the cluster can hold a model that neither node could run alone.",
+      "It serves Hermes as my own personal agent. It runs at home, every day.",
+      "The files for this are not on my work machine. I keep the cluster separate on purpose.",
+    ],
+    outcome: [
+      "This is the closest thing I have to Nebius's own product, at a very small scale. One model, split across nodes, on a fast interconnect.",
+      "It taught me the parts you cannot learn from an API: how the interconnect becomes the limit, and how a model behaves when it does not fit on one machine.",
     ],
   },
 ];
