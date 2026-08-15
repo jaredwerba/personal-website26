@@ -794,7 +794,7 @@ export type TweetLedgerEntry = {
 export const TWEET_LEDGER_INTRO: string[] = [
   "I have posted what I was reading since 2017. Most posts are a title and a link. The dates are public.",
   "This is not every tweet I have written. X search returns a small page, and older posts often store only a short t.co URL. It is the trail I could verify: AI, ML, GPU, memory, and interconnect.",
-  "If you only open four: InfiniBand in 2019, RDMA in July 2020, GPT-3 in August 2020, and RoCE for distributed training in 2024.",
+  "The starred rows are the ones to open first: what to ask an ML/AI company and EC2 bare metal, both in 2017; InfiniBand in 2019; RDMA in July 2020; GPT-3 in August 2020; and RoCE for distributed training in 2024.",
 ];
 
 export const TWEET_LEDGER: TweetLedgerEntry[] = [
@@ -824,6 +824,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     title: "Business questions engineers should ask when interviewing at ML/AI companies",
     tweetUrl: "https://x.com/jaredwerba/status/928829344113397760",
     receipt: true,
+    star: true,
     why: "Explicit ML/AI career interest in 2017.",
   },
   {
@@ -838,6 +839,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     title: "Amazon EC2 Bare Metal Instances with Direct Access to Hardware",
     tweetUrl: "https://x.com/jaredwerba/status/935824872969732098",
     receipt: true,
+    star: true,
     why: "Direct hardware access. No hypervisor tax.",
   },
   {

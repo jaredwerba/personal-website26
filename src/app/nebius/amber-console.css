@@ -3382,3 +3382,38 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
   min-width: 0;
   overflow-x: clip;
 }
+
+/* Post modal. Reads as a console window, not a lightbox. */
+dialog.ac-tweetmodal {
+  width: min(560px, calc(100vw - 2rem));
+  padding: 0;
+  border: var(--ac-border-w, 2px) solid var(--ac-emit-90, #ffae1e);
+  background: var(--ac-screen, #0d0700);
+  color: var(--ac-ink, #ffae1e);
+}
+dialog.ac-tweetmodal[open] {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  height: fit-content;
+  max-height: calc(100dvh - 2rem);
+  z-index: 60;
+}
+dialog.ac-tweetmodal::backdrop { background: rgba(0, 0, 0, 0.8); }
+dialog.ac-tweetmodal .ac-tweetmodal__bar { display: flex; align-items: center; gap: 8px; padding: 6px 10px; }
+dialog.ac-tweetmodal .ac-tweetmodal__body { padding: var(--ac-space-4, 16px); }
+dialog.ac-tweetmodal .ac-tweetmodal__title {
+  margin: 0 0 var(--ac-space-3, 12px);
+  font-size: var(--ac-type-body, 22px);
+  color: var(--ac-ink-bright, #ffd052);
+  text-transform: none;
+}
+dialog.ac-tweetmodal .ac-tweetmodal__why {
+  margin: 0 0 var(--ac-space-4, 16px);
+  color: var(--ac-ink-dim, #a2690c);
+  text-transform: none;
+}
+dialog.ac-tweetmodal .ac-tweetmodal__actions { gap: var(--ac-space-3, 12px); }
+
+/* The row sitting behind the open dialog. */
+.ac-root tr[data-open-row] { background: var(--ac-screen-raised, #1e1200); }
