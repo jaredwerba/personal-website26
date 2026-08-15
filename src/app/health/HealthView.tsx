@@ -1,24 +1,70 @@
 "use client";
 
 import Link from "next/link";
-import {
-  Badge,
-  Divider,
-  TerminalDisplay,
-  Gauge,
-  SyncProgressBar,
-  PhaseStatusStack,
-} from "@mdrbx/nerv-ui";
+import { Badge, Divider, TerminalDisplay, Gauge } from "@mdrbx/nerv-ui";
 import Section from "@/components/Section";
+import MetricStack from "@/components/MetricStack";
 import type { WhoopSnapshot } from "@/lib/storage";
+import {
+  METRIC_SCALES,
+  RECOVERY_VITALS,
+  SLEEP_VITALS,
+  type MetricKey,
+} from "@/lib/health-scales";
 
 type Props = {
   snapshot: WhoopSnapshot | null;
 };
 
-function fmt(value: number | null, suffix = ""): string {
-  if (value === null) return "—";
-  return `${value}${suffix}`;
+/**
+ * Gauges read their axis from the same table as the bars, so the two can never
+ * disagree about the same number, and null is a third state rather than a
+ * needle pinned at zero printing "0%" for a metric that is merely missing.
+ */
+function MetricGauge({
+  metricKey,
+  value,
+  color,
+  threshold,
+}: {
+  metricKey: MetricKey;
+  value: number | null;
+  color?: "cyan" | "green" | "orange" | "red" | "magenta";
+  threshold?: number;
+}) {
+  const scale = METRIC_SCALES[metricKey];
+  if (value === null) {
+    // Reproduces Gauge's own header so the placeholder reads as an instrument
+    // with no reading, rather than as a gap in the layout.
+    return (
+      <div className="inline-flex flex-col items-center font-mono">
+        <div
+          className="mb-1 w-[112px] border-b border-current/25 pb-1 text-[10px] uppercase tracking-[0.22em] font-bold text-nerv-mid-gray"
+          style={{ fontFamily: "var(--font-nerv-display)" }}
+        >
+          {scale.label}
+        </div>
+        <div className="flex h-[94px] w-[120px] items-center justify-center border border-dashed border-nerv-mid-gray/30">
+          <span className="font-nerv-mono text-[10px] tracking-[0.16em] text-nerv-mid-gray">
+            NO.DATA
+          </span>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <Gauge
+      value={value}
+      min={scale.min}
+      max={scale.max}
+      label={scale.label}
+      unit={scale.unit}
+      color={color}
+      threshold={threshold}
+      size={120}
+      variant="needle"
+    />
+  );
 }
 
 function daysAgo(iso: string): string {
@@ -35,13 +81,8 @@ export default function HealthView({ snapshot }: Props) {
   const hrv = snapshot?.hrv_rmssd_avg ?? null;
   const sleep = snapshot?.sleep_performance_pct_avg ?? null;
   const strain = snapshot?.day_strain_avg ?? null;
-  const rhr = snapshot?.resting_hr_avg ?? null;
-  const spo2 = snapshot?.spo2_pct_avg ?? null;
-  const skinTemp = snapshot?.skin_temp_c_avg ?? null;
-  const respRate = snapshot?.respiratory_rate_avg ?? null;
-  const sleepEff = snapshot?.sleep_efficiency_pct_avg ?? null;
-  const sleepCons = snapshot?.sleep_consistency_pct_avg ?? null;
-  const sleepDebt = snapshot?.sleep_debt_min_avg ?? null;
+  // The remaining seven metrics are read inside MetricStack, keyed off the
+  // scale table — so a value can no longer be wired to the wrong label.
 
   const terminalLines = connected
     ? [
@@ -98,112 +139,46 @@ export default function HealthView({ snapshot }: Props) {
           )}
 
           <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-            <Gauge
-              value={recovery ?? 0}
-              label="RECOVERY"
-              unit="%"
+            <MetricGauge
+              metricKey="recovery_pct_avg"
+              value={recovery}
               color="green"
-              size={120}
-              variant="needle"
             />
-            <Gauge
-              value={hrv ?? 0}
-              label="HRV"
-              unit=" MS"
+            <MetricGauge metricKey="hrv_rmssd_avg" value={hrv} color="cyan" />
+            <MetricGauge
+              metricKey="sleep_performance_pct_avg"
+              value={sleep}
               color="cyan"
-              size={120}
-              variant="ring"
-              max={120}
             />
-            <Gauge
-              value={sleep ?? 0}
-              label="SLEEP"
-              unit="%"
-              color="cyan"
-              size={120}
-              variant="needle"
-            />
-            <Gauge
-              value={strain ?? 0}
-              label="STRAIN"
-              unit=""
-              color="red"
-              size={120}
-              variant="needle"
-              max={21}
+            {/* Band-optimal: orange base with WHOOP's All Out floor as the
+                threshold, so red is earned above 18 rather than permanent. */}
+            <MetricGauge
+              metricKey="day_strain_avg"
+              value={strain}
+              color="orange"
+              threshold={18}
             />
           </div>
 
-          <SyncProgressBar value={connected ? 100 : 0} label="DATA.SYNC" />
-
-          <PhaseStatusStack
+          <MetricStack
             title="RECOVERY.VITALS"
             color="cyan"
-            phases={[
-              {
-                label: "RECOVERY",
-                status: recovery !== null ? "ok" : "inactive",
-                value: fmt(recovery, "%"),
-              },
-              {
-                label: "HRV",
-                status: hrv !== null ? "ok" : "inactive",
-                value: fmt(hrv, " MS"),
-              },
-              {
-                label: "RESTING.HR",
-                status: rhr !== null ? "ok" : "inactive",
-                value: fmt(rhr, " BPM"),
-              },
-              {
-                label: "SPO2",
-                status: spo2 !== null ? "ok" : "inactive",
-                value: fmt(spo2, "%"),
-              },
-              {
-                label: "SKIN.TEMP",
-                status: skinTemp !== null ? "ok" : "inactive",
-                value: fmt(skinTemp, "°C"),
-              },
-              {
-                label: "STRAIN",
-                status: strain !== null ? "ok" : "inactive",
-                value: fmt(strain),
-              },
-            ]}
+            scales={RECOVERY_VITALS}
+            snapshot={snapshot}
           />
 
-          <PhaseStatusStack
+          <MetricStack
             title="SLEEP.VITALS"
             color="cyan"
-            phases={[
-              {
-                label: "PERFORMANCE",
-                status: sleep !== null ? "ok" : "inactive",
-                value: fmt(sleep, "%"),
-              },
-              {
-                label: "EFFICIENCY",
-                status: sleepEff !== null ? "ok" : "inactive",
-                value: fmt(sleepEff, "%"),
-              },
-              {
-                label: "CONSISTENCY",
-                status: sleepCons !== null ? "ok" : "inactive",
-                value: fmt(sleepCons, "%"),
-              },
-              {
-                label: "DEBT",
-                status: sleepDebt !== null ? "ok" : "inactive",
-                value: fmt(sleepDebt, " MIN"),
-              },
-              {
-                label: "RESP.RATE",
-                status: respRate !== null ? "ok" : "inactive",
-                value: fmt(respRate, " BPM"),
-              },
-            ]}
+            scales={SLEEP_VITALS}
+            snapshot={snapshot}
           />
+
+          <p className="font-nerv-mono text-[10px] text-nerv-mid-gray tracking-wider">
+            // SCALE.NOTE &mdash; BARS SHOW POSITION ON THE PRINTED AXIS, NOT A
+            SCORE. RANGES ARE DISPLAY SCALES DERIVED FROM WHOOP&rsquo;S PUBLISHED
+            DOCUMENTATION &mdash; NOT CLINICAL REFERENCE RANGES.
+          </p>
         </div>
       </Section>
 
