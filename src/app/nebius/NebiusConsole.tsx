@@ -1,5 +1,6 @@
 import {
   BACKGROUND,
+  OVERVIEW,
   CAPABILITIES,
   NEBIUS_PROJECTS,
   type NebiusProject,
@@ -170,6 +171,15 @@ function ProjectDoc({ project }: { project: NebiusProject }) {
       status={project.status}
     >
       <p className="ac-tagline">{project.tagline}</p>
+      {project.signals?.length ? (
+        <div className="ac-row ac-signals">
+          {project.signals.map((s) => (
+            <span key={s} className="ac-signal">
+              {s}
+            </span>
+          ))}
+        </div>
+      ) : null}
       <div className="ac-row ac-stackrow">
         {project.stack.map((s) => (
           <span key={s} className="ac-badge">
@@ -193,17 +203,11 @@ function OverviewDoc() {
   const featured = ["01", "02"].map((id) => byId.get(id)).filter(Boolean) as NebiusProject[];
   return (
     <DocShell id="overview" title="OVERVIEW" status={`${NEBIUS_PROJECTS.length} RECORDS`}>
-      <p className="ac-prose">
-        Seventeen projects. I ordered them by how much they matter to the work at Nebius,
-        not by date. For each one, I give three things: the problem, what I built, and what
-        came of it. Everything with a live link is running right now. The fastest way
-        through this page is to open one.
-      </p>
-      <p className="ac-prose">
-        Before the projects: ten years at Oracle, selling and architecting cloud
-        infrastructure. That included GPU compute for AI training and inference. It is why
-        I build what I build.
-      </p>
+      {OVERVIEW.map((para, i) => (
+        <p key={i} className="ac-prose ac-overview__para">
+          {para}
+        </p>
+      ))}
 
       <section className="ac-block">
         <h3 className="ac-block__title">START HERE</h3>

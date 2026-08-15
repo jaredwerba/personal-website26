@@ -3248,3 +3248,40 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
   text-transform: none;
 }
 .ac-root .ac-block .ac-list li { max-width: 68ch; }
+
+/* ===========================================================================
+   Full-bleed. The site shell caps content at max-w-4xl (896px), which wastes
+   most of a desktop screen on a two-pane console. Break out of the centred
+   column, then pad back in so the reading measure stays sane.
+
+   `margin-inline: calc(50% - 50vw)` is the escape. body has overflow-x:hidden,
+   so the scrollbar sliver 100vw overshoots by lands in padding, not content.
+   =========================================================================== */
+@media (min-width: 1024px) {
+  .ac-root {
+    margin-inline: calc(50% - 50vw);
+    padding-inline: max(var(--ac-space-4), calc(50vw - 47rem));
+  }
+  /* Wider rail once there is room for it. */
+  .ac-console__grid { grid-template-columns: 280px minmax(0, 1fr); gap: var(--ac-space-5); }
+  .ac-prose,
+  .ac-block .ac-list,
+  .ac-block .ac-list li { max-width: 82ch; }
+}
+@media (min-width: 1600px) {
+  .ac-console__grid { grid-template-columns: 320px minmax(0, 1fr); }
+}
+
+/* FDE signal chips — which lines of the role bar a project evidences. */
+.ac-root .ac-signals { display: flex; flex-wrap: wrap; gap: var(--ac-space-2); margin-bottom: var(--ac-space-3); }
+.ac-root .ac-signal {
+  font-family: var(--ac-font-micro);
+  font-size: var(--ac-type-micro);
+  text-transform: uppercase;
+  letter-spacing: var(--ac-tracking-micro);
+  color: var(--ac-on-fill);
+  background: var(--ac-fill);
+  padding: 3px 7px;
+  text-shadow: none;
+}
+.ac-root .ac-overview__para + .ac-overview__para { margin-top: var(--ac-space-4); }
