@@ -14,6 +14,8 @@ export type Capability = {
   label: string;
   /** What proves it. Project numbers tie back to the index. */
   proof: string;
+  /** Optional supporting links — rendered as small keys under the row. */
+  links?: ProjectLink[];
 };
 
 /**
@@ -26,39 +28,43 @@ export type Capability = {
  */
 export const CAPABILITIES: Capability[] = [
   {
+    label: "Hackathons won",
+    proof:
+      "First place at Augmentation Lab, MIT — AugHacks 2025, Long Track (02). I presented the work to Stephen Wolfram.",
+  },
+  {
     label: "Agentic systems",
     proof:
-      "01 Nebius-XWord, a hand-built LangGraph. 03 Venus, four specialist sub-agents in parallel. 04 LinkedIn-Automator, which ran against a live site in production.",
+      "01 Nebius-XWord, a hand-built LangGraph. 03 Venus, four specialist sub-agents in parallel. 13, an orchestrator that fans work out to specialist agents and their sub-agents. 04 LinkedIn-Automator, which ran against a live site in production.",
   },
   {
     label: "Tool calling",
     proof:
-      "01 — four tools, and a stop rule that fires on a submit call, not on silence.",
+      "01 — four tools, and a stop rule that fires on a submit call, not on silence. 12 career-ops and 13, my resume skills, both give the model a defined tool surface and hold it to that surface.",
   },
   {
     label: "MCP",
     proof:
-      "14 whoop-mcp. I run it as a connected server. It pulls my own health metrics into jwerba.com.",
+      "14 whoop-mcp. I run it as a connected server. It pulls my own health metrics, and the result is live on my site.",
+    links: [
+      { label: "SEE.IT.LIVE", href: "https://www.jwerba.com/health", primary: true },
+    ],
   },
   {
     label: "Evaluation",
     proof:
-      "01 — a four-solver harness that tests itself. An empty solver must score 0%. An oracle solver must score 100%. If either misses, the scorer is broken.",
+      "01 — a four-solver harness that tests itself. An empty solver must score 0%. An oracle solver must score 100%. If either misses, the scorer is broken. 13 adds a rule-based gate that stops a build when the output drifts.",
   },
   {
     label: "RAG and retrieval",
     proof:
-      "A retrieval pipeline with Cohere ReRank. 05 COVE builds three context layers per request, each one isolated so a failure degrades the answer instead of killing it.",
-  },
-  {
-    label: "LLM APIs",
-    proof:
-      "Nebius Token Factory, Vercel AI Gateway, OpenAI, Anthropic, Ollama.",
+      "A retrieval pipeline using Cohere ReRank, which reorders results by relevance after the first search returns them. 05 COVE builds three context layers per request, each one isolated so a failure degrades the answer instead of killing it.",
+    links: [{ label: "COHERE.RERANK", href: "https://cohere.com/rerank" }],
   },
   {
     label: "Inference, self-hosted",
     proof:
-      "17 — two Mac minis on RDMA, running MLX and EXO, serving Hermes. 04 serves llama3.1:8b locally through Ollama inside a live loop, with temperature and token budget set per task.",
+      "17 — two Mac minis on RDMA, 48GB of unified memory, running MLX and EXO. They serve Qwen locally to my Hermes agent and to OpenClaw, my always-on outreach agent. 04 serves llama3.1:8b through Ollama inside a live loop, with temperature and token budget set per task.",
   },
   {
     label: "Inference, hosted",
@@ -68,36 +74,35 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Edge and embedded",
     proof:
-      "02 — I embedded the NeuroLM model onto OpenBCI hardware, reading 6-channel EEG at 250Hz.",
+      "02 — the hackathon-winning build. I embedded NeuroLM, an EEG foundation model, onto OpenBCI hardware, reading 6-channel EEG at 250Hz.",
+    links: [
+      { label: "NEUROLM.SOURCE", href: "https://github.com/935963004/NeuroLM" },
+    ],
   },
   {
-    label: "Distributed systems",
+    label: "LLM APIs",
     proof:
-      "03 — at-least-once dispatch. A SET NX lease claims each job. A TTL covers a crashed worker. A failed send releases the lease. Idempotency keys stop a double send.",
+      "Nebius Token Factory, Vercel AI Gateway, OpenAI, Anthropic, and Cohere. Ollama is not on this list on purpose — it is a local runtime, so it sits under self-hosted inference above.",
+  },
+  {
+    label: "Python",
+    proof:
+      "01 is Python end to end: the LangGraph agent, the FastAPI service, the grid engine, and the eval harness, with 55 tests that run offline. 04 is Python too: FastAPI, Playwright browser control, WebSockets, and the local model loop. 13 uses Python for the audit gate and PDF layout.",
   },
   {
     label: "Deployment automation",
     proof:
-      "12 — a two-tier launchd scheduler with a real lock, stale-lock recovery by age, catch-up after the machine sleeps, and a guarded production deploy.",
-  },
-  {
-    label: "Python",
-    proof: "01 and 04.",
+      "12 — a two-tier scheduler I wrote and still run. It holds a real lock, recovers a stale lock by age, catches up after the machine sleeps, and ends in a guarded production deploy. It has run daily since July.",
   },
   {
     label: "Integrations",
     proof:
-      "OAuth 2.0 written by hand (10, 14). Signed inbound webhooks (03). Google Solar, NREL, and Stripe Connect (07, 08).",
+      "Built: OAuth 2.0 by hand (10, 14), signed inbound webhooks (03), Google Solar, NREL, and Stripe Connect (07, 08). Sold and architected: Oracle Integration Cloud, Oracle GoldenGate, GraphQL, and Apache Kafka.",
   },
   {
     label: "Infrastructure",
     proof:
       "Ten years at Oracle. I sold and architected every OCI IaaS and PaaS product, including GPU compute for AI training and inference: A100 80GB, H100, A10. I ran Kubernetes architecture for named accounts. Oracle Cloud Architect certified. I also run my own RDMA cluster at home (17).",
-  },
-  {
-    label: "Hackathons won",
-    proof:
-      "First place at Augmentation Lab, MIT — AugHacks 2025, Long Track (02). I presented the work to Stephen Wolfram.",
   },
   {
     label: "Open source",
@@ -489,20 +494,30 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
   },
   {
     id: "13",
-    name: "RESUME AUDIT GATE",
-    tagline: "A rule-based check that fails the build when a model's output drifts.",
+    name: "RESUME ORCHESTRATOR",
+    tagline:
+      "An agent skill that fans work out to specialist agents, then gates the result.",
     tier: 3,
     accent: "orange",
-    status: "TOOLING",
-    stack: ["Python", "Claude Agent Skill"],
+    status: "TOOLING // I RUN IT",
+    stack: [
+      "Claude Agent Skills",
+      "Multi-agent orchestration",
+      "Python",
+      "WeasyPrint",
+    ],
     problem:
-      "My pipeline let one model hold both the facts and the rules. It gave a different answer every run. Two files each thought they were in charge. On the questions that mattered, they disagreed.",
+      "Tailoring a resume to a posting is three jobs at once: read the posting, pull the employer's real brand, and lay out two exact pages. One model doing all three did each one worse. It also gave a different answer every run, because one model held both the facts and the rules, and on the questions that mattered they disagreed.",
     built: [
-      "I split facts from rules, so there is nothing left to argue about at run time. I then added a fixed pre-flight script. It runs after generation and stops the build on failure. It checks voice, length limits, and leaked identity details.",
-      "The script's own history shows a real mistake. An earlier version matched any substring on the whole page, and failed builds that just named a real tech stack, by mistake.",
+      "An orchestrator that splits the work and fans it out. Specialist agents run in parallel, each on one job: extract the posting's real requirements, pull the employer's brand and vocabulary, select and order the right facts, then build the page. Those agents spawn their own sub-agents when a job splits again.",
+      "I split facts from rules, so there is nothing left to argue about at run time. One file holds every fact the system may print. A separate file holds the rules for choosing among them. Neither holds both.",
+      "A rule-based gate that runs after generation and stops the build on failure. It checks voice, length limits, and leaked identity details. It is plain code, not a model, so its answer never varies.",
+      "The gate's own history shows a real mistake I made. An earlier version matched any substring on the whole page, and failed builds that had simply named a real tech stack.",
     ],
     outcome: [
-      "Output that once varied by run now must pass a fixed set of checks. If it fails, the build stops.",
+      "Real runs have fanned out to 15, 35, and 93 agents, depending on how much the posting needed.",
+      "Output that once varied by run now must pass a fixed set of checks. If it fails, the build stops rather than shipping something wrong.",
+      "This is the pattern I reach for now: let an orchestrator split the work, let specialists do one job each, and put a deterministic check at the end where a model cannot argue with it.",
     ],
   },
   {

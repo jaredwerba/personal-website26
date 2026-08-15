@@ -344,6 +344,23 @@ export default function NebiusPage() {
             <div key={c.label} className="space-y-1">
               <p className="ac-micro ac-dim">{c.label}:</p>
               <p className="ac-body">{c.proof}</p>
+              {c.links?.length ? (
+                <div className="flex flex-wrap gap-3 pt-1">
+                  {c.links.map((l) => (
+                    <a
+                      key={l.href}
+                      href={l.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={l.primary ? "ac-key" : "ac-key ac-key--ghost"}
+                    >
+                      {l.primary && <span aria-hidden="true">&#9654;</span>}
+                      {l.label}
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  ))}
+                </div>
+              ) : null}
             </div>
           ))}
         </div>
