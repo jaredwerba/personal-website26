@@ -167,7 +167,7 @@ function ProjectDoc({ project }: { project: NebiusProject }) {
   return (
     <DocShell
       id={project.id}
-      title={`${project.id} ${project.name}`}
+      title={project.name}
       status={project.status}
     >
       <p className="ac-tagline">{project.tagline}</p>
@@ -214,7 +214,7 @@ function OverviewDoc() {
         <div className="ac-row ac-keys">
           {featured.map((p) => (
             <button key={p.id} type="button" className="ac-btn ac-btn--filled" data-doc-target={p.id}>
-              {p.id} {p.name}
+              {p.name}
             </button>
           ))}
         </div>
@@ -337,9 +337,7 @@ export default function NebiusConsole() {
                             data-doc-target={docId}
                             data-featured={FEATURED.has(docId) ? "" : undefined}
                             aria-current="false"
-                          >
-                            {project ? <span className="nbx-nav__id">{project.id}</span> : null}
-                            <span className="nbx-nav__label">{meta.label}</span>
+                          >                            <span className="nbx-nav__label">{meta.label}</span>
                             <span className="nbx-nav__meta">{meta.meta}</span>
                           </button>
                         </li>

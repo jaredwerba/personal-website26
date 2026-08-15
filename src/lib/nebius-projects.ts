@@ -30,7 +30,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Hackathons won",
     proof:
-      "First place at Augmentation Lab, MIT — AugHacks 2025, Long Track (02). I presented the work to Stephen Wolfram.",
+      "First place at Augmentation Lab, MIT — AugHacks 2025, Long Track . I presented the work to Stephen Wolfram.",
     links: [
       { label: "BRAIN-STORM.AI", href: "https://www.brain-storm.ai", primary: true },
     ],
@@ -38,7 +38,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Agentic systems",
     proof:
-      "01 Nebius-XWord, a hand-built LangGraph. 03 Venus, four specialist sub-agents in parallel. 13, an orchestrator that fans work out to specialist agents — one I later cut from five waves to three stages, because the handoffs cost more than they bought. 04 LinkedIn-Automator, which ran against a live site in production.",
+      "Nebius-XWord, a hand-built LangGraph. Venus, four specialist sub-agents in parallel. The resume orchestrator, which fans work out that fans work out to specialist agents — one I later cut from five waves to three stages, because the handoffs cost more than they bought. LinkedIn-Automator, which ran against a live site in production.",
     links: [
       {
         label: "NEBIUS-XWORD",
@@ -56,7 +56,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Tool calling",
     proof:
-      "01 — four tools, and a stop rule that fires on a submit call, not on silence. 12 career-ops and 13, my resume skills, both give the model a defined tool surface and hold it to that surface.",
+      "Nebius-XWord — four tools, and a stop rule that fires on a submit call, not on silence. career-ops and my resume skills both give the model a defined tool surface and hold it to that surface.",
     links: [
       {
         label: "CAREER-OPS.DASHBOARD",
@@ -68,7 +68,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "MCP",
     proof:
-      "14 whoop-mcp. I run it as a connected server. It pulls my own health metrics, and the result is live on my site.",
+      "whoop-mcp. I run it as a connected server. It pulls my own health metrics, and the result is live on my site.",
     links: [
       { label: "SEE.IT.LIVE", href: "https://www.jwerba.com/health", primary: true },
     ],
@@ -76,7 +76,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Evaluation",
     proof:
-      "01 is the eval harness: four solvers through one scorer. An empty solver must score 0%. An oracle solver must score 100%. If either misses, the scorer is broken. 13 is a different thing — a rule-based gate that reports document defects and refuses to judge quality. I built a model self-score into it once, then deleted it, because a model grading its own output is not a test.",
+      "Nebius-XWord is the eval harness: four solvers through one scorer. An empty solver must score 0%. An oracle solver must score 100%. If either misses, the scorer is broken. The resume orchestrator is a different thing — a rule-based gate that reports document defects and refuses to judge quality. I built a model self-score into it once, then deleted it, because a model grading its own output is not a test.",
     links: [
       {
         label: "XWORD.SOURCE",
@@ -87,7 +87,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "RAG and retrieval",
     proof:
-      "05 COVE is RAG end to end. I wrote connectors against three dispensary menu platforms, normalized them into one product model, matched names to a strain catalog, and stored the result in Redis. A trimmed slice — strain-matched, deduped, eight per shop — goes into the prompt at request time. Separately, a retrieval pipeline using Cohere ReRank, which reorders results by relevance after the first search returns them.",
+      "COVE is RAG end to end. I wrote connectors against three dispensary menu platforms, normalized them into one product model, matched names to a strain catalog, and stored the result in Redis. A trimmed slice — strain-matched, deduped, eight per shop — goes into the prompt at request time. Separately, a retrieval pipeline using Cohere ReRank, which reorders results by relevance after the first search returns them.",
     links: [
       { label: "COVEBUD.COM", href: "https://www.covebud.com", primary: true },
       { label: "COHERE.RERANK", href: "https://cohere.com/rerank" },
@@ -96,12 +96,12 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Inference, self-hosted",
     proof:
-      "17 — two Mac minis on RDMA, 48GB of unified memory, running MLX and EXO. They serve Qwen locally to my Hermes agent and to OpenClaw, my always-on outreach agent. 04 serves llama3.1:8b through Ollama on my own machine, and I tune it per call: title scoring runs at temperature 0.1 with a 5-token cap, because that job wants one integer, while message writing runs at 0.8.",
+      "The home cluster — two Mac minis on RDMA, 48GB of unified memory, running MLX and EXO. They serve Qwen locally to my Hermes agent and to OpenClaw, my always-on outreach agent. LinkedIn-Automator serves llama3.1:8b through Ollama on my own machine, and I tune it per call: title scoring runs at temperature 0.1 with a 5-token cap, because that job wants one integer, while message writing runs at 0.8.",
   },
   {
     label: "Inference, hosted",
     proof:
-      "01 — I tested 13 models across two providers, then raced the same weights on both to compare the providers, not the models. The race runs on the live page.",
+      "Nebius-XWord — I tested 13 models across two providers, then raced the same weights on both to compare the providers, not the models. The race runs on the live page.",
     links: [
       {
         label: "RUN.THE.RACE",
@@ -113,7 +113,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Edge and embedded",
     proof:
-      "02 — the hackathon-winning build. I embedded NeuroLM, an EEG foundation model, onto OpenBCI hardware, reading 6-channel EEG at 250Hz.",
+      "BrainStorm.ai, the hackathon-winning build. I embedded NeuroLM, an EEG foundation model, onto OpenBCI hardware, reading 6-channel EEG at 250Hz.",
     links: [
       { label: "BRAIN-STORM.AI", href: "https://www.brain-storm.ai", primary: true },
       { label: "NEUROLM.SOURCE", href: "https://github.com/935963004/NeuroLM" },
@@ -127,7 +127,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Python",
     proof:
-      "01 is Python end to end: the LangGraph agent, the FastAPI service, the grid engine, and the eval harness, with 55 tests that run offline. 04 is Python too: FastAPI, Playwright browser control, WebSockets, and the local model loop. 13 uses Python for the audit gate and PDF layout.",
+      "Nebius-XWord is Python end to end: the LangGraph agent, the FastAPI service, the grid engine, and the eval harness, with 55 tests that run offline. LinkedIn-Automator is Python too: FastAPI, Playwright browser control, WebSockets, and the local model loop. The resume orchestrator uses Python for the audit gate and PDF layout.",
     links: [
       { label: "XWORD.SOURCE", href: "https://github.com/jaredwerba/Nebius-XWord" },
       {
@@ -139,7 +139,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Deployment automation",
     proof:
-      "12 — a two-tier scheduler I wrote and still run. It holds a real lock, recovers a stale lock by age, catches up after the machine sleeps, and ends in a guarded production deploy. It has run daily since July, and it publishes a public dashboard.",
+      "career-ops — a two-tier scheduler I wrote and still run. It holds a real lock, recovers a stale lock by age, catches up after the machine sleeps, and ends in a guarded production deploy. It has run daily since July, and it publishes a public dashboard.",
     links: [
       {
         label: "CAREER-OPS.DASHBOARD",
@@ -151,7 +151,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Integrations",
     proof:
-      "Built: OAuth 2.0 by hand (10, 14), signed inbound webhooks (03), Google Solar, NREL, and Stripe Connect (07, 08). Sold and architected: Oracle Integration Cloud, Oracle GoldenGate, GraphQL, and Apache Kafka.",
+      "Built: OAuth 2.0 by hand, on jwerba.com and against the WHOOP API, signed inbound webhooks in Venus, Google Solar, NREL, and Stripe Connect in Train247 and Sunday Energy. Sold and architected: Oracle Integration Cloud, Oracle GoldenGate, GraphQL, and Apache Kafka.",
     links: [
       { label: "TRAIN247.FIT", href: "https://train247.fit", primary: true },
       {
@@ -164,12 +164,12 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Infrastructure",
     proof:
-      "Ten years at Oracle. I sold and architected every OCI IaaS and PaaS product, including GPU compute for AI training and inference: A100 80GB, H100, A10. I ran Kubernetes architecture for named accounts. Oracle Cloud Architect certified. I also run my own RDMA cluster at home (17).",
+      "Ten years at Oracle. I sold and architected every OCI IaaS and PaaS product, including GPU compute for AI training and inference: A100 80GB, H100, A10. I ran Kubernetes architecture for named accounts. Oracle Cloud Architect certified. I also run my own RDMA cluster at home the home cluster.",
   },
   {
     label: "Open source",
     proof:
-      "12 career-ops. 33 commits, third-largest contributor. My worker-pool fix came from a measurement, not a hunch.",
+      "career-ops. 33 commits, third-largest contributor. My worker-pool fix came from a measurement, not a hunch.",
     links: [
       {
         label: "CAREER-OPS.DASHBOARD",
@@ -181,7 +181,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Technical writing",
     proof:
-      "I write in ASD-STE100, the Simplified Technical English standard. This page is written in it. The 01 README runs 550 lines and states plainly what it does not measure. The 04 architecture set runs nine documents, written by the tool's own logging integration.",
+      "I write in ASD-STE100, the Simplified Technical English standard. This page is written in it. The Nebius-XWord README runs 550 lines and states plainly what it does not measure. The LinkedIn-Automator architecture set runs nine documents, written by the tool's own logging integration.",
     links: [
       { label: "READ.THE.README", href: "https://github.com/jaredwerba/Nebius-XWord" },
     ],
@@ -247,7 +247,7 @@ export type NebiusProject = {
 /** Top framing. What this page is, and where the strongest evidence sits. */
 export const OVERVIEW: string[] = [
   "This is a technical brief for one conversation. Seventeen projects, ordered by how much they bear on the Forward Deployed Engineer role, not by date. Every entry answers the same three questions: what problem I was solving, what I personally built, and what came of it.",
-  "Where the strongest evidence sits, if you only read three: 01 Nebius-XWord is the agent and the eval harness I built to judge it, and it found a gap in the Nebius model catalog along the way. 02 BrainStorm.ai took first place at an MIT-hosted hackathon, running a real model on real hardware. 04 LinkedIn-Automator is the one that ran in production against a live third-party site, and stopped itself when it should have.",
+  "Where the strongest evidence sits, if you only read three: Nebius-XWord is the agent and the eval harness I built to judge it, and it found a gap in the Nebius model catalog along the way. BrainStorm.ai took first place at an MIT-hosted hackathon, running a real model on real hardware. LinkedIn-Automator is the one that ran in production against a live third-party site, and stopped itself when it should have.",
   "Everything with a live link is running now. Opening one is faster than reading about it.",
 ];
 
@@ -565,7 +565,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     ],
     outcome: [
       "Running in production on its own domain, with the booking flow, auth and scheduled jobs all live.",
-      "The Whoop client is the direct product of running someone else's Whoop MCP server daily (14). Using their implementation made the tradeoffs in mine obvious.",
+      "The Whoop client is the direct product of running someone else's Whoop MCP server daily the Whoop MCP server. Using their implementation made the tradeoffs in mine obvious.",
     ],
   },
   {
@@ -669,7 +669,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     ],
     outcome: [
       "I run it as a connected MCP server most days, and that is where my practical feel for the protocol comes from: how a tool's schema shapes what a model will actually call, how much description a tool needs before it gets used correctly, and what token lifecycle management looks like when an agent rather than a human is the consumer.",
-      "It set the bar for my own Whoop OAuth client on jwerba.com (10). Using someone else's implementation daily made the tradeoffs in mine much clearer.",
+      "It set the bar for my own Whoop OAuth client on jwerba.com on jwerba.com. Using someone else's implementation daily made the tradeoffs in mine much clearer.",
     ],
     links: [
       { label: "SOURCE", href: "https://github.com/shashankswe2020-ux/whoop-mcp" },
@@ -691,7 +691,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "A financial research agent on LangChain and LangGraph, with delegated subagents, an evaluation harness, OpenRouter routing across model providers, and a terminal interface built with Ink.",
     ],
     outcome: [
-      "Running it daily shaped my views on LangGraph before I built my own graph for the Nebius take-home (01). I learned where the prebuilt agent stops being the right abstraction, and why an eval harness needs baselines rather than a single score.",
+      "Running it daily shaped my views on LangGraph before I built my own graph for the Nebius take-home for the take-home. I learned where the prebuilt agent stops being the right abstraction, and why an eval harness needs baselines rather than a single score.",
       "Reading and operating other people's agent code is underrated. Most of what I know about failure modes I learned by watching someone else's agent hit them first.",
     ],
     links: [{ label: "SOURCE", href: "https://github.com/virattt/dexter" }],

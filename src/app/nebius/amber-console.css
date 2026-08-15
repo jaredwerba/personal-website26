@@ -3285,3 +3285,15 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
   text-shadow: none;
 }
 .ac-root .ac-overview__para + .ac-overview__para { margin-top: var(--ac-space-4); }
+
+/* Index rows no longer carry a number column. Featured items keep a marker. */
+.ac-root .nbx-nav__item,
+.ac-root .nbx-nav__item[data-featured] {
+  grid-template-columns: 1.1em minmax(0, 1fr);
+  grid-template-rows: auto auto;
+}
+.ac-root .nbx-nav__item::before { grid-row: 1; grid-column: 1; }
+.ac-root .nbx-nav__item .nbx-nav__label,
+.ac-root .nbx-nav__item[data-featured] .nbx-nav__label { grid-row: 1; grid-column: 2; }
+.ac-root .nbx-nav__item .nbx-nav__meta,
+.ac-root .nbx-nav__item[data-featured] .nbx-nav__meta { grid-row: 2; grid-column: 2; }
