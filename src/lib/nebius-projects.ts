@@ -76,7 +76,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Evaluation",
     proof:
-      "01 is the eval harness: four solvers through one scorer. An empty solver must score 0%. An oracle solver must score 100%. If either misses, the scorer is broken. 13 is not an eval harness, and I want to be exact about that. It is a rule-based gate that reports document defects and refuses to judge quality. I built a model self-score into it once, then deleted it, because a model grading its own output is not a test.",
+      "01 is the eval harness: four solvers through one scorer. An empty solver must score 0%. An oracle solver must score 100%. If either misses, the scorer is broken. 13 is a different thing — a rule-based gate that reports document defects and refuses to judge quality. I built a model self-score into it once, then deleted it, because a model grading its own output is not a test.",
     links: [
       {
         label: "XWORD.SOURCE",
@@ -87,7 +87,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "RAG and retrieval",
     proof:
-      "A retrieval pipeline using Cohere ReRank, which reorders results by relevance after the first search returns them. 05 COVE builds three context layers per request, each one isolated so a failure degrades the answer instead of killing it.",
+      "05 COVE is RAG end to end. I wrote connectors against three dispensary menu platforms, normalized them into one product model, matched names to a strain catalog, and stored the result in Redis. A trimmed slice — strain-matched, deduped, eight per shop — goes into the prompt at request time. Separately, a retrieval pipeline using Cohere ReRank, which reorders results by relevance after the first search returns them.",
     links: [
       { label: "COVEBUD.COM", href: "https://www.covebud.com", primary: true },
       { label: "COHERE.RERANK", href: "https://cohere.com/rerank" },
@@ -122,7 +122,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "LLM APIs",
     proof:
-      "Nebius Token Factory, Vercel AI Gateway, OpenAI, Anthropic, and Cohere. Ollama is not on this list on purpose — it is a local runtime, so it sits under self-hosted inference above.",
+      "Nebius Token Factory, Vercel AI Gateway, OpenAI, Anthropic, and Cohere.",
   },
   {
     label: "Python",
@@ -139,7 +139,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Deployment automation",
     proof:
-      "12 — a two-tier scheduler I wrote and still run. It holds a real lock, recovers a stale lock by age, catches up after the machine sleeps, and ends in a guarded production deploy. It has run daily since July. The dashboard below is what it publishes.",
+      "12 — a two-tier scheduler I wrote and still run. It holds a real lock, recovers a stale lock by age, catches up after the machine sleeps, and ends in a guarded production deploy. It has run daily since July, and it publishes a public dashboard.",
     links: [
       {
         label: "CAREER-OPS.DASHBOARD",
@@ -189,7 +189,7 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Public demos",
     proof:
-      "Twelve, all live right now. The rest of this map links them next to the work they prove. These five are the remainder.",
+      "Twelve, all live right now: a dog-running community, a coaching platform, two trainer sites, a solar proposal engine, and a WebGL showcase.",
     links: [
       { label: "RUNDOG.BOSTON", href: "https://rundog.boston", primary: true },
       { label: "GOALSLOPES.RUN", href: "https://www.goalslopes.run", primary: true },
@@ -255,7 +255,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
   {
     id: "01",
     name: "NEBIUS-XWORD",
-    tagline: "A crossword agent, plus a test harness that proves it is good.",
+    tagline: "A tool-calling agent, and the harness built to prove it works.",
     tier: 1,
     accent: "orange",
     status: "LIVE",
@@ -270,12 +270,12 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     problem:
       "The task had three parts. Build an agent that solves crosswords. Build a way to test it. Write clear instructions. Solving a puzzle is the easy part. The hard part is proof: how do I know the agent is good, not lucky? And how do I stop one wrong answer from breaking the whole grid?",
     built: [
-      "I split the work in two. A Python engine owns the grid: the slots, the numbers, the crossing rules. The model owns only the answers. If the model gives a wrong answer, the engine rejects it and gives a reason. The model can fail. It can never break the grid.",
-      "I built my own LangGraph, not the standard prebuilt agent. My stop rule is different: the run must end on a submit call, not on silence. The graph has three nodes — agent, tools, and a nudge node. The nudge node pushes the model back to tool calls if it answers in plain text. It nudges at most three times, so the run always ends.",
-      "I capped the context window. Without a cap, each turn resends the full history, and cost grows with the square of the turn count — one 40-turn solve used 1.09 million tokens. My cap keeps the system prompt, the first grid, and the newest messages. It also drops any orphan tool result, since the API rejects a tool message with no matching call.",
-      "I built a test harness that checks itself. Four solvers run through the same scoring code. An empty solver must score 0%. If it does not, the scorer is broken. An oracle solver must score 100%. A backtrack solver fills real words but ignores every clue — it scores about 9%. Any score above that line is the model's real skill at reading clues. The harness is the reusable part. The crossword agent is just what I pointed it at.",
-      "I chose models by testing, not by name. I read the live model catalog first, and found that DeepSeek V4 Flash has no tool support at all. I screened 13 candidates, then ran the rest through 5 models, 2 services, 4 puzzles, 2 runs each. The README lists every failure next to every win.",
-      "I measured the prompt itself. One rule told the agent to call get_state first — that wasted a turn, since the first message already has the grid. Another rule made the agent confirm before it submits — that cost 200 seconds to recheck a grid the engine had already checked. I removed both rules. One solve dropped from 420 seconds to 153.",
+      "I split the work in two. A Python engine owns the grid: the slots, the numbers, the crossing rules. The model owns only the answers. When the model returns a wrong answer, the engine rejects it and says why, and the model tries again. The model can fail. It cannot corrupt the grid.",
+      "I wrote the graph myself in LangGraph rather than using its prebuilt agent, because my stop condition is different: the run has to end on a submit tool call, not on the model going quiet. Three nodes — agent, tools, and a nudge node that pushes the model back to tool calls when it answers in prose. The nudge is capped at three, so a model that never calls a tool still terminates.",
+      "Before choosing anything, I built the harness that would judge it. Four solvers run through one scorer. An empty solver must score 0% and an oracle solver must score 100% — if either misses, the scorer itself is broken. A third solver fills real interlocking words while ignoring every clue; it scores about 9%. Anything above that line is what the model contributed by reading clues, rather than by fitting the grid. The harness takes any puzzle set. The crossword agent is only the first thing I pointed it at.",
+      "I chose models by measurement. Reading the live Nebius catalog first turned up a gap worth knowing: DeepSeek V4 Flash advertises no tool support, so it cannot drive a tool-calling agent at all. Finding that in the catalog beat finding it in production. I screened 13 candidates, then ran the survivors through 5 models across 2 services, 4 puzzles, 2 runs each. The README publishes every failure beside every pass.",
+      "I capped the context window after measuring what it cost not to. Resending the whole history each turn makes token cost grow with the square of the turn count — one 40-turn solve burned 1.09 million tokens. The cap keeps the system prompt, the opening grid, and the most recent messages. It also drops any tool result whose matching call fell outside the window, because the API rejects a tool message with no call attached.",
+      "I measured the prompt itself. One instruction told the agent to call get_state first, which wasted a turn — the opening message already contains the grid. Another made it confirm before submitting, which spent 200 seconds rechecking a grid the engine had already validated. Removing both took one solve from 420 seconds to 153.",
     ],
     outcome: [
       "I pointed the agent at a real newspaper crossword: a 13x13 grid, 60 entries. DeepSeek V4 Pro on Nebius filled and submitted the whole grid. All 60 entries were correct. Every crossing checked out. It took 98 turns, 16.6 minutes, and 2.44 million tokens — about $4.40.",
@@ -283,6 +283,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "I raced the same model on two providers. Nebius averaged 17.5 seconds. The other gateway averaged 53.7 seconds. The page marks this n=4 — a small sample, not a full benchmark.",
       "Running both providers at once found a real bug. On a cold start, the environment loaded late, and a fallback chain sent the wrong key to the wrong provider. I fixed the bug and added a test to catch it again.",
       "The project has 55 tests. None needs an API key or a network. A fake model drives the whole graph offline.",
+      "What outlasts the puzzle: the harness runs against any puzzle set, the model matrix records which models can and cannot drive a tool loop, and the race is a repeatable way to compare two providers on identical weights.",
     ],
     links: [
       { label: "LIVE.DEMO", href: "https://nebius-xword.vercel.app", primary: true },
@@ -410,25 +411,35 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
   {
     id: "05",
     name: "COVE",
-    tagline: "A chat assistant that cannot make up its facts.",
+    tagline: "RAG over real dispensary menus, so the model cannot invent stock.",
     tier: 1,
     accent: "cyan",
-    status: "LIVE",
-    stack: ["TypeScript", "gpt-4o", "Upstash Redis", "Next.js", "WebAuthn", "Leaflet"],
+    status: "LIVE // INGESTION PAUSED",
+    stack: [
+      "TypeScript",
+      "gpt-4o",
+      "Upstash Redis",
+      "Next.js",
+      "Vercel Cron",
+      "WebAuthn",
+    ],
     problem:
-      "A chat assistant for a regulated market must help without guessing. Vermont cannabis retail has real stock, real licensed stores, and real legal limits on advice. The hard engineering here is not the chat. It is making sure the model only ever speaks from data that is true right now.",
+      "A chat assistant for a regulated market must help without guessing. Vermont cannabis retail has real stock, real licensed stores, and real legal limits on advice. The hard part is not the chat. It is getting true data in front of the model, from menus that were never meant to be read by anyone else.",
     built: [
-      "Three layers of context, built fresh for each request. A live stock snapshot from Redis. The user's saved preferences and favorites. And, if the user shares location, the three nearest licensed stores, by real distance. This lets the assistant give a real mileage, not a guess.",
-      "Each layer fails on its own, without breaking the rest. If Redis goes down, the answer gets weaker. The assistant still works.",
-      "A system prompt split into clear sections: persona, style, format, safety, data. I can tune one section without breaking the rest. A comment in the file states the rule: keep each section short and testable, since a bloated section weakens all the others.",
-      "The prompt enforces three safety rules. Users must be 21 or older. No medical or dosing advice. No guessing beyond the real data given to it.",
-      "Temperature is fixed at 0.7, below the default, for a more consistent answer. Token output is capped at 800, to stop a runaway reply.",
-      "Around the assistant sit four more features: a QR-code passport trail, a store map, a B2B dashboard, and real WebAuthn passkey login.",
+      "The retrieval side is the real work. Dispensaries publish menus through a handful of e-commerce platforms, none of which offers a public API. I found Leafly's embedded-menu JSON endpoint by reading the embed script on a shop's own site, then wrote a connector against it: sequential pagination, 50 items per page because the server rejects anything larger, and a user agent that identifies my crawler and links to my own policy page.",
+      "I made the connector an interface, not a one-off. Leafly returns JSON. Tymber ships state inside a Next.js data blob. Maui hides it in a Remix context object. Each is a different extraction problem behind the same contract, so adding a platform does not touch the pipeline.",
+      "Every platform maps into one product model: name, type, brand, size, THC, CBD, price, stock. Two mapping decisions took real thought. Leafly buckets grinders and rolling papers as 'Other', so I re-derive product type from the name when the category is useless. And I only store THC as a percentage when the source says percent — edibles report milligrams, and storing 100mg as '100%' would be a lie on the card, so the card omits it instead.",
+      "Product names are matched to a canonical strain list with an alias table and fuzzy comparison at a 0.85 threshold. About 80% of items match nothing, because small growers use their own SKU names. That number is in the code as a comment, not hidden.",
+      "A nightly cron syncs every shop, writes one blob per shop to Redis with a 90-day expiry, and isolates failures per shop: one dead menu records an error against that shop and the run continues.",
+      "Only a trimmed slice reaches the model. Strain-matched items only, deduped to the cheapest price per strain, capped at eight per shop. A 700-item menu contributes about a line of text. The rest of the context is the user's saved preferences, and the three nearest licensed stores by real distance when location is shared.",
+      "Every read is wrapped so a failure returns empty rather than throwing. If Redis is unreachable the assistant loses its stock data and keeps answering.",
+      "The system prompt is split into sections — persona, style, format, safety, data — so one can be tuned without disturbing the others. Safety is enforced there: 21 or older, no medical or dosing advice, and no speculation beyond the injected data. Temperature is pinned at 0.7 and output capped at 800 tokens.",
     ],
     outcome: [
-      "211 commits. This is the project I have worked on the longest, over about three months.",
-      "It is deployed and live. The retrieval layer, the login, and the B2B side all run in production.",
-      "I want to be precise here. This is careful context engineering and grounded retrieval. It is not an agent. I would not call it one.",
+      "At peak the pipeline held about 2,055 products across 10 dispensaries, roughly 1,439 of them through the Leafly connector. Verified end to end: a sync run reporting 681 normalized products, trail badges showing the count and sync age, and the assistant answering 'where can I find Blue Dream right now' with two named shops and their prices.",
+      "211 commits, the longest-running project I have built. The connector layer is about 2,080 lines of the 15,000.",
+      "Ingestion is paused, and I would rather say so than imply otherwise. A roster migration in June replaced the dispensary list and dropped the platform tags the sync depends on, so the nightly job now skips every shop. The connectors still work and the upstream endpoint still answers. It needs the tags restored, not a rewrite.",
+      "This is RAG, not an agent. Retrieval, then generation constrained to what was retrieved. I would not call it an agent.",
     ],
     links: [{ label: "LIVE.SITE", href: "https://www.covebud.com", primary: true }],
   },
