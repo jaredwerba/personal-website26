@@ -3397,3 +3397,50 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
 /* The row sitting behind the open dialog. */
 .ac-root tr[data-open-row] { background: var(--ac-screen-raised, #1e1200); }
 
+
+/* Ledger column widths. table-layout: fixed splits columns evenly by default,
+   which gave the date and the OPEN link as much room as the post title.
+   Pin the two narrow columns and let the title take what is left.
+   :last-child covers both table shapes — the receipts table has a "why"
+   column, the full table does not. */
+.ac-root .ac-table-scroll th:first-child,
+.ac-root .ac-table-scroll td:first-child {
+  width: 7rem;
+  /* The numeric class right-aligns, which pushed the date away from its label. */
+  text-align: left;
+}
+.ac-root .ac-table-scroll th:last-child,
+.ac-root .ac-table-scroll td:last-child {
+  width: 4.5rem;
+  text-align: left;
+}
+/* "Why it matters", present only on the receipts table. */
+.ac-root .ac-table-scroll th:nth-child(3):not(:last-child),
+.ac-root .ac-table-scroll td:nth-child(3):not(:last-child) {
+  width: 30%;
+}
+@media (max-width: 640px) {
+  /* Smaller type on a phone. At 18px a date needs 91px of a 303px table,
+     which leaves the title nothing. */
+  .ac-root .ac-table-scroll table { font-size: 0.82rem; }
+  .ac-root .ac-table-scroll th,
+  .ac-root .ac-table-scroll td { padding-left: 0.4rem; padding-right: 0.4rem; }
+  .ac-root .ac-table-scroll th:first-child,
+  .ac-root .ac-table-scroll td:first-child { width: 4.75rem; }
+  .ac-root .ac-table-scroll th:last-child,
+  .ac-root .ac-table-scroll td:last-child { width: 3rem; }
+  /* Four columns do not fit a phone. "Why it matters" is the supporting
+     column, so it goes and the post title gets the room. */
+  .ac-root .ac-table-scroll th:nth-child(3):not(:last-child),
+  .ac-root .ac-table-scroll td:nth-child(3):not(:last-child) { display: none; }
+}
+
+/* A starred row is inverse video, so its OPEN link has to flip with it.
+   The scoped reset styles `.ac-root a` at (0,1,1), which outranks the row
+   class on its own — hence the descendant selector. */
+.ac-root .ac-table__row--active a,
+.ac-root tr.ac-table__row--active a:hover {
+  color: var(--ac-on-fill);
+  text-shadow: none;
+  text-decoration: underline;
+}
