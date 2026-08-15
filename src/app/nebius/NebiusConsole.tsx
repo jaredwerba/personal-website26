@@ -291,6 +291,19 @@ export default function NebiusConsole() {
         </span>
       </div>
 
+      {/* Recipient mark. Desaturated — a label, not a claim of affiliation. */}
+      <div className="ac-brandbar">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/nebius-logo.svg"
+          alt="Nebius"
+          className="ac-brand"
+          width={131}
+          height={36}
+        />
+        <span className="ac-brand__caption">Forward Deployed Engineer &mdash; AI R&amp;D</span>
+      </div>
+
       <div className="ac-console__grid">
         {/* ── Index rail ── */}
         <ac-index className="ac-rail">

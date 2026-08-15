@@ -3308,3 +3308,28 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
   min-width: 0;
 }
 .ac-root .ac-bar__sep { opacity: 0.55; }
+
+/* Nebius mark. Grayscale on purpose: the console is monochrome, and a
+   desaturated mark reads as a recipient label rather than a badge of
+   affiliation. Sits on the dark screen, not the amber bar, where a pale
+   mark would have poor contrast. */
+.ac-root .ac-brandbar {
+  display: flex;
+  align-items: center;
+  gap: var(--ac-space-3);
+  padding: var(--ac-space-3) 0 0;
+}
+.ac-root .ac-brand {
+  height: 28px;
+  width: auto;
+  filter: grayscale(1) brightness(0.92);
+  opacity: 0.75;
+}
+.ac-root .ac-brandbar:hover .ac-brand { opacity: 1; }
+.ac-root .ac-brand__caption {
+  font-family: var(--ac-font-micro);
+  font-size: var(--ac-type-micro);
+  letter-spacing: var(--ac-tracking-micro);
+  text-transform: uppercase;
+  color: var(--ac-ink-faint);
+}
