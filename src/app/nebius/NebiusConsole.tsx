@@ -279,7 +279,13 @@ export default function NebiusConsole() {
     <ac-console className="ac-console" default-doc="01">
       {/* Top status bar */}
       <div className="ac-statusbar ac-console__bar" role="status">
-        <span>JWERBA // TECHNICAL BRIEF</span>
+        <span className="ac-bar__line">
+          <span>Jared Werba</span>
+          <span className="ac-bar__sep" aria-hidden="true">//</span>
+          <span>Nebius FDE Candidate</span>
+          <span className="ac-bar__sep" aria-hidden="true">//</span>
+          <span>Prepared for: Chris Mulder, Head of Engineering &mdash; AI R&amp;D</span>
+        </span>
         <span className="ac-push">
           REC:<span data-match-count>{Object.keys(DOC_META).length}</span>
         </span>

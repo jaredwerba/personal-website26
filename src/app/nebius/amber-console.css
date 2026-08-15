@@ -3297,3 +3297,14 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
 .ac-root .nbx-nav__item[data-featured] .nbx-nav__label { grid-row: 1; grid-column: 2; }
 .ac-root .nbx-nav__item .nbx-nav__meta,
 .ac-root .nbx-nav__item[data-featured] .nbx-nav__meta { grid-row: 2; grid-column: 2; }
+
+/* Header bar: identity, role, recipient. Wraps rather than overflows on a phone. */
+.ac-root .ac-console__bar { flex-wrap: wrap; row-gap: 2px; }
+.ac-root .ac-bar__line {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 var(--ac-space-2);
+  min-width: 0;
+}
+.ac-root .ac-bar__sep { opacity: 0.55; }
