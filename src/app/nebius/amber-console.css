@@ -3134,12 +3134,13 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
 /* ── Content ──────────────────────────────────────────────── */
 
 .ac-content { min-width: 0; }
+/* One scroller, not two. The content pane used to have its own max-height and
+   overflow, which nested scroll containers (the ledger has eleven capped
+   tables) inside another scroll container — that inflated the document to
+   ~8000px and left a huge dead area under the console. The page scrolls
+   normally now and the rail stays sticky beside it. */
 @media (min-width: 1024px) {
-  .ac-content {
-    max-height: calc(100dvh - 8rem);
-    overflow-y: auto;
-    padding-right: var(--ac-space-2);
-  }
+  .ac-content { padding-right: var(--ac-space-2); }
 }
 
 .ac-doc { display: block; border: var(--ac-border-w) solid var(--ac-stroke); }
@@ -3354,7 +3355,16 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
    put a wide box outside normal flow and gave the whole page a horizontal
    scroll — make it fit and wrap. A dense three-column ledger reads fine
    wrapped on a phone, and nothing can escape the column. */
-.ac-root .ac-table-scroll { max-width: 100%; overflow-x: auto; }
+.ac-root .ac-table-scroll {
+  max-width: 100%;
+  /* Bounded in BOTH axes. With only overflow-x set, a 135-row table escaped
+     its container and stretched the document to 8000px, leaving a huge dead
+     area under the console. A capped box also gives the ledger its own scroll
+     region instead of burying the rest of the page. */
+  max-height: 60vh;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
 .ac-root .ac-table-scroll > table {
   display: table;
   table-layout: fixed;
@@ -3383,37 +3393,7 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
   overflow-x: clip;
 }
 
-/* Post modal. Reads as a console window, not a lightbox. */
-dialog.ac-tweetmodal {
-  width: min(560px, calc(100vw - 2rem));
-  padding: 0;
-  border: var(--ac-border-w, 2px) solid var(--ac-emit-90, #ffae1e);
-  background: var(--ac-screen, #0d0700);
-  color: var(--ac-ink, #ffae1e);
-}
-dialog.ac-tweetmodal[open] {
-  position: fixed;
-  inset: 0;
-  margin: auto;
-  height: fit-content;
-  max-height: calc(100dvh - 2rem);
-  z-index: 60;
-}
-dialog.ac-tweetmodal::backdrop { background: rgba(0, 0, 0, 0.8); }
-dialog.ac-tweetmodal .ac-tweetmodal__bar { display: flex; align-items: center; gap: 8px; padding: 6px 10px; }
-dialog.ac-tweetmodal .ac-tweetmodal__body { padding: var(--ac-space-4, 16px); }
-dialog.ac-tweetmodal .ac-tweetmodal__title {
-  margin: 0 0 var(--ac-space-3, 12px);
-  font-size: var(--ac-type-body, 22px);
-  color: var(--ac-ink-bright, #ffd052);
-  text-transform: none;
-}
-dialog.ac-tweetmodal .ac-tweetmodal__why {
-  margin: 0 0 var(--ac-space-4, 16px);
-  color: var(--ac-ink-dim, #a2690c);
-  text-transform: none;
-}
-dialog.ac-tweetmodal .ac-tweetmodal__actions { gap: var(--ac-space-3, 12px); }
 
 /* The row sitting behind the open dialog. */
 .ac-root tr[data-open-row] { background: var(--ac-screen-raised, #1e1200); }
+

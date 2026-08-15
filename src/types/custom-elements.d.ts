@@ -18,7 +18,6 @@ declare module "react" {
       "ac-index": AcElement;
       "ac-search": AcElement;
       "ac-doc": AcElement<{ "doc-id"?: string; hidden?: boolean }>;
-      "ac-tweet-modal": AcElement;
     }
   }
 }

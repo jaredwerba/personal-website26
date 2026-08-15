@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { Badge } from "@mdrbx/nerv-ui";
+import Highlights from "@/components/Highlights";
 
 interface BookEntry {
   title: string;
@@ -142,12 +143,23 @@ function SortIndicator({ active, dir }: { active: boolean; dir: SortDir }) {
   return <span className="text-nerv-orange ml-1">{dir === "asc" ? "↑" : "↓"}</span>;
 }
 
+type Tab = "books" | "highlights";
+
+const TABS: { id: Tab; label: string }[] = [
+  { id: "books", label: "BOOKS" },
+  { id: "highlights", label: "HIGHLIGHTS" },
+];
+
 export default function ReadsPage() {
   const [books, setBooks] = useState<BookEntry[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [query, setQuery] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("dateRead");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
+  const [tab, setTab] = useState<Tab>("books");
+  // Highlights are ~900 KB, so they only load once someone opens the tab. Once
+  // mounted they stay mounted, which keeps the shuffle and scroll on tab flips.
+  const [highlightsOpened, setHighlightsOpened] = useState(false);
 
   useEffect(() => {
     fetch("/goodreads.csv")
@@ -193,15 +205,53 @@ export default function ReadsPage() {
         <h2 className="font-nerv-display text-2xl md:text-3xl tracking-[0.16em] text-nerv-orange">
           READS
         </h2>
-        <Badge
-          label={loaded ? `${displayed.length}/${books.length}` : "—"}
-          variant="info"
-          size="sm"
-        />
+        {tab === "books" && (
+          <Badge
+            label={loaded ? `${displayed.length}/${books.length}` : "—"}
+            variant="info"
+            size="sm"
+          />
+        )}
       </div>
 
+      <div className="flex border-b border-nerv-mid-gray/40">
+        {TABS.map(({ id, label }) => {
+          const active = tab === id;
+          return (
+            <button
+              key={id}
+              type="button"
+              onClick={() => {
+                setTab(id);
+                if (id === "highlights") setHighlightsOpened(true);
+              }}
+              aria-pressed={active}
+              className={`relative px-3 py-1.5 font-nerv-display text-[11px] tracking-[0.18em] transition-colors ${
+                active
+                  ? "text-nerv-orange"
+                  : "text-nerv-mid-gray hover:text-nerv-cyan"
+              }`}
+            >
+              {label}
+              {active && (
+                <span className="absolute inset-x-0 -bottom-px h-[2px] bg-nerv-orange" />
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {highlightsOpened && (
+        <div hidden={tab !== "highlights"}>
+          <Highlights />
+        </div>
+      )}
+
       {loaded && (
-        <div className="bg-nerv-black border border-nerv-mid-gray">
+        <div
+          hidden={tab !== "books"}
+          className="bg-nerv-black border border-nerv-mid-gray"
+        >
           <div className="flex items-center gap-2 px-1.5 py-1 md:px-2.5 border-b border-nerv-mid-gray bg-nerv-dark-gray">
             <span className="font-nerv-mono text-[10px] text-nerv-cyan tracking-[0.2em] shrink-0">
               &gt;

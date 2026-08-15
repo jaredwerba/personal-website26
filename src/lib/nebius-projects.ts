@@ -835,7 +835,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     why: "HPC cluster OS, not just the app layer.",
   },
   {
-    date: "2017-11-28",
+    date: "2017-11-29",
     title: "Amazon EC2 Bare Metal Instances with Direct Access to Hardware",
     tweetUrl: "https://x.com/jaredwerba/status/935824872969732098",
     receipt: true,

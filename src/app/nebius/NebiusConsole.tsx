@@ -311,7 +311,6 @@ function LedgerTable({
             <th>What I posted</th>
             {showWhy ? <th>Why it matters</th> : null}
             <th>Tweet</th>
-            <th>Source</th>
           </tr>
         </thead>
         <tbody>
@@ -325,13 +324,6 @@ function LedgerTable({
               {showWhy ? <td>{row.why}</td> : null}
               <td>
                 <LedgerLink href={row.tweetUrl}>OPEN</LedgerLink>
-              </td>
-              <td>
-                {row.sourceUrl ? (
-                  <LedgerLink href={row.sourceUrl}>SOURCE</LedgerLink>
-                ) : (
-                  "—"
-                )}
               </td>
             </tr>
           ))}
@@ -484,48 +476,6 @@ export default function NebiusConsole() {
         </div>
       </div>
 
-      {/* Posts open here rather than sending the reader to X. */}
-      <ac-tweet-modal>
-        <dialog className="ac-dialog ac-tweetmodal" aria-label="Post">
-          <div className="ac-statusbar ac-tweetmodal__bar">
-            <span data-tweet-date>POST</span>
-            <span className="ac-push">
-              <button type="button" className="ac-btn ac-btn--filled" data-tweet-close>
-                CLOSE
-              </button>
-            </span>
-          </div>
-          <div className="ac-tweetmodal__body">
-            <h3 className="ac-tweetmodal__title" data-tweet-title>
-              Post
-            </h3>
-            <p className="ac-tweetmodal__why" data-tweet-why hidden />
-            <div className="ac-row ac-keys ac-tweetmodal__actions">
-              <a
-                className="ac-btn ac-btn--filled"
-                data-tweet-out
-                href="https://x.com/jaredwerba"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                ▶ OPEN THE POST
-                <span className="ac-sr-only"> (opens in a new tab)</span>
-              </a>
-              <a
-                className="ac-btn"
-                data-tweet-source
-                href="#"
-                target="_blank"
-                rel="noopener noreferrer"
-                hidden
-              >
-                SOURCE ARTICLE
-                <span className="ac-sr-only"> (opens in a new tab)</span>
-              </a>
-            </div>
-          </div>
-        </dialog>
-      </ac-tweet-modal>
 
       <div className="ac-statusbar ac-console__foot" role="status">
         <span>JARED WERBA / BOSTON MA</span>
