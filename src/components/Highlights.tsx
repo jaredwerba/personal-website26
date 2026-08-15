@@ -7,25 +7,36 @@ interface HighlightBook {
   author: string;
 }
 
+interface Theme {
+  id: string;
+  label: string;
+  blurb: string;
+  count: number;
+}
+
 interface HighlightItem {
   /** Index into `books`. */
   b: number;
   text: string;
   loc: string;
+  /** Primary theme id. */
+  t: string;
+  /** Themes this highlight also earned on its own wording. */
+  also: string[];
 }
 
 interface HighlightsData {
   books: HighlightBook[];
+  themes: Theme[];
   items: HighlightItem[];
 }
 
 /** Search results are capped — 2,800 rows at once is a scroll no one finishes. */
 const MAX_RESULTS = 200;
 
-/** The shuffle card skips one-word highlights, which read as noise on their own. */
+/** The shuffle card skips one-word lookups, which read as noise on their own. */
 const MIN_FEATURE_LENGTH = 80;
 
-/** Indices worth featuring — long enough to stand alone out of context. */
 function featurableIndices(items: HighlightItem[]): number[] {
   const long = items
     .map((item, i) => (item.text.length >= MIN_FEATURE_LENGTH ? i : -1))
@@ -50,6 +61,10 @@ function formatLoc(loc: string): string {
   return `${/^loc/i.test(label) ? "LOC" : label.toUpperCase()} ${value}`;
 }
 
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 /** Highlight every occurrence of the query inside a highlight's text. */
 function Marked({ text, query }: { text: string; query: string }) {
   if (!query) return <>{text}</>;
@@ -69,20 +84,14 @@ function Marked({ text, query }: { text: string; query: string }) {
   );
 }
 
-function escapeRegExp(s: string): string {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
 function Quote({
   item,
   book,
   query,
-  showBook,
 }: {
   item: HighlightItem;
   book: HighlightBook;
   query: string;
-  showBook: boolean;
 }) {
   return (
     <li className="border-b border-nerv-mid-gray/20 px-3 py-2.5 last:border-b-0 hover:bg-nerv-cyan/5 transition-colors">
@@ -90,12 +99,21 @@ function Quote({
         <Marked text={item.text} query={query} />
       </p>
       <p className="mt-1.5 flex flex-wrap items-center gap-x-2 font-nerv-mono text-[9px] tracking-[0.12em] text-nerv-mid-gray">
-        {showBook && (
-          <span className="text-nerv-amber/70 uppercase">{book.title}</span>
-        )}
+        <span className="text-nerv-amber/70 uppercase">{book.title}</span>
         <span>{formatLoc(item.loc)}</span>
       </p>
     </li>
+  );
+}
+
+function ScrollBox({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      className="overflow-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
+      style={{ maxHeight: "calc(100dvh - 210px)" }}
+    >
+      {children}
+    </div>
   );
 }
 
@@ -104,7 +122,8 @@ export default function Highlights() {
   const [error, setError] = useState(false);
   const [query, setQuery] = useState("");
   const [featured, setFeatured] = useState<number | null>(null);
-  const [openBook, setOpenBook] = useState<number | null>(null);
+  /** null = the theme grid; otherwise the open theme's id. */
+  const [openTheme, setOpenTheme] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -148,13 +167,14 @@ export default function Highlights() {
     );
   }, [data, query]);
 
-  /** Per-book highlight lists, built once so expanding a book is instant. */
-  const byBook = useMemo(() => {
-    if (!data) return [];
-    const groups: HighlightItem[][] = data.books.map(() => []);
-    for (const item of data.items) groups[item.b]?.push(item);
-    return groups;
-  }, [data]);
+  /** Highlights of the open theme, primary matches first, then cross-listed. */
+  const themeItems = useMemo(() => {
+    if (!data || !openTheme) return [];
+    return [
+      ...data.items.filter((i) => i.t === openTheme),
+      ...data.items.filter((i) => i.t !== openTheme && i.also.includes(openTheme)),
+    ];
+  }, [data, openTheme]);
 
   if (error) {
     return (
@@ -174,6 +194,7 @@ export default function Highlights() {
 
   const featuredItem = featured !== null ? data.items[featured] : null;
   const searching = query.trim().length > 0;
+  const theme = data.themes.find((t) => t.id === openTheme) ?? null;
 
   return (
     <div className="space-y-2">
@@ -213,8 +234,8 @@ export default function Highlights() {
         </section>
       )}
 
-      {/* Search + browser */}
       <div className="border border-nerv-mid-gray bg-nerv-black">
+        {/* Search */}
         <div className="flex items-center gap-2 border-b border-nerv-mid-gray bg-nerv-dark-gray px-1.5 py-1 md:px-2.5">
           <span className="shrink-0 font-nerv-mono text-[10px] tracking-[0.2em] text-nerv-cyan">
             &gt;
@@ -223,7 +244,7 @@ export default function Highlights() {
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="SEARCH HIGHLIGHTS, TITLE, AUTHOR"
+            placeholder="SEARCH ALL HIGHLIGHTS"
             className="min-w-0 flex-1 bg-transparent font-nerv-mono text-[11px] tracking-wider text-nerv-cyan outline-none placeholder:text-nerv-mid-gray/60"
           />
           {query && (
@@ -238,12 +259,28 @@ export default function Highlights() {
           )}
         </div>
 
-        <div
-          className="overflow-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
-          style={{ maxHeight: "calc(100dvh - 200px)" }}
-        >
-          {searching ? (
-            results.length === 0 ? (
+        {/* Open theme header, so there is always a way back to the grid */}
+        {!searching && theme && (
+          <div className="flex items-center gap-2 border-b border-nerv-mid-gray bg-nerv-dark-gray px-2 py-1.5">
+            <button
+              type="button"
+              onClick={() => setOpenTheme(null)}
+              className="shrink-0 font-nerv-mono text-[10px] tracking-[0.15em] text-nerv-cyan transition-colors hover:text-nerv-orange"
+            >
+              [ ← ALL ]
+            </button>
+            <span className="min-w-0 flex-1 truncate font-nerv-display text-[11px] tracking-[0.18em] text-nerv-orange">
+              {theme.label.toUpperCase()}
+            </span>
+            <span className="shrink-0 font-nerv-mono text-[9px] text-nerv-mid-gray">
+              {themeItems.length}
+            </span>
+          </div>
+        )}
+
+        {searching ? (
+          <ScrollBox>
+            {results.length === 0 ? (
               <p className="px-3 py-4 font-nerv-mono text-[11px] text-nerv-mid-gray">
                 NO MATCHES
               </p>
@@ -255,59 +292,46 @@ export default function Highlights() {
                     item={item}
                     book={data.books[item.b]}
                     query={query.trim()}
-                    showBook
                   />
                 ))}
               </ul>
-            )
-          ) : (
+            )}
+          </ScrollBox>
+        ) : theme ? (
+          <ScrollBox>
             <ul>
-              {data.books.map((book, b) => {
-                const open = openBook === b;
-                return (
-                  <li
-                    key={b}
-                    className="border-b border-nerv-mid-gray/20 last:border-b-0"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setOpenBook(open ? null : b)}
-                      aria-expanded={open}
-                      className="flex w-full items-center gap-2 px-2 py-1.5 text-left transition-colors hover:bg-nerv-cyan/5"
-                    >
-                      <span
-                        className={`shrink-0 font-nerv-mono text-[10px] ${open ? "text-nerv-orange" : "text-nerv-mid-gray"}`}
-                      >
-                        {open ? "▾" : "▸"}
-                      </span>
-                      <span
-                        className={`min-w-0 flex-1 truncate font-nerv-mono text-[11px] ${open ? "text-nerv-orange" : "text-nerv-cyan"}`}
-                      >
-                        {book.title}
-                      </span>
-                      <span className="shrink-0 font-nerv-mono text-[9px] text-nerv-mid-gray">
-                        [{byBook[b].length}]
-                      </span>
-                    </button>
-                    {open && (
-                      <ul className="border-t border-nerv-mid-gray/20 bg-nerv-panel">
-                        {byBook[b].map((item, i) => (
-                          <Quote
-                            key={i}
-                            item={item}
-                            book={book}
-                            query=""
-                            showBook={false}
-                          />
-                        ))}
-                      </ul>
-                    )}
-                  </li>
-                );
-              })}
+              {themeItems.map((item, i) => (
+                <Quote key={i} item={item} book={data.books[item.b]} query="" />
+              ))}
             </ul>
-          )}
-        </div>
+          </ScrollBox>
+        ) : (
+          /* Theme grid — the landing view */
+          <ScrollBox>
+            <div className="grid grid-cols-1 gap-px bg-nerv-mid-gray/20 sm:grid-cols-2">
+              {data.themes.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setOpenTheme(t.id)}
+                  className="group bg-nerv-black px-3 py-3 text-left transition-colors hover:bg-nerv-cyan/5"
+                >
+                  <span className="flex items-baseline justify-between gap-2">
+                    <span className="font-nerv-display text-[12px] tracking-[0.14em] text-nerv-cyan transition-colors group-hover:text-nerv-orange">
+                      {t.label.toUpperCase()}
+                    </span>
+                    <span className="shrink-0 font-nerv-mono text-[10px] text-nerv-amber">
+                      {t.count}
+                    </span>
+                  </span>
+                  <span className="mt-1 block font-nerv-mono text-[10px] leading-relaxed text-nerv-mid-gray">
+                    {t.blurb}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </ScrollBox>
+        )}
 
         <div className="flex items-center justify-between border-t border-nerv-mid-gray bg-nerv-dark-gray px-3 py-1 font-mono text-[10px] text-nerv-mid-gray">
           <span>
@@ -317,7 +341,9 @@ export default function Highlights() {
                     ? ` / ${results.length.toLocaleString()}`
                     : ""
                 }`
-              : `BOOKS: ${data.books.length}`}
+              : theme
+                ? `${data.books.length} BOOKS`
+                : `THEMES: ${data.themes.length}`}
           </span>
           <span>
             {searching && results.length > MAX_RESULTS
