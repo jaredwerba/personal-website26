@@ -3247,6 +3247,22 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
 .ac-root .ac-tagline {
   text-transform: none;
 }
+
+/* Public-record ledger: article titles stay in written case. */
+.ac-root .ac-table--prose td {
+  text-transform: none;
+}
+.ac-root .ac-table--prose .ac-table__date {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.ac-root .ac-table--prose a {
+  color: var(--ac-ink-bright);
+  text-decoration: none;
+}
+.ac-root .ac-table--prose a:hover {
+  color: var(--ac-emit-100);
+}
 .ac-root .ac-block .ac-list li { max-width: 68ch; }
 
 /* ===========================================================================
@@ -3332,4 +3348,37 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
   letter-spacing: var(--ac-tracking-micro);
   text-transform: uppercase;
   color: var(--ac-ink-faint);
+}
+
+/* The Public Record table. Rather than let it be 1600px and scroll — which
+   put a wide box outside normal flow and gave the whole page a horizontal
+   scroll — make it fit and wrap. A dense three-column ledger reads fine
+   wrapped on a phone, and nothing can escape the column. */
+.ac-root .ac-table-scroll { max-width: 100%; overflow-x: auto; }
+.ac-root .ac-table-scroll > table {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  min-width: 0;
+}
+.ac-root .ac-table-scroll th,
+.ac-root .ac-table-scroll td {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
+}
+@media (max-width: 640px) {
+  .ac-root .ac-table-scroll > table { font-size: var(--ac-type-small); }
+}
+
+/* Content is data-driven, so a future entry can always be wider than a phone.
+   Clip at the document container rather than chase each offender. `clip`
+   rather than `hidden` because it does not create a scroll container, so the
+   sticky rail and the inner .ac-table-scroll keep working. */
+.ac-root .ac-content,
+.ac-root .ac-doc,
+.ac-root .ac-doc__body {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: clip;
 }

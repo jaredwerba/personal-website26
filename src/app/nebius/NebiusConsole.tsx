@@ -3,8 +3,12 @@ import {
   OVERVIEW,
   CAPABILITIES,
   NEBIUS_PROJECTS,
+  TWEET_LEDGER_INTRO,
+  TWEET_LEDGER_RECEIPTS,
+  TWEET_LEDGER_FULL,
   type NebiusProject,
   type ProjectLink,
+  type TweetLedgerEntry,
 } from "@/lib/nebius-projects";
 
 /* ─────────────────────────────────────────────────────────────
@@ -16,6 +20,7 @@ type Section = { id: string; title: string; docs: string[] };
 
 const SECTIONS: Section[] = [
   { id: "overview", title: "Overview / Live Systems", docs: ["overview", "capabilities", "background"] },
+  { id: "record", title: "Public Record", docs: ["ledger"] },
   { id: "agentic", title: "Agentic Systems & Evaluation", docs: ["01", "03", "04", "13", "05"] },
   { id: "hackathon", title: "Hackathon & Prototypes", docs: ["02", "17", "16", "08"] },
   { id: "other", title: "Other Projects", docs: ["06", "07", "09", "10", "11", "12", "14", "15"] },
@@ -27,12 +32,15 @@ const FEATURED = new Set(["01", "02"]);
 const HINTS = [
   "eval harness",
   "RAG",
-  "local LLM",
+  "Ollama",
   "LangGraph",
   "MCP",
   "tool calling",
   "GPU",
   "RDMA",
+  "InfiniBand",
+  "GPT-3",
+  "RoCE",
   "OAuth",
 ];
 
@@ -83,6 +91,11 @@ const DOC_META: Record<string, { label: string; meta: string; search: string }> 
     label: "Background",
     meta: "10 YRS",
     search: BACKGROUND.join(" ").toLowerCase(),
+  },
+  ledger: {
+    label: "Public Record",
+    meta: `${TWEET_LEDGER_FULL.length} POSTS`,
+    search: `public record tweet ledger infiniband rdma roce gpt-3 optane xpoint ${TWEET_LEDGER_FULL.map((e) => `${e.date} ${e.title}`).join(" ")}`.toLowerCase(),
   },
   ...Object.fromEntries(
     NEBIUS_PROJECTS.map((p) => [
@@ -217,6 +230,9 @@ function OverviewDoc() {
               {p.name}
             </button>
           ))}
+          <button type="button" className="ac-btn" data-doc-target="ledger">
+            PUBLIC RECORD
+          </button>
         </div>
       </section>
 
@@ -266,6 +282,93 @@ function BackgroundDoc() {
           <li key={i}>{line}</li>
         ))}
       </ul>
+    </DocShell>
+  );
+}
+
+function LedgerLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <a href={href} target="_blank" rel="noopener noreferrer">
+      {children}
+      <span className="ac-sr-only"> (opens in a new tab)</span>
+    </a>
+  );
+}
+
+function LedgerTable({
+  rows,
+  showWhy,
+}: {
+  rows: TweetLedgerEntry[];
+  showWhy?: boolean;
+}) {
+  return (
+    <div className="ac-table-scroll">
+      <table className="ac-table ac-table--dense ac-table--prose">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>What I posted</th>
+            {showWhy ? <th>Why it matters</th> : null}
+            <th>Tweet</th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr
+              key={row.tweetUrl}
+              className={row.star ? "ac-table__row--active" : undefined}
+            >
+              <td className="ac-table__num ac-table__date">{row.date}</td>
+              <td>{row.title}</td>
+              {showWhy ? <td>{row.why}</td> : null}
+              <td>
+                <LedgerLink href={row.tweetUrl}>OPEN</LedgerLink>
+              </td>
+              <td>
+                {row.sourceUrl ? (
+                  <LedgerLink href={row.sourceUrl}>SOURCE</LedgerLink>
+                ) : (
+                  "—"
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function LedgerDoc() {
+  const byYear = new Map<string, TweetLedgerEntry[]>();
+  for (const row of TWEET_LEDGER_FULL) {
+    const year = row.date.slice(0, 4);
+    const list = byYear.get(year) ?? [];
+    list.push(row);
+    byYear.set(year, list);
+  }
+
+  return (
+    <DocShell id="ledger" title="PUBLIC RECORD" status={`${TWEET_LEDGER_FULL.length} POSTS`}>
+      {TWEET_LEDGER_INTRO.map((para, i) => (
+        <p key={i} className="ac-prose ac-overview__para">
+          {para}
+        </p>
+      ))}
+
+      <section className="ac-block">
+        <h3 className="ac-block__title">RECEIPTS</h3>
+        <LedgerTable rows={TWEET_LEDGER_RECEIPTS} showWhy />
+      </section>
+
+      {[...byYear.entries()].map(([year, rows]) => (
+        <section key={year} className="ac-block">
+          <h3 className="ac-block__title">{year}</h3>
+          <LedgerTable rows={rows} />
+        </section>
+      ))}
     </DocShell>
   );
 }
@@ -374,6 +477,7 @@ export default function NebiusConsole() {
           <OverviewDoc />
           <CapabilitiesDoc />
           <BackgroundDoc />
+          <LedgerDoc />
           {NEBIUS_PROJECTS.map((p) => (
             <ProjectDoc key={p.id} project={p} />
           ))}
