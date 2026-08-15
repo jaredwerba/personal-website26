@@ -31,16 +31,39 @@ export const CAPABILITIES: Capability[] = [
     label: "Hackathons won",
     proof:
       "First place at Augmentation Lab, MIT — AugHacks 2025, Long Track (02). I presented the work to Stephen Wolfram.",
+    links: [
+      { label: "BRAIN-STORM.AI", href: "https://www.brain-storm.ai", primary: true },
+    ],
   },
   {
     label: "Agentic systems",
     proof:
-      "01 Nebius-XWord, a hand-built LangGraph. 03 Venus, four specialist sub-agents in parallel. 13, an orchestrator that fans work out to specialist agents and their sub-agents. 04 LinkedIn-Automator, which ran against a live site in production.",
+      "01 Nebius-XWord, a hand-built LangGraph. 03 Venus, four specialist sub-agents in parallel. 13, an orchestrator that fans work out to specialist agents — one I later cut from five waves to three stages, because the handoffs cost more than they bought. 04 LinkedIn-Automator, which ran against a live site in production.",
+    links: [
+      {
+        label: "NEBIUS-XWORD",
+        href: "https://nebius-xword.vercel.app",
+        primary: true,
+      },
+      {
+        label: "VENUS",
+        href: "https://vendor-scout-xi.vercel.app",
+        primary: true,
+        note: "Vercel password: fernwood2027",
+      },
+    ],
   },
   {
     label: "Tool calling",
     proof:
       "01 — four tools, and a stop rule that fires on a submit call, not on silence. 12 career-ops and 13, my resume skills, both give the model a defined tool surface and hold it to that surface.",
+    links: [
+      {
+        label: "CAREER-OPS.DASHBOARD",
+        href: "https://careerops-jobboard-public.vercel.app",
+        primary: true,
+      },
+    ],
   },
   {
     label: "MCP",
@@ -53,29 +76,46 @@ export const CAPABILITIES: Capability[] = [
   {
     label: "Evaluation",
     proof:
-      "01 — a four-solver harness that tests itself. An empty solver must score 0%. An oracle solver must score 100%. If either misses, the scorer is broken. 13 adds a rule-based gate that stops a build when the output drifts.",
+      "01 is the eval harness: four solvers through one scorer. An empty solver must score 0%. An oracle solver must score 100%. If either misses, the scorer is broken. 13 is not an eval harness, and I want to be exact about that. It is a rule-based gate that reports document defects and refuses to judge quality. I built a model self-score into it once, then deleted it, because a model grading its own output is not a test.",
+    links: [
+      {
+        label: "XWORD.SOURCE",
+        href: "https://github.com/jaredwerba/Nebius-XWord",
+      },
+    ],
   },
   {
     label: "RAG and retrieval",
     proof:
       "A retrieval pipeline using Cohere ReRank, which reorders results by relevance after the first search returns them. 05 COVE builds three context layers per request, each one isolated so a failure degrades the answer instead of killing it.",
-    links: [{ label: "COHERE.RERANK", href: "https://cohere.com/rerank" }],
+    links: [
+      { label: "COVEBUD.COM", href: "https://www.covebud.com", primary: true },
+      { label: "COHERE.RERANK", href: "https://cohere.com/rerank" },
+    ],
   },
   {
     label: "Inference, self-hosted",
     proof:
-      "17 — two Mac minis on RDMA, 48GB of unified memory, running MLX and EXO. They serve Qwen locally to my Hermes agent and to OpenClaw, my always-on outreach agent. 04 serves llama3.1:8b through Ollama inside a live loop, with temperature and token budget set per task.",
+      "17 — two Mac minis on RDMA, 48GB of unified memory, running MLX and EXO. They serve Qwen locally to my Hermes agent and to OpenClaw, my always-on outreach agent. 04 serves llama3.1:8b through Ollama on my own machine, and I tune it per call: title scoring runs at temperature 0.1 with a 5-token cap, because that job wants one integer, while message writing runs at 0.8.",
   },
   {
     label: "Inference, hosted",
     proof:
-      "01 — I tested 13 models across two providers, then raced the same weights on both to compare the providers, not the models.",
+      "01 — I tested 13 models across two providers, then raced the same weights on both to compare the providers, not the models. The race runs on the live page.",
+    links: [
+      {
+        label: "RUN.THE.RACE",
+        href: "https://nebius-xword.vercel.app",
+        primary: true,
+      },
+    ],
   },
   {
     label: "Edge and embedded",
     proof:
       "02 — the hackathon-winning build. I embedded NeuroLM, an EEG foundation model, onto OpenBCI hardware, reading 6-channel EEG at 250Hz.",
     links: [
+      { label: "BRAIN-STORM.AI", href: "https://www.brain-storm.ai", primary: true },
       { label: "NEUROLM.SOURCE", href: "https://github.com/935963004/NeuroLM" },
     ],
   },
@@ -88,16 +128,38 @@ export const CAPABILITIES: Capability[] = [
     label: "Python",
     proof:
       "01 is Python end to end: the LangGraph agent, the FastAPI service, the grid engine, and the eval harness, with 55 tests that run offline. 04 is Python too: FastAPI, Playwright browser control, WebSockets, and the local model loop. 13 uses Python for the audit gate and PDF layout.",
+    links: [
+      { label: "XWORD.SOURCE", href: "https://github.com/jaredwerba/Nebius-XWord" },
+      {
+        label: "AUTOMATOR.SOURCE",
+        href: "https://github.com/jaredwerba/linkedin-automator",
+      },
+    ],
   },
   {
     label: "Deployment automation",
     proof:
-      "12 — a two-tier scheduler I wrote and still run. It holds a real lock, recovers a stale lock by age, catches up after the machine sleeps, and ends in a guarded production deploy. It has run daily since July.",
+      "12 — a two-tier scheduler I wrote and still run. It holds a real lock, recovers a stale lock by age, catches up after the machine sleeps, and ends in a guarded production deploy. It has run daily since July. The dashboard below is what it publishes.",
+    links: [
+      {
+        label: "CAREER-OPS.DASHBOARD",
+        href: "https://careerops-jobboard-public.vercel.app",
+        primary: true,
+      },
+    ],
   },
   {
     label: "Integrations",
     proof:
       "Built: OAuth 2.0 by hand (10, 14), signed inbound webhooks (03), Google Solar, NREL, and Stripe Connect (07, 08). Sold and architected: Oracle Integration Cloud, Oracle GoldenGate, GraphQL, and Apache Kafka.",
+    links: [
+      { label: "TRAIN247.FIT", href: "https://train247.fit", primary: true },
+      {
+        label: "SUNDAY-ENERGY",
+        href: "https://sunday-energy.vercel.app",
+        primary: true,
+      },
+    ],
   },
   {
     label: "Infrastructure",
@@ -108,15 +170,45 @@ export const CAPABILITIES: Capability[] = [
     label: "Open source",
     proof:
       "12 career-ops. 33 commits, third-largest contributor. My worker-pool fix came from a measurement, not a hunch.",
+    links: [
+      {
+        label: "CAREER-OPS.DASHBOARD",
+        href: "https://careerops-jobboard-public.vercel.app",
+        primary: true,
+      },
+    ],
   },
   {
     label: "Technical writing",
     proof:
       "I write in ASD-STE100, the Simplified Technical English standard. This page is written in it. The 01 README runs 550 lines and states plainly what it does not measure. The 04 architecture set runs nine documents, written by the tool's own logging integration.",
+    links: [
+      { label: "READ.THE.README", href: "https://github.com/jaredwerba/Nebius-XWord" },
+    ],
   },
   {
     label: "Public demos",
-    proof: "Twelve, all live right now. Every one is linked at the top of this page.",
+    proof:
+      "Twelve, all live right now. The rest of this map links them next to the work they prove. These five are the remainder.",
+    links: [
+      { label: "RUNDOG.BOSTON", href: "https://rundog.boston", primary: true },
+      { label: "GOALSLOPES.RUN", href: "https://www.goalslopes.run", primary: true },
+      {
+        label: "DAVIDWILLFIT.COM",
+        href: "https://www.davidwillfit.com",
+        primary: true,
+      },
+      {
+        label: "NICKSCALIHEALTH.COM",
+        href: "https://www.nickscalihealth.com",
+        primary: true,
+      },
+      {
+        label: "LUNARFORGE",
+        href: "https://space-forge-taupe.vercel.app/eb",
+        primary: true,
+      },
+    ],
   },
 ];
 
@@ -515,9 +607,10 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "The gate's own history shows a real mistake I made. An earlier version matched any substring on the whole page, and failed builds that had simply named a real tech stack.",
     ],
     outcome: [
-      "Real runs have fanned out to 15, 35, and 93 agents, depending on how much the posting needed.",
+      "I removed a scoring step I had built. The first version asked the model to rate its own output out of 10 against the posting. A model grading its own work is not a test, so I deleted it. The gate reports mechanical facts now, and it says nothing about quality.",
+      "I also made the system smaller. The first pipeline ran five waves of agents. It runs three stages now. The handoffs between waves cost more than they bought, so I cut them.",
       "Output that once varied by run now must pass a fixed set of checks. If it fails, the build stops rather than shipping something wrong.",
-      "This is the pattern I reach for now: let an orchestrator split the work, let specialists do one job each, and put a deterministic check at the end where a model cannot argue with it.",
+      "Two lessons I carry from this: put the deterministic check where a model cannot argue with it, and do not add an agent unless the work it saves is larger than the handoff it costs.",
     ],
   },
   {
