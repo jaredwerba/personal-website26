@@ -2,6 +2,7 @@ import {
   BACKGROUND,
   OVERVIEW,
   CAPABILITIES,
+  CAPABILITY_LEAD,
   NEBIUS_PROJECTS,
   TWEET_LEDGER_INTRO,
   TWEET_LEDGER_RECEIPTS,
@@ -260,14 +261,37 @@ function OverviewDoc() {
   );
 }
 
+/**
+ * Rows carry their own group name and are already in reading order, so runs of
+ * consecutive rows are folded into one heading here rather than kept in a
+ * separate nested structure that could drift out of step with the data.
+ */
+function groupCapabilities() {
+  const out: { name: string; rows: typeof CAPABILITIES }[] = [];
+  for (const c of CAPABILITIES) {
+    const name = c.group ?? "";
+    const last = out[out.length - 1];
+    if (last && last.name === name) last.rows.push(c);
+    else out.push({ name, rows: [c] });
+  }
+  return out;
+}
+
 function CapabilitiesDoc() {
+  const groups = groupCapabilities();
   return (
     <DocShell id="capabilities" title="CAPABILITY MAP" status={`${CAPABILITIES.length} ROWS`}>
-      {CAPABILITIES.map((c) => (
-        <section key={c.label} className="ac-block">
-          <h3 className="ac-block__title">{c.label}</h3>
-          <p className="ac-prose">{c.proof}</p>
-          <Keys links={c.links} />
+      <p className="ac-tagline">{CAPABILITY_LEAD}</p>
+      {groups.map((g) => (
+        <section key={g.name || "ungrouped"} className="ac-capgroup">
+          {g.name ? <h3 className="ac-capgroup__title">{g.name}</h3> : null}
+          {g.rows.map((c) => (
+            <section key={c.label} className="ac-block">
+              <h4 className="ac-block__title">{c.label}</h4>
+              <p className="ac-prose">{c.proof}</p>
+              <Keys links={c.links} />
+            </section>
+          ))}
         </section>
       ))}
     </DocShell>
@@ -381,7 +405,19 @@ export default function NebiusConsole() {
           <span className="ac-bar__sep" aria-hidden="true">//</span>
           <span>Prepared for: Chris Mulder, Head of Engineering &mdash; AI R&amp;D</span>
         </span>
-        <span className="ac-push">
+        <span className="ac-push nbx-barkeys">
+          {/* The escape hatch. Deliberately styled plain rather than as an
+              amber key: it is the one control that is not part of the
+              simulation, and it should not look like it is. */}
+          <button
+            type="button"
+            className="nbx-readability"
+            data-readability-toggle
+            aria-pressed="false"
+          >
+            READABILITY
+          </button>
+          <span className="ac-bar__sep" aria-hidden="true">//</span>
           REC:<span data-match-count>{Object.keys(DOC_META).length}</span>
         </span>
       </div>

@@ -10,6 +10,12 @@ export type ProjectLink = {
 };
 
 export type Capability = {
+  /**
+   * Which of the role spec's five technical-bar areas this sits under, named
+   * the way the spec names it. Consecutive rows sharing a group render under
+   * one heading, so the order of this array is the order on the page.
+   */
+  group?: string;
   /** Their bar, as they name it. */
   label: string;
   /** What proves it. Project numbers tie back to the index. */
@@ -19,32 +25,39 @@ export type Capability = {
 };
 
 /**
- * The role spec lists a technical bar. This maps each item to the work that
- * proves it, so a reader does not have to infer it from sixteen writeups.
+ * Their bar has five named areas. This map uses those five, in their order,
+ * then one group for the signals the posting itself calls out.
  *
- * Claim level matters. "Architected and sold" for the Oracle infrastructure
- * work; "built and ran" for his own code. Nothing here should fail a
- * follow-up question.
+ * The rule that shapes it: every row leads with a different thing. Jared's
+ * strongest projects each bear on four or five of these areas, so a
+ * capability-first list made the same three names appear over and over and
+ * read as thinner than the work is. Each row here carries a fact no other row
+ * uses, and no two consecutive rows open with the same noun.
+ *
+ * Claim level matters. "Sold and architected" for the Oracle work; "built and
+ * ran" for his own code; "I run" for whoop-mcp, which is someone else's
+ * server. Nothing here should fail a follow-up question.
  */
+export const CAPABILITY_LEAD =
+  "This map follows your five technical areas, in your order. My depth is AI applications. Three things here run rather than sit in a repository: career-ops has run daily since July, my home cluster serves Qwen to my own agents, and LinkedIn-Automator ran in production against a live third-party site.";
+
 export const CAPABILITIES: Capability[] = [
+  // ── AI Applications ──────────────────────────────────────────────────────
   {
-    label: "Hackathons won",
+    group: "AI Applications",
+    label: "Agentic systems and tool calling",
     proof:
-      "First place at Augmentation Lab, MIT — AugHacks 2025, Long Track . I presented the work to Stephen Wolfram.",
+      "Nebius-XWord is a hand-built LangGraph agent. It has four tools, and a stop rule that fires on a submit call, not on silence. LinkedIn-Automator is the one that ran in production, against a live third-party site, and it stopped itself when it should have. career-ops and my resume skills give a model a defined tool surface, and they hold it to that surface.",
     links: [
-      { label: "BRAIN-STORM.AI", href: "https://www.brain-storm.ai", primary: true },
+      { label: "NEBIUS-XWORD", href: "https://nebius-xword.vercel.app", primary: true },
     ],
   },
   {
-    label: "Agentic systems",
+    group: "AI Applications",
+    label: "Sub-agent fan-out, and cutting it back",
     proof:
-      "Nebius-XWord, a hand-built LangGraph. Venus, four specialist sub-agents in parallel. The resume orchestrator, which fans work out that fans work out to specialist agents — one I later cut from five waves to three stages, because the handoffs cost more than they bought. LinkedIn-Automator, which ran against a live site in production.",
+      "My resume orchestrator fans work out to specialist agents. I cut it from five waves to three stages, because the handoffs cost more than they bought. Venus runs four specialist sub-agents in parallel.",
     links: [
-      {
-        label: "NEBIUS-XWORD",
-        href: "https://nebius-xword.vercel.app",
-        primary: true,
-      },
       {
         label: "VENUS",
         href: "https://vendor-scout-xi.vercel.app",
@@ -54,92 +67,67 @@ export const CAPABILITIES: Capability[] = [
     ],
   },
   {
-    label: "Tool calling",
-    proof:
-      "Nebius-XWord — four tools, and a stop rule that fires on a submit call, not on silence. career-ops and my resume skills both give the model a defined tool surface and hold it to that surface.",
-    links: [
-      {
-        label: "CAREER-OPS.DASHBOARD",
-        href: "https://careerops-jobboard-public.vercel.app",
-        primary: true,
-      },
-    ],
-  },
-  {
-    label: "MCP",
-    proof:
-      "whoop-mcp. I run it as a connected server. It pulls my own health metrics, and the result is live on my site.",
-    links: [
-      { label: "SEE.IT.LIVE", href: "https://www.jwerba.com/health", primary: true },
-    ],
-  },
-  {
+    group: "AI Applications",
     label: "Evaluation",
     proof:
-      "Nebius-XWord is the eval harness: four solvers through one scorer. An empty solver must score 0%. An oracle solver must score 100%. If either misses, the scorer is broken. The resume orchestrator is a different thing — a rule-based gate that reports document defects and refuses to judge quality. I built a model self-score into it once, then deleted it, because a model grading its own output is not a test.",
+      "The eval harness runs four solvers through one scorer. An empty solver must score 0%. An oracle solver must score 100%. If either misses, the scorer is broken. The resume orchestrator gate is a different thing: it is rule-based, it reports document defects, and it refuses to judge quality. I built a model self-score into it once, then deleted it, because a model grading its own output is not a test.",
     links: [
-      {
-        label: "XWORD.SOURCE",
-        href: "https://github.com/jaredwerba/Nebius-XWord",
-      },
+      { label: "XWORD.SOURCE", href: "https://github.com/jaredwerba/Nebius-XWord" },
     ],
   },
   {
+    group: "AI Applications",
     label: "RAG and retrieval",
     proof:
-      "COVE is RAG end to end. I wrote connectors against three dispensary menu platforms, normalized them into one product model, matched names to a strain catalog, and stored the result in Redis. A trimmed slice — strain-matched, deduped, eight per shop — goes into the prompt at request time. Separately, a retrieval pipeline using Cohere ReRank, which reorders results by relevance after the first search returns them.",
+      "COVE is RAG end to end over live dispensary menus. A trimmed slice — strain-matched, deduped, eight per shop — goes into the prompt at request time. A separate retrieval pipeline uses Cohere ReRank, which reorders results by relevance after the first search returns them.",
     links: [
       { label: "COVEBUD.COM", href: "https://www.covebud.com", primary: true },
       { label: "COHERE.RERANK", href: "https://cohere.com/rerank" },
     ],
   },
   {
-    label: "Inference, self-hosted",
+    group: "AI Applications",
+    label: "MCP",
     proof:
-      "The home cluster — two Mac minis on RDMA, 48GB of unified memory, running MLX and EXO. They serve Qwen locally to my Hermes agent and to OpenClaw, my always-on outreach agent. LinkedIn-Automator serves llama3.1:8b through Ollama on my own machine, and I tune it per call: title scoring runs at temperature 0.1 with a 5-token cap, because that job wants one integer, while message writing runs at 0.8.",
+      "I run whoop-mcp as a connected server. It pulls my own health metrics, and the result is live on my site. Daily use is where my feel for the protocol comes from: how much description a tool schema needs before a model calls it correctly, and what token lifecycle looks like when an agent rather than a person is the consumer.",
+    links: [{ label: "SEE.IT.LIVE", href: "https://www.jwerba.com/health", primary: true }],
   },
   {
-    label: "Inference, hosted",
-    proof:
-      "Nebius-XWord — I tested 13 models across two providers, then raced the same weights on both to compare the providers, not the models. The race runs on the live page.",
-    links: [
-      {
-        label: "RUN.THE.RACE",
-        href: "https://nebius-xword.vercel.app",
-        primary: true,
-      },
-    ],
-  },
-  {
-    label: "Edge and embedded",
-    proof:
-      "BrainStorm.ai, the hackathon-winning build. I embedded NeuroLM, an EEG foundation model, onto OpenBCI hardware, reading 6-channel EEG at 250Hz.",
-    links: [
-      { label: "BRAIN-STORM.AI", href: "https://www.brain-storm.ai", primary: true },
-      { label: "NEUROLM.SOURCE", href: "https://github.com/935963004/NeuroLM" },
-    ],
-  },
-  {
+    group: "AI Applications",
     label: "LLM APIs",
     proof:
-      "Nebius Token Factory, Vercel AI Gateway, OpenAI, Anthropic, and Cohere.",
+      "I build against five providers: Nebius Token Factory, Vercel AI Gateway, OpenAI, Anthropic, and Cohere.",
   },
+
+  // ── Software Engineering ─────────────────────────────────────────────────
   {
+    group: "Software Engineering",
     label: "Python",
     proof:
-      "Nebius-XWord is Python end to end: the LangGraph agent, the FastAPI service, the grid engine, and the eval harness, with 55 tests that run offline. LinkedIn-Automator is Python too: FastAPI, Playwright browser control, WebSockets, and the local model loop. The resume orchestrator uses Python for the audit gate and PDF layout.",
+      "Python runs all of it. Nebius-XWord is Python end to end: the LangGraph agent, the FastAPI service, the grid engine, and the eval harness, with 55 tests that run offline. LinkedIn-Automator is Python too: FastAPI, Playwright browser control, WebSockets, and the local model loop. I use Python for the resume orchestrator's audit gate and its PDF layout.",
     links: [
-      { label: "XWORD.SOURCE", href: "https://github.com/jaredwerba/Nebius-XWord" },
-      {
-        label: "AUTOMATOR.SOURCE",
-        href: "https://github.com/jaredwerba/linkedin-automator",
-      },
+      { label: "AUTOMATOR.SOURCE", href: "https://github.com/jaredwerba/linkedin-automator" },
     ],
   },
   {
+    group: "Software Engineering",
+    label: "Data services",
+    proof:
+      "For COVE I wrote connectors against three dispensary menu platforms. I normalized them into one product model, matched names to a strain catalog, and stored the result in Redis.",
+  },
+
+  // ── Infrastructure ───────────────────────────────────────────────────────
+  {
+    group: "Infrastructure",
+    label: "Cloud and GPU platform",
+    proof:
+      "Ten years at Oracle. I sold and architected every OCI IaaS and PaaS product, including GPU compute for AI training and inference: A100 80GB, H100, and A10. I ran Kubernetes architecture for named accounts. I am Oracle Cloud Architect certified. I also run my own RDMA cluster at home.",
+  },
+  {
+    group: "Infrastructure",
     label: "Deployment automation",
     proof:
-      "career-ops — a two-tier scheduler I wrote and still run. It holds a real lock, recovers a stale lock by age, catches up after the machine sleeps, and ends in a guarded production deploy. It has run daily since July, and it publishes a public dashboard.",
+      "career-ops is a two-tier scheduler I wrote and still run. It holds a real lock, recovers a stale lock by age, catches up after the machine sleeps, and ends in a guarded production deploy. It has run daily since July, and it publishes a public dashboard.",
     links: [
       {
         label: "CAREER-OPS.DASHBOARD",
@@ -148,93 +136,98 @@ export const CAPABILITIES: Capability[] = [
       },
     ],
   },
+
+  // ── Inference ────────────────────────────────────────────────────────────
   {
-    label: "Integrations",
+    group: "Inference",
+    label: "Self-hosted and local serving",
     proof:
-      "Built: OAuth 2.0 by hand, on jwerba.com and against the WHOOP API, signed inbound webhooks in Venus, Google Solar, NREL, and Stripe Connect in Train247 and Sunday Energy. Sold and architected: Oracle Integration Cloud, Oracle GoldenGate, GraphQL, and Apache Kafka.",
+      "My home cluster is two Mac minis on RDMA, with 48GB of unified memory. It runs MLX and EXO, and it serves Qwen locally to my Hermes agent and to OpenClaw, my always-on outreach agent. LinkedIn-Automator serves llama3.1:8b through Ollama on my own machine, and I tune it per call: title scoring runs at temperature 0.1 with a 5-token cap, because that job wants one integer, and message writing runs at 0.8.",
+  },
+  {
+    group: "Inference",
+    label: "Hosted inference and provider comparison",
+    proof:
+      "I tested 13 models across two providers. I then raced the same weights on both, to compare the providers, not the models. The race runs on the live Nebius-XWord page.",
+    links: [{ label: "RUN.THE.RACE", href: "https://nebius-xword.vercel.app", primary: true }],
+  },
+  {
+    group: "Inference",
+    label: "Edge and embedded",
+    proof:
+      "On BrainStorm.ai I embedded NeuroLM, an EEG foundation model, onto OpenBCI hardware. It reads 6-channel EEG at 250Hz.",
+    links: [{ label: "NEUROLM.SOURCE", href: "https://github.com/935963004/NeuroLM" }],
+  },
+
+  // ── Integrations ─────────────────────────────────────────────────────────
+  {
+    group: "Integrations",
+    label: "OAuth and webhooks, built",
+    proof:
+      "I wrote OAuth 2.0 by hand, on jwerba.com and against the WHOOP API. I built signed inbound webhooks in Venus. I integrated Google Solar, NREL, and Stripe Connect in Train247 and Sunday Energy.",
     links: [
-      { label: "TRAIN247.FIT", href: "https://train247.fit", primary: true },
-      {
-        label: "SUNDAY-ENERGY",
-        href: "https://sunday-energy.vercel.app",
-        primary: true,
-      },
+      { label: "SUNDAY-ENERGY", href: "https://sunday-energy.vercel.app", primary: true },
     ],
   },
   {
-    label: "Infrastructure",
+    group: "Integrations",
+    label: "Oracle integration stack, sold and architected",
     proof:
-      "Ten years at Oracle. I sold and architected every OCI IaaS and PaaS product, including GPU compute for AI training and inference: A100 80GB, H100, A10. I ran Kubernetes architecture for named accounts. Oracle Cloud Architect certified. I also run my own RDMA cluster at home the home cluster.",
+      "I sold and architected Oracle Integration Cloud, Oracle GoldenGate, GraphQL, and Apache Kafka.",
   },
+
+  // ── Signals ──────────────────────────────────────────────────────────────
   {
-    label: "Dated public record",
+    group: "Signals",
+    label: "Hackathons won",
     proof:
-      "I have posted what I was reading since 2017. The posts are public and dated. Oracle InfiniBand interconnects in 2019. RDMA and GPT-3 in 2020. RoCE for distributed training in 2024. NVIDIA Quantum-2 InfiniBand in 2025.",
+      "First place at Augmentation Lab, MIT — AugHacks 2025, Long Track, for BrainStorm.ai. I presented the work to Stephen Wolfram.",
     links: [
-      {
-        label: "INFINIBAND.2019",
-        href: "https://x.com/jaredwerba/status/1170785178681315331",
-        primary: true,
-      },
-      {
-        label: "RDMA.2020",
-        href: "https://x.com/jaredwerba/status/1282138164153536512",
-        primary: true,
-      },
-      {
-        label: "GPT-3.2020",
-        href: "https://x.com/jaredwerba/status/1295451720626188290",
-        primary: true,
-      },
-      {
-        label: "ROCE.2024",
-        href: "https://x.com/jaredwerba/status/1820550430667276400",
-        primary: true,
-      },
+      { label: "BRAIN-STORM.AI", href: "https://www.brain-storm.ai", primary: true },
     ],
   },
   {
+    group: "Signals",
     label: "Open source",
     proof:
-      "career-ops. 33 commits, third-largest contributor. My worker-pool fix came from a measurement, not a hunch.",
+      "I have 33 commits in career-ops, and I am the third-largest contributor. My worker-pool fix came from a measurement, not a hunch.",
     links: [
       {
         label: "CAREER-OPS.DASHBOARD",
         href: "https://careerops-jobboard-public.vercel.app",
-        primary: true,
       },
     ],
   },
   {
+    group: "Signals",
     label: "Technical writing",
     proof:
-      "I write in ASD-STE100, the Simplified Technical English standard. This page is written in it. The Nebius-XWord README runs 550 lines and states plainly what it does not measure. The LinkedIn-Automator architecture set runs nine documents, written by the tool's own logging integration.",
+      "I write in ASD-STE100, the Simplified Technical English standard, and this page is written in it. The Nebius-XWord README runs 550 lines, and it states plainly what it does not measure. The LinkedIn-Automator architecture set runs nine documents, written by the tool's own logging integration.",
     links: [
       { label: "READ.THE.README", href: "https://github.com/jaredwerba/Nebius-XWord" },
     ],
   },
   {
+    group: "Signals",
+    label: "Dated public record",
+    proof:
+      "I have posted what I was reading since 2017. The posts are public and dated: Oracle InfiniBand interconnects in 2019, RDMA and GPT-3 in 2020, RoCE for distributed training in 2024, and NVIDIA Quantum-2 InfiniBand in 2025.",
+    links: [
+      { label: "INFINIBAND.2019", href: "https://x.com/jaredwerba/status/1170785178681315331" },
+      { label: "RDMA.2020", href: "https://x.com/jaredwerba/status/1282138164153536512" },
+      { label: "GPT-3.2020", href: "https://x.com/jaredwerba/status/1295451720626188290" },
+      { label: "ROCE.2024", href: "https://x.com/jaredwerba/status/1820550430667276400" },
+    ],
+  },
+  {
+    group: "Signals",
     label: "Public demos",
     proof:
-      "Twelve, all live right now: a dog-running community, a coaching platform, two trainer sites, a solar proposal engine, and a WebGL showcase.",
+      "Twelve public demos are live right now: a dog-running community, a coaching platform, two trainer sites, a solar proposal engine, and a WebGL showcase.",
     links: [
-      { label: "RUNDOG.BOSTON", href: "https://rundog.boston", primary: true },
-      { label: "GOALSLOPES.RUN", href: "https://www.goalslopes.run", primary: true },
-      {
-        label: "DAVIDWILLFIT.COM",
-        href: "https://www.davidwillfit.com",
-        primary: true,
-      },
-      {
-        label: "NICKSCALIHEALTH.COM",
-        href: "https://www.nickscalihealth.com",
-        primary: true,
-      },
-      {
-        label: "LUNARFORGE",
-        href: "https://space-forge-taupe.vercel.app/eb",
-        primary: true,
-      },
+      { label: "DAVIDWILLFIT.COM", href: "https://www.davidwillfit.com", primary: true },
+      { label: "NICKSCALIHEALTH.COM", href: "https://www.nickscalihealth.com", primary: true },
+      { label: "LUNARFORGE", href: "https://space-forge-taupe.vercel.app/eb", primary: true },
     ],
   },
 ];

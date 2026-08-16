@@ -34,10 +34,25 @@ export const metadata: Metadata = {
 export default function NebiusPage() {
   return (
     <div
-      className={`${term.variable} ${micro.variable} ac-root -mx-4 md:-mx-8 px-4 md:px-6 py-4`}
+      className={`${term.variable} ${micro.variable} ac-root ac-crt ac-afterglow -mx-4 md:-mx-8 px-4 md:px-6 py-4`}
       data-ac-tech="crt"
       data-ac-emitter="p3"
     >
+      {/* Simulation layers: empty spans the stylesheet paints into. retrace is
+          the beam sweep, persist is phosphor decay.
+
+          .ac-bloom is deliberately NOT here. It is a viewport-sized plasma
+          bleed, and on this frame it lifted the whole panel toward amber and
+          cost real contrast on body text. This page is read once, by one
+          person, under time pressure — the scanlines and the vignette carry
+          the character, and the wash only cost legibility.
+
+          .ac-screen is also skipped: it forces a 100svh frame, and this console
+          lives inside the site shell rather than owning the viewport.
+
+          Both layers stop under prefers-reduced-motion. */}
+      <span className="ac-retrace" aria-hidden="true" />
+      <span className="ac-persist" aria-hidden="true" />
       <NebiusConsole />
       <ConsoleRuntime />
     </div>
