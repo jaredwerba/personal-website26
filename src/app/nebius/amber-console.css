@@ -3736,3 +3736,56 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
   .ac-root[data-readable] .ac-table-scroll td:nth-child(3) { display: table-cell; }
   .ac-root[data-readable] .ac-table { font-size: 14px; }
 }
+
+/* ===========================================================================
+   Ledger year separators. The full record used to emit one scroll box per
+   year — a column of small independently-scrolling panes, which is miserable
+   to read and hides how long the record is. It is one table now, and the year
+   sticks to the top of the scroller so you always know where you are.
+   =========================================================================== */
+.ac-root .ac-ledger__note {
+  color: var(--ac-ink-dim);
+  margin: 0 0 var(--ac-space-3);
+}
+
+/* The year rows are NOT sticky. Sticky table rows are not constrained by their
+   tbody under border-collapse — every year that scrolled past stayed pinned and
+   they stacked into an unreadable bar. The column header is sticky instead:
+   one row, so it cannot accumulate, and it is the thing worth keeping in view
+   across 135 rows. */
+.ac-root .ac-table-scroll thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--ac-screen, #000);
+}
+
+.ac-root .ac-table__group th {
+  text-align: left;
+  /* Inverse video: the framework's own way of saying "this is a boundary,
+     not a row of data". No new colour. */
+  background: var(--ac-fill);
+  color: var(--ac-on-fill);
+  border-top: 2px solid var(--ac-stroke);
+  border-bottom: 2px solid var(--ac-stroke);
+  padding: 2px var(--ac-space-3);
+  font-family: var(--ac-font-micro);
+  font-size: var(--ac-type-micro);
+  letter-spacing: var(--ac-tracking-micro);
+  /* The header row scrolls away under this, so the year needs to be opaque. */
+  background-clip: padding-box;
+}
+
+.ac-root .ac-table__group-count {
+  float: right;
+  opacity: 0.72;
+}
+
+/* The one scroll region is now the whole record, so give it more room than a
+   per-year box needed. */
+.ac-root .ac-block .ac-table-scroll { max-height: 62vh; }
+
+@media (max-width: 640px) {
+  .ac-root .ac-block .ac-table-scroll { max-height: 70vh; }
+  .ac-root .ac-table__group th { font-size: 0.72rem; }
+}

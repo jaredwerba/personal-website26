@@ -1094,6 +1094,8 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2017-10-09",
     title: "The rise of container orchestration storage standards",
     tweetUrl: "https://x.com/jaredwerba/status/917407469781086210",
+    receipt: true,
+    why: "Container orchestration, in 2017.",
   },
   {
     date: "2017-10-17",
@@ -1179,6 +1181,8 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2017-12-26",
     title: "Computer latency: 1977-2017",
     tweetUrl: "https://x.com/jaredwerba/status/945788796200783874",
+    receipt: true,
+    why: "Latency as a measured quantity.",
   },
   {
     date: "2018-04-02",
@@ -1224,6 +1228,8 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2018-08-29",
     title: "Google steps back from running the Kubernetes infrastructure",
     tweetUrl: "https://x.com/jaredwerba/status/1034851702019698688",
+    receipt: true,
+    why: "Who carries the operational load.",
   },
   {
     date: "2018-09-03",
@@ -1471,6 +1477,8 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2022-09-06",
     title: "what is edge compute",
     tweetUrl: "https://x.com/jaredwerba/status/1567227596198363137",
+    receipt: true,
+    why: "Edge compute, before I put a model on a headset.",
   },
   {
     date: "2022-11-03",
@@ -1507,6 +1515,8 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2024-06-13",
     title: "Reply in the 2019 InfiniBand thread",
     tweetUrl: "https://x.com/jaredwerba/status/1801320252468564208",
+    receipt: true,
+    why: "Same thread, five years later.",
   },
   {
     date: "2024-06-28",
@@ -1559,6 +1569,8 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2025-04-12",
     title: "Overjet training models on GPU clusters",
     tweetUrl: "https://x.com/jaredwerba/status/1911040409079267574",
+    receipt: true,
+    why: "GPU cluster training in production.",
   },
   {
     date: "2025-06-04",
@@ -1598,11 +1610,15 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2025-09-30",
     title: "Is this like RDMA or InfiniBand? Is this networking?",
     tweetUrl: "https://x.com/jaredwerba/status/1973006362537074888",
+    receipt: true,
+    why: "Asking the interconnect question in public.",
   },
   {
     date: "2026-03-12",
     title: "Lights off bc your utilities bill for 24 RDMA Mac studios",
     tweetUrl: "https://x.com/jaredwerba/status/2032087875521565059",
+    receipt: true,
+    why: "RDMA at home, and what it costs.",
   },
 ];
 

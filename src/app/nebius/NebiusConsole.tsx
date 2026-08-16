@@ -319,13 +319,46 @@ function LedgerLink({ href, children }: { href: string; children: React.ReactNod
   );
 }
 
+function LedgerRow({ row, showWhy }: { row: TweetLedgerEntry; showWhy?: boolean }) {
+  return (
+    <tr className={row.star ? "ac-table__row--active" : undefined}>
+      <td className="ac-table__num ac-table__date">{row.date}</td>
+      <td>{row.title}</td>
+      {showWhy ? <td>{row.why}</td> : null}
+      <td>
+        <LedgerLink href={row.tweetUrl}>OPEN</LedgerLink>
+      </td>
+    </tr>
+  );
+}
+
+/**
+ * One table, one scroll region. `byYear` groups rows under sticky year rows
+ * inside a single scroller rather than emitting a scroll box per year — a
+ * column of small independently-scrolling panes is miserable to read, and it
+ * hides how long the record actually is.
+ */
 function LedgerTable({
   rows,
   showWhy,
+  byYear,
 }: {
   rows: TweetLedgerEntry[];
   showWhy?: boolean;
+  byYear?: boolean;
 }) {
+  const cols = showWhy ? 4 : 3;
+
+  const years = new Map<string, TweetLedgerEntry[]>();
+  if (byYear) {
+    for (const row of rows) {
+      const y = row.date.slice(0, 4);
+      const list = years.get(y) ?? [];
+      list.push(row);
+      years.set(y, list);
+    }
+  }
+
   return (
     <div className="ac-table-scroll">
       <table className="ac-table ac-table--dense ac-table--prose">
@@ -337,35 +370,35 @@ function LedgerTable({
             <th>Tweet</th>
           </tr>
         </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr
-              key={row.tweetUrl}
-              className={row.star ? "ac-table__row--active" : undefined}
-            >
-              <td className="ac-table__num ac-table__date">{row.date}</td>
-              <td>{row.title}</td>
-              {showWhy ? <td>{row.why}</td> : null}
-              <td>
-                <LedgerLink href={row.tweetUrl}>OPEN</LedgerLink>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+        {byYear ? (
+          [...years.entries()].map(([year, yearRows]) => (
+            <tbody key={year}>
+              <tr className="ac-table__group">
+                <th scope="colgroup" colSpan={cols}>
+                  {year}
+                  <span className="ac-table__group-count">
+                    {yearRows.length} {yearRows.length === 1 ? "post" : "posts"}
+                  </span>
+                </th>
+              </tr>
+              {yearRows.map((row) => (
+                <LedgerRow key={row.tweetUrl} row={row} showWhy={showWhy} />
+              ))}
+            </tbody>
+          ))
+        ) : (
+          <tbody>
+            {rows.map((row) => (
+              <LedgerRow key={row.tweetUrl} row={row} showWhy={showWhy} />
+            ))}
+          </tbody>
+        )}
       </table>
     </div>
   );
 }
 
 function LedgerDoc() {
-  const byYear = new Map<string, TweetLedgerEntry[]>();
-  for (const row of TWEET_LEDGER_FULL) {
-    const year = row.date.slice(0, 4);
-    const list = byYear.get(year) ?? [];
-    list.push(row);
-    byYear.set(year, list);
-  }
-
   return (
     <DocShell id="ledger" title="PUBLIC RECORD" status={`${TWEET_LEDGER_FULL.length} POSTS`}>
       {TWEET_LEDGER_INTRO.map((para, i) => (
@@ -375,16 +408,25 @@ function LedgerDoc() {
       ))}
 
       <section className="ac-block">
-        <h3 className="ac-block__title">RECEIPTS</h3>
+        <h3 className="ac-block__title">
+          SELECTED &mdash; {TWEET_LEDGER_RECEIPTS.length}
+        </h3>
         <LedgerTable rows={TWEET_LEDGER_RECEIPTS} showWhy />
       </section>
 
-      {[...byYear.entries()].map(([year, rows]) => (
-        <section key={year} className="ac-block">
-          <h3 className="ac-block__title">{year}</h3>
-          <LedgerTable rows={rows} />
-        </section>
-      ))}
+      {/* A hard break, so the picked posts and the whole record are not two
+          tables a reader has to tell apart by their column count. */}
+      <hr className="ac-hr" />
+
+      <section className="ac-block">
+        <h3 className="ac-block__title">
+          EVERY POST &mdash; {TWEET_LEDGER_FULL.length}
+        </h3>
+        <p className="ac-prose ac-ledger__note">
+          One list, oldest first, in a single scroll.
+        </p>
+        <LedgerTable rows={TWEET_LEDGER_FULL} byYear />
+      </section>
     </DocShell>
   );
 }
