@@ -2,6 +2,11 @@
 
 import type { WhoopSnapshot } from "@/lib/storage";
 import {
+  STAGGER_MS,
+  sweepFraction,
+  useSweepElapsed,
+} from "@/lib/instrument-sweep";
+import {
   bandRect,
   describeMetric,
   formatMetric,
@@ -17,6 +22,9 @@ type MetricStackProps = {
   /** Scales in render order. Values are pulled from the snapshot by key. */
   scales: readonly MetricScale[];
   snapshot: WhoopSnapshot | null;
+  /** Where this stack starts in the cluster, so the stagger runs unbroken
+   *  through both stacks instead of restarting at the second one. */
+  sweepOffset?: number;
 };
 
 // Lifted from nerv-ui's PhaseStatusStack so the two read as one component.
@@ -80,14 +88,26 @@ const MONO = { fontFamily: "var(--font-nerv-mono)" } as const;
 function MetricRow({
   scale,
   value,
+  sweepIndex,
 }: {
   scale: MetricScale;
   value: number | null;
+  /** Position in the cluster, for the startup stagger. */
+  sweepIndex: number;
 }) {
   const reading = readMetric(value, scale);
   const status = reading.status;
   const readout = formatMetric(value, scale);
   const description = describeMetric(value, scale);
+
+  // The marker travels the full track and settles on the reading, in step with
+  // the dials above. Only the marker moves: the value readout, the status
+  // colour and the target band all describe the real number and would be lying
+  // if they animated with it.
+  const elapsed = useSweepElapsed();
+  const drawnPct =
+    sweepFraction(elapsed, sweepIndex * STAGGER_MS, reading.positionPct / 100) *
+    100;
 
   // Metrics whose absolute value cannot support a position on any axis get a
   // readout and an explicit note instead of a bar. Showing that we know which
@@ -169,10 +189,7 @@ function MetricRow({
           on the wrong side of a band edge it should coincide with. */}
       {reading.hasValue && (
         <div className="pointer-events-none absolute inset-0">
-          <div
-            className="absolute inset-y-0"
-            style={{ left: `${reading.positionPct}%` }}
-          >
+          <div className="absolute inset-y-0" style={{ left: `${drawnPct}%` }}>
             {/* nerv-ui's own marker idiom, lifted from GradientStatusBar: a
                 hairline plus a flag tab. Reads as an instrument pointer rather
                 than a stray 2px line. */}
@@ -294,6 +311,7 @@ export default function MetricStack({
   color = "cyan",
   scales,
   snapshot,
+  sweepOffset = 0,
 }: MetricStackProps) {
   return (
     <div className="flex flex-col">
@@ -304,11 +322,12 @@ export default function MetricStack({
         {title}
       </div>
       <div className="flex flex-col gap-[3px]">
-        {scales.map((scale) => (
+        {scales.map((scale, i) => (
           <MetricRow
             key={scale.key}
             scale={scale}
             value={snapshot?.[scale.key] ?? null}
+            sweepIndex={sweepOffset + i}
           />
         ))}
       </div>

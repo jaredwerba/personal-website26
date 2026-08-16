@@ -6,6 +6,12 @@ import Section from "@/components/Section";
 import MetricStack from "@/components/MetricStack";
 import type { WhoopSnapshot } from "@/lib/storage";
 import {
+  STAGGER_MS,
+  sweepFraction,
+  useSweepElapsed,
+  useSweepTrigger,
+} from "@/lib/instrument-sweep";
+import {
   METRIC_SCALES,
   RECOVERY_VITALS,
   SLEEP_VITALS,
@@ -26,13 +32,27 @@ function MetricGauge({
   value,
   color,
   threshold,
+  sweepIndex = 0,
 }: {
   metricKey: MetricKey;
   value: number | null;
   color?: "cyan" | "green" | "orange" | "red" | "magenta";
   threshold?: number;
+  /** Position in the cluster, for the startup stagger. */
+  sweepIndex?: number;
 }) {
   const scale = METRIC_SCALES[metricKey];
+
+  // Gauge derives the needle straight from `value` and tweens nothing, so the
+  // sweep has to be driven through the value itself. A happy side effect: the
+  // gauge's own readout counts up and back down with the needle, which is
+  // exactly what an instrument doing a self-test looks like.
+  const elapsed = useSweepElapsed();
+  const span = scale.max - scale.min;
+  const target = span > 0 ? ((value ?? scale.min) - scale.min) / span : 0;
+  const drawn =
+    scale.min + sweepFraction(elapsed, sweepIndex * STAGGER_MS, target) * span;
+
   if (value === null) {
     // Reproduces Gauge's own header so the placeholder reads as an instrument
     // with no reading, rather than as a gap in the layout.
@@ -54,7 +74,7 @@ function MetricGauge({
   }
   return (
     <Gauge
-      value={value}
+      value={drawn}
       min={scale.min}
       max={scale.max}
       label={scale.label}
@@ -83,6 +103,8 @@ export default function HealthView({ snapshot }: Props) {
   const strain = snapshot?.day_strain_avg ?? null;
   // The remaining seven metrics are read inside MetricStack, keyed off the
   // scale table — so a value can no longer be wired to the wrong label.
+
+  const sweepRef = useSweepTrigger<HTMLDivElement>();
 
   const terminalLines = connected
     ? [
@@ -138,17 +160,30 @@ export default function HealthView({ snapshot }: Props) {
             </p>
           )}
 
-          <div className="flex flex-wrap justify-center gap-4 md:gap-6">
+          {/* The whole cluster sweeps off one clock when this scrolls into
+              view, so the dials and the bars below read as one instrument
+              panel coming up rather than as separate widgets. */}
+          <div
+            ref={sweepRef}
+            className="flex flex-wrap justify-center gap-4 md:gap-6"
+          >
             <MetricGauge
               metricKey="recovery_pct_avg"
               value={recovery}
               color="green"
+              sweepIndex={0}
             />
-            <MetricGauge metricKey="hrv_rmssd_avg" value={hrv} color="cyan" />
+            <MetricGauge
+              metricKey="hrv_rmssd_avg"
+              value={hrv}
+              color="cyan"
+              sweepIndex={1}
+            />
             <MetricGauge
               metricKey="sleep_performance_pct_avg"
               value={sleep}
               color="cyan"
+              sweepIndex={2}
             />
             {/* Band-optimal: orange base with WHOOP's All Out floor as the
                 threshold, so red is earned above 18 rather than permanent. */}
@@ -157,6 +192,7 @@ export default function HealthView({ snapshot }: Props) {
               value={strain}
               color="orange"
               threshold={18}
+              sweepIndex={3}
             />
           </div>
 
@@ -165,6 +201,7 @@ export default function HealthView({ snapshot }: Props) {
             color="cyan"
             scales={RECOVERY_VITALS}
             snapshot={snapshot}
+            sweepOffset={4}
           />
 
           <MetricStack
@@ -172,6 +209,7 @@ export default function HealthView({ snapshot }: Props) {
             color="cyan"
             scales={SLEEP_VITALS}
             snapshot={snapshot}
+            sweepOffset={10}
           />
 
           <p className="font-nerv-mono text-[10px] text-nerv-mid-gray tracking-wider">
