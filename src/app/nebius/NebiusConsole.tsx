@@ -23,7 +23,11 @@ const SECTIONS: Section[] = [
   { id: "overview", title: "Overview / Live Systems", docs: ["overview", "capabilities", "background"] },
   { id: "record", title: "Public Record", docs: ["ledger"] },
   { id: "agentic", title: "Agentic Systems & Evaluation", docs: ["01", "03", "04", "13", "05"] },
-  { id: "hackathon", title: "Hackathon & Prototypes", docs: ["02", "17", "16", "08"] },
+  // Inference gets its own section rather than sitting under prototypes: it is
+  // a named area of their technical bar, and one of these two ran on their
+  // hardware.
+  { id: "inference", title: "Inference & GPU", docs: ["18", "17"] },
+  { id: "hackathon", title: "Hackathon & Prototypes", docs: ["02", "16", "08"] },
   { id: "other", title: "Other Projects", docs: ["06", "07", "09", "10", "11", "12", "14", "15"] },
 ];
 
@@ -32,6 +36,8 @@ const FEATURED = new Set(["01", "02"]);
 
 const HINTS = [
   "eval harness",
+  "vLLM",
+  "H200",
   "RAG",
   "Ollama",
   "LangGraph",
