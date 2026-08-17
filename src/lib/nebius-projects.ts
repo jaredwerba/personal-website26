@@ -558,11 +558,11 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     id: "09",
     name: "GOALSRUN",
     tagline:
-      "A profitable SaaS. Booking and pipeline for an elite Boston runner's coaching business.",
+      "Booking and pipeline for an elite Boston runner's coaching business. He sells sessions through it.",
     tier: 2,
     accent: "green",
-    status: "LIVE // PROFITABLE SAAS",
-    signals: ["Profitable SaaS", "Scheduled jobs", "WebAuthn"],
+    status: "LIVE // IN COMMERCIAL USE",
+    signals: ["In commercial use", "Scheduled jobs", "WebAuthn"],
     stack: ["Next.js", "Drizzle", "Postgres", "better-auth", "Vercel Cron"],
     problem:
       "A coach taking bookings by DM loses sessions to scheduling friction and has no view of their own pipeline. Slots also have to exist far enough ahead that someone can plan around them.",
@@ -571,7 +571,9 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "Passkey login, a partners and sponsors surface, and two admin views: one for running the day, one for running the business.",
     ],
     outcome: [
-      "It is a profitable SaaS. It earns more than it costs to run, which makes it the one claim on this page that a market made rather than I did.",
+      "A working coach runs his business on it, and the sessions it books are sessions he gets paid for. He collects payment directly over Venmo rather than in the app, because a processor's percentage matters at his volume.",
+      "I take no cut, so the revenue is his and not mine. What that makes this is the one thing on this page that somebody else's income depends on — which is a harder test than any number I could put next to it.",
+      "The payment decision is worth one line: I built Stripe Connect with a take rate into Train247, so I have shipped the in-app model too. Knowing when a client is better off outside it is the same skill as knowing when to build it.",
       "73 commits on a real feature-branch workflow. Each commit message names the exact production bug it fixes.",
     ],
     links: [{ label: "LIVE.SITE", href: "https://www.goalslopes.run", primary: true }],
