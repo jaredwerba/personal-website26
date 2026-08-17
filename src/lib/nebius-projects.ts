@@ -807,7 +807,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     outcome: [
       "Both models served, and both answered.",
       "The speed change was larger than I expected. With 32 people asking at once, the server went from 381 tokens a second to 2,128. The wait before the first word dropped from 21 seconds to under 4. Usually you trade one for the other. Here both improved, because the old setting was leaving the card idle.",
-      "Then I deleted the VM and the disk. The weights are a public download. Keeping a GPU parked would be paying rent on something I can fetch again in twenty minutes.",
+      "Then I deleted the VM and the disk. The weights are a public download.",
       "Half of what slowed me down was not the models. It was the platform. An address that only works inside the VPC. A machine built with no public IP. A key comment pasted into a username box. I wrote every one of them down with the cause and the fix, because the next person hits them too.",
       "That write-up is the part that outlasts the rental. It is a runbook, a numbered list of failures, and a small benchmark script that needs nothing installed.",
     ],
