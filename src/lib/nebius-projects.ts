@@ -840,17 +840,29 @@ export type TweetLedgerEntry = {
 
 export const TWEET_LEDGER_INTRO: string[] = [
   "I have posted what I was reading since 2017. Most posts are a title and a link. The dates are public.",
-  "This is not every tweet I have written. X search returns a small page, and older posts often store only a short t.co URL. It is the trail I could verify: AI, ML, GPU, memory, and interconnect.",
+  "This is not every tweet I have written. I pulled the whole retrievable timeline and kept the technical ones: AI, ML, GPU, memory, and interconnect. Older posts often store only a short t.co URL, so some are a title and a redirect.",
   "The starred rows are the ones to open first: what to ask an ML/AI company and EC2 bare metal, both in 2017; InfiniBand in 2019; RDMA in July 2020; GPT-3 in August 2020; and RoCE for distributed training in 2024.",
 ];
 
 export const TWEET_LEDGER: TweetLedgerEntry[] = [
+  {
+    date: "2017-10-09",
+    title: "The rise of container orchestration storage standards",
+    tweetUrl: "https://x.com/jaredwerba/status/917407469781086210",
+    receipt: true,
+    why: "Container orchestration, in 2017.",
+  },
   {
     date: "2017-10-13",
     title: "Colorizing B&W photos with neural networks",
     tweetUrl: "https://x.com/jaredwerba/status/918973257344266240",
     receipt: true,
     why: "Neural nets as a working tool, five years before ChatGPT.",
+  },
+  {
+    date: "2017-10-17",
+    title: "How to set up world-class continuous deployment using free hosted tools",
+    tweetUrl: "https://x.com/jaredwerba/status/920371633004609536",
   },
   {
     date: "2017-10-23",
@@ -860,306 +872,16 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     why: "Applied ML product reading in 2017.",
   },
   {
+    date: "2017-10-24",
+    title: "HashiCorp raises $40M for its cloud infrastructure automation services",
+    tweetUrl: "https://x.com/jaredwerba/status/922928773552590848",
+  },
+  {
     date: "2017-10-26",
     title: "Introducing Amazon EC2 P3 instances",
     tweetUrl: "https://x.com/jaredwerba/status/923516497036750850",
     receipt: true,
     why: "NVIDIA GPU instances as soon as they shipped.",
-  },
-  {
-    date: "2017-11-10",
-    title: "Business questions engineers should ask when interviewing at ML/AI companies",
-    tweetUrl: "https://x.com/jaredwerba/status/928829344113397760",
-    receipt: true,
-    star: true,
-    why: "Explicit ML/AI career interest in 2017.",
-  },
-  {
-    date: "2017-11-16",
-    title: "Linux totally dominates supercomputers",
-    tweetUrl: "https://x.com/jaredwerba/status/930992098698055680",
-    receipt: true,
-    why: "HPC cluster OS, not just the app layer.",
-  },
-  {
-    date: "2017-11-29",
-    title: "Amazon EC2 Bare Metal Instances with Direct Access to Hardware",
-    tweetUrl: "https://x.com/jaredwerba/status/935824872969732098",
-    receipt: true,
-    star: true,
-    why: "Direct hardware access. No hypervisor tax.",
-  },
-  {
-    date: "2017-12-01",
-    title: "BlazingDB Origins — raised from NVIDIA and Samsung",
-    tweetUrl: "https://x.com/jaredwerba/status/936386827069591552",
-    receipt: true,
-    why: "GPU databases, not just GPUs as graphics.",
-  },
-  {
-    date: "2018-01-28",
-    title: "Intel Optane Memory: How to make revolutionary technology totally boring",
-    tweetUrl: "https://x.com/jaredwerba/status/957602685443813376",
-    receipt: true,
-    why: "Persistent memory, same day as 3D XPoint.",
-  },
-  {
-    date: "2018-01-28",
-    title: "Intel: Meltdown, Spectre silicon fixes coming 2018; 3D XPoint RAM, not so much",
-    tweetUrl: "https://x.com/jaredwerba/status/957602731736387589",
-    sourceUrl:
-      "https://arstechnica.com/gadgets/2018/01/intel-meltdown-spectre-silicon-fixes-coming-2018-3d-xpoint-ram-not-so-much/",
-    receipt: true,
-    why: "3D XPoint / storage-class memory, years before CXL talk.",
-  },
-  {
-    date: "2018-02-21",
-    title: "NVIDIA FastPhotoStyle",
-    tweetUrl: "https://x.com/jaredwerba/status/966104218510741504",
-    sourceUrl: "https://github.com/NVIDIA/FastPhotoStyle",
-    receipt: true,
-    why: "NVIDIA research repo, not consumer GPUs.",
-  },
-  {
-    date: "2018-06-06",
-    title: "How NLP is transforming the news industry",
-    tweetUrl: "https://x.com/jaredwerba/status/1004349414012588032",
-    receipt: true,
-    why: "NLP two years before GPT-3.",
-  },
-  {
-    date: "2018-08-06",
-    title: "T2F: text to face generation using Deep Learning",
-    tweetUrl: "https://x.com/jaredwerba/status/1026379661608214528",
-    receipt: true,
-    why: "Generative models before the GAN-Twitter era.",
-  },
-  {
-    date: "2018-10-26",
-    title: "Generating custom photo-realistic faces using AI",
-    tweetUrl: "https://x.com/jaredwerba/status/1055871284264030209",
-    receipt: true,
-    why: "Same generative-model thread, 2018.",
-  },
-  {
-    date: "2019-07-24",
-    title: "Oracle Cloud — Networking as a differentiator?",
-    tweetUrl: "https://x.com/jaredwerba/status/1154144784963055622",
-    receipt: true,
-    why: "Cloud networking as the product, not the tax.",
-  },
-  {
-    date: "2019-09-08",
-    title: "Oracle engineers its own InfiniBand interconnects",
-    tweetUrl: "https://x.com/jaredwerba/status/1170785178681315331",
-    sourceUrl:
-      "https://www.nextplatform.com/connect/2016/02/23/oracle-engineers-its-own-infiniband-interconnects/1652732",
-    receipt: true,
-    star: true,
-    why: "InfiniBand reading in 2019. The strongest interconnect receipt.",
-  },
-  {
-    date: "2019-09-22",
-    title: "Intel Announces New Optane DC Persistent Memory",
-    tweetUrl: "https://x.com/jaredwerba/status/1175842173243277319",
-    sourceUrl:
-      "https://www.extremetech.com/extreme/270270-intel-announces-new-optane-dc-persistent-memory",
-    receipt: true,
-    why: "Server-class persistent memory.",
-  },
-  {
-    date: "2020-06-11",
-    title: "Generic block diagram of a GPU",
-    tweetUrl: "https://x.com/jaredwerba/status/1271186080948240384",
-    receipt: true,
-    why: "Hardware-level GPU study, not just “use CUDA”.",
-  },
-  {
-    date: "2020-07-12",
-    title: "Remote direct memory access",
-    tweetUrl: "https://x.com/jaredwerba/status/1282138164153536512",
-    sourceUrl: "https://en.wikipedia.org/wiki/Remote_direct_memory_access",
-    receipt: true,
-    star: true,
-    why: "RDMA, two years before the ChatGPT cluster boom.",
-  },
-  {
-    date: "2020-08-17",
-    title: "GPT-3",
-    tweetUrl: "https://x.com/jaredwerba/status/1295451720626188290",
-    sourceUrl: "https://en.wikipedia.org/wiki/GPT-3",
-    receipt: true,
-    star: true,
-    why: "GPT-3 the month the API started spreading.",
-  },
-  {
-    date: "2021-12-24",
-    title: "Apple to Apple Comparison: M1 Max vs Intel — Unifying CS and HPC for the future of AGI",
-    tweetUrl: "https://x.com/jaredwerba/status/1474441311994494982",
-    sourceUrl: "https://www.unum.cloud/post/2021-12-21-macbook/",
-    receipt: true,
-    why: "HPC and AGI in the same sentence, 2021.",
-  },
-  {
-    date: "2022-12-05",
-    title: "Generative Adversarial Network",
-    tweetUrl: "https://x.com/jaredwerba/status/1599564262266937345",
-    receipt: true,
-    why: "GAN Wikipedia. Same breadcrumb style.",
-  },
-  {
-    date: "2023-07-14",
-    title: "Oracle Generative AI",
-    tweetUrl: "https://x.com/jaredwerba/status/1679644978388037632",
-    sourceUrl: "https://www.oracle.com/artificial-intelligence/generative-ai/",
-    receipt: true,
-    why: "GenAI product page as it launched.",
-  },
-  {
-    date: "2023-07-25",
-    title: "Oracle & NVIDIA solve the largest AI and NLP models",
-    tweetUrl: "https://x.com/jaredwerba/status/1683950594820546560",
-    sourceUrl:
-      "https://blogs.oracle.com/cloud-infrastructure/post/oracle-partners-with-nvidia-to-solve-the-largest-ai-and-nlp-models",
-    receipt: true,
-    why: "I quoted my own 2019 Optane tweet. 2019 memory work tied to 2023 GPU-cluster AI.",
-  },
-  {
-    date: "2023-09-23",
-    title: "OCI Gen AI Preview",
-    tweetUrl: "https://x.com/jaredwerba/status/1705637338615812266",
-    sourceUrl: "https://www.youtube.com/live/ESuP_rtTeQo?si=--4TiLoMz2j0N2rR&t=2843",
-    receipt: true,
-    why: "Watching the actual OCI genAI preview.",
-  },
-  {
-    date: "2023-10-02",
-    title: "What Is Retrieval-Augmented Generation (RAG)?",
-    tweetUrl: "https://x.com/jaredwerba/status/1708875261322711098",
-    sourceUrl:
-      "https://www.oracle.com/artificial-intelligence/generative-ai/retrieval-augmented-generation-rag/",
-    receipt: true,
-    why: "RAG as it entered the stack.",
-  },
-  {
-    date: "2023-10-27",
-    title: "Deploy Llama 2 in OCI Data Science",
-    tweetUrl: "https://x.com/jaredwerba/status/1717933771591209026",
-    receipt: true,
-    why: "Open-weight serving on GPU cloud.",
-  },
-  {
-    date: "2024-03-13",
-    title: "Building Meta’s GenAI Infrastructure",
-    tweetUrl: "https://x.com/jaredwerba/status/1767915599748112716",
-    receipt: true,
-    why: "Cluster and fabric design, not just models.",
-  },
-  {
-    date: "2024-08-05",
-    title: "RoCE networks for distributed AI training at scale",
-    tweetUrl: "https://x.com/jaredwerba/status/1820550430667276400",
-    receipt: true,
-    star: true,
-    why: "Ethernet-RDMA versus InfiniBand, at training scale.",
-  },
-  {
-    date: "2024-09-25",
-    title: "Fine-tune and deploy Llama 3.2 models on OCI Data Science",
-    tweetUrl: "https://x.com/jaredwerba/status/1839068099586228566",
-    receipt: true,
-    why: "Open-weight training and serve.",
-  },
-  {
-    date: "2025-03-19",
-    title: "Quantum-2 InfiniBand Platform",
-    tweetUrl: "https://x.com/jaredwerba/status/1902410926500004322",
-    sourceUrl: "https://www.nvidia.com/en-us/networking/quantum2/",
-    receipt: true,
-    why: "Current-gen InfiniBand fabric.",
-  },
-  {
-    date: "2025-06-18",
-    title: "Ultra Ethernet Consortium",
-    tweetUrl: "https://x.com/jaredwerba/status/1935141352985215367",
-    receipt: true,
-    why: "Next-gen Ethernet for AI fabrics.",
-  },
-  {
-    date: "2025-06-18",
-    title: "AMD’s CDNA 4 Architecture Announcement",
-    tweetUrl: "https://x.com/jaredwerba/status/1935140753446953245",
-    sourceUrl: "https://chipsandcheese.com/p/amds-cdna-4-architecture-announcement",
-    receipt: true,
-    why: "GPU microarchitecture, not only NVIDIA.",
-  },
-  {
-    date: "2025-06-25",
-    title: "Basic facts about GPUs",
-    tweetUrl: "https://x.com/jaredwerba/status/1937878665045426178",
-    sourceUrl: "https://damek.github.io/random/basic-facts-about-gpus/",
-    receipt: true,
-    why: "Bottlenecks, occupancy, measurement.",
-  },
-  {
-    date: "2025-06-29",
-    title: "I want a good parallel computer",
-    tweetUrl: "https://x.com/jaredwerba/status/1939418237856370847",
-    sourceUrl: "https://raphlinus.github.io/gpu/2025/03/21/good-parallel-computer.html",
-    receipt: true,
-    why: "Parallel-machine design.",
-  },
-  {
-    date: "2025-07-12",
-    title: "Zettascale Computing — 10^21 FLOPS + OCI Superclusters",
-    tweetUrl: "https://x.com/jaredwerba/status/1944083149509587186",
-    sourceUrl: "https://en.wikipedia.org/wiki/Zettascale_computing",
-    receipt: true,
-    why: "Supercluster first principles.",
-  },
-  {
-    date: "2026-02-24",
-    title: "What about unified memory & RDMA tho?",
-    tweetUrl: "https://x.com/jaredwerba/status/2026366599729647728",
-    receipt: true,
-    why: "Still thinking in fabrics, not just tokens.",
-  },
-  {
-    date: "2026-05-11",
-    title: "Static random-access memory",
-    tweetUrl: "https://x.com/jaredwerba/status/2053856132741935184",
-    sourceUrl: "https://en.wikipedia.org/wiki/Static_random-access_memory",
-    receipt: true,
-    why: "Memory hierarchy, still.",
-  },
-  {
-    date: "2026-07-10",
-    title: "Unified Memory, Explained: Why Mini PCs Can Run 70B Models a Big GPU Can't",
-    tweetUrl: "https://x.com/jaredwerba/status/2075605997830226299",
-    sourceUrl:
-      "https://vettedconsumer.com/unified-memory-explained-why-mini-pcs-can-run-70b-models-a-big-gpu-cant-and-where-they-slow-down/",
-    receipt: true,
-    why: "Memory bandwidth as the product.",
-  },
-
-  // ── Full chronological trail. Receipts are repeated here so the year tables
-  //    stay complete. The UI de-dupes by tweetUrl within a year group. ──
-  {
-    date: "2017-10-09",
-    title: "The rise of container orchestration storage standards",
-    tweetUrl: "https://x.com/jaredwerba/status/917407469781086210",
-    receipt: true,
-    why: "Container orchestration, in 2017.",
-  },
-  {
-    date: "2017-10-17",
-    title: "How to set up world-class continuous deployment using free hosted tools",
-    tweetUrl: "https://x.com/jaredwerba/status/920371633004609536",
-  },
-  {
-    date: "2017-10-24",
-    title: "HashiCorp raises $40M for its cloud infrastructure automation services",
-    tweetUrl: "https://x.com/jaredwerba/status/922928773552590848",
   },
   {
     date: "2017-10-28",
@@ -1178,8 +900,23 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2017-11-10",
+    title: "Business questions engineers should ask when interviewing at ML/AI companies",
+    tweetUrl: "https://x.com/jaredwerba/status/928829344113397760",
+    receipt: true,
+    star: true,
+    why: "Explicit ML/AI career interest in 2017.",
+  },
+  {
+    date: "2017-11-10",
     title: "Observing the A11's Heterogenous Cores",
     tweetUrl: "https://x.com/jaredwerba/status/929044799889530880",
+  },
+  {
+    date: "2017-11-16",
+    title: "Linux totally dominates supercomputers",
+    tweetUrl: "https://x.com/jaredwerba/status/930992098698055680",
+    receipt: true,
+    why: "HPC cluster OS, not just the app layer.",
   },
   {
     date: "2017-11-18",
@@ -1190,6 +927,21 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2017-11-18",
     title: "The React Story: How Facebook's Instagram Acquisition",
     tweetUrl: "https://x.com/jaredwerba/status/931985527691149315",
+  },
+  {
+    date: "2017-11-29",
+    title: "Amazon EC2 Bare Metal Instances with Direct Access to Hardware",
+    tweetUrl: "https://x.com/jaredwerba/status/935824872969732098",
+    receipt: true,
+    star: true,
+    why: "Direct hardware access. No hypervisor tax.",
+  },
+  {
+    date: "2017-12-01",
+    title: "BlazingDB Origins — raised from NVIDIA and Samsung",
+    tweetUrl: "https://x.com/jaredwerba/status/936386827069591552",
+    receipt: true,
+    why: "GPU databases, not just GPUs as graphics.",
   },
   {
     date: "2017-12-01",
@@ -1239,6 +991,43 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     why: "Latency as a measured quantity.",
   },
   {
+    date: "2018-01-22",
+    title: "Bitmain buys 20k 16nm wafers a month from TSMC, more than NVIDIA",
+    tweetUrl: "https://x.com/jaredwerba/status/955589685996347392",
+    receipt: true,
+    why: "GPU supply chain, while it was still a mining story.",
+  },
+  {
+    date: "2018-01-28",
+    title: "Intel Optane Memory: How to make revolutionary technology totally boring",
+    tweetUrl: "https://x.com/jaredwerba/status/957602685443813376",
+    receipt: true,
+    why: "Persistent memory, same day as 3D XPoint.",
+  },
+  {
+    date: "2018-01-28",
+    title: "Intel: Meltdown, Spectre silicon fixes coming 2018; 3D XPoint RAM, not so much",
+    tweetUrl: "https://x.com/jaredwerba/status/957602731736387589",
+    sourceUrl:
+      "https://arstechnica.com/gadgets/2018/01/intel-meltdown-spectre-silicon-fixes-coming-2018-3d-xpoint-ram-not-so-much/",
+    receipt: true,
+    why: "3D XPoint / storage-class memory, years before CXL talk.",
+  },
+  {
+    date: "2018-01-30",
+    title: "How Apple Built a Chip Powerhouse to Threaten Qualcomm and Intel",
+    tweetUrl: "https://x.com/jaredwerba/status/958142393051766784",
+  },
+  {
+    date: "2018-02-21",
+    title: "NVIDIA FastPhotoStyle",
+    tweetUrl: "https://x.com/jaredwerba/status/966104218510741504",
+    sourceUrl:
+      "https://github.com/NVIDIA/FastPhotoStyle",
+    receipt: true,
+    why: "NVIDIA research repo, not consumer GPUs.",
+  },
+  {
     date: "2018-04-02",
     title: "Data Integrity Follow Up: Ways to Protect Your Data",
     tweetUrl: "https://x.com/jaredwerba/status/980657288678526976",
@@ -1259,6 +1048,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     tweetUrl: "https://x.com/jaredwerba/status/1000508850909392898",
   },
   {
+    date: "2018-06-06",
+    title: "How NLP is transforming the news industry",
+    tweetUrl: "https://x.com/jaredwerba/status/1004349414012588032",
+    receipt: true,
+    why: "NLP two years before GPT-3.",
+  },
+  {
     date: "2018-06-23",
     title: "5 Benefits of Using MYSQL",
     tweetUrl: "https://x.com/jaredwerba/status/1010594314936778759",
@@ -1267,6 +1063,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2018-07-19",
     title: "How Facebook configures its millions of servers every day",
     tweetUrl: "https://x.com/jaredwerba/status/1020040631236943873",
+  },
+  {
+    date: "2018-08-06",
+    title: "T2F: text to face generation using Deep Learning",
+    tweetUrl: "https://x.com/jaredwerba/status/1026379661608214528",
+    receipt: true,
+    why: "Generative models before the GAN-Twitter era.",
   },
   {
     date: "2018-08-21",
@@ -1306,6 +1109,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     tweetUrl: "https://x.com/jaredwerba/status/1052349889022226432",
   },
   {
+    date: "2018-10-26",
+    title: "Generating custom photo-realistic faces using AI",
+    tweetUrl: "https://x.com/jaredwerba/status/1055871284264030209",
+    receipt: true,
+    why: "Same generative-model thread, 2018.",
+  },
+  {
     date: "2018-11-01",
     title: "Optical character recognition",
     tweetUrl: "https://x.com/jaredwerba/status/1058092721557159936",
@@ -1336,16 +1146,78 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     tweetUrl: "https://x.com/jaredwerba/status/1075616924770287616",
   },
   {
+    date: "2019-01-14",
+    title: "AWS, MongoDB, and the Economic Realities of Open Source",
+    tweetUrl: "https://x.com/jaredwerba/status/1084801371201830913",
+  },
+  {
+    date: "2019-03-06",
+    title: "Microservices, Containers and Kubernetes in 10 minutes",
+    tweetUrl: "https://x.com/jaredwerba/status/1103361222211186689",
+  },
+  {
+    date: "2019-03-07",
+    title: "Serverless Architecture: When To Use This Approach",
+    tweetUrl: "https://x.com/jaredwerba/status/1103712806736723968",
+  },
+  {
+    date: "2019-04-26",
+    title: "6 Technical Challenges Developing a Distributed SQL Database",
+    tweetUrl: "https://x.com/jaredwerba/status/1121892106161803264",
+    sourceUrl:
+      "https://blog.yugabyte.com/6-technical-challenges-developing-a-distributed-sql-database/",
+  },
+  {
+    date: "2019-04-30",
+    title: "Data in a Flash: the Evolution of Disk Storage and NVMe",
+    tweetUrl: "https://x.com/jaredwerba/status/1123237047249063936",
+    sourceUrl:
+      "https://www.linuxjournal.com/content/data-flash-part-i-evolution-disk-storage-and",
+  },
+  {
+    date: "2019-06-09",
+    title: "AWS costs every programmer should know",
+    tweetUrl: "https://x.com/jaredwerba/status/1137763212240261120",
+  },
+  {
+    date: "2019-07-24",
+    title: "Oracle Cloud — Networking as a differentiator?",
+    tweetUrl: "https://x.com/jaredwerba/status/1154144784963055622",
+    receipt: true,
+    why: "Cloud networking as the product, not the tax.",
+  },
+  {
+    date: "2019-09-08",
+    title: "Oracle engineers its own InfiniBand interconnects",
+    tweetUrl: "https://x.com/jaredwerba/status/1170785178681315331",
+    sourceUrl:
+      "https://www.nextplatform.com/connect/2016/02/23/oracle-engineers-its-own-infiniband-interconnects/1652732",
+    receipt: true,
+    star: true,
+    why: "InfiniBand reading in 2019. The strongest interconnect receipt.",
+  },
+  {
+    date: "2019-09-22",
+    title: "Intel Announces New Optane DC Persistent Memory",
+    tweetUrl: "https://x.com/jaredwerba/status/1175842173243277319",
+    sourceUrl:
+      "https://www.extremetech.com/extreme/270270-intel-announces-new-optane-dc-persistent-memory",
+    receipt: true,
+    why: "Server-class persistent memory.",
+  },
+  {
     date: "2019-09-29",
     title: "NCBI paper",
     tweetUrl: "https://x.com/jaredwerba/status/1178317280096276481",
-    sourceUrl: "https://pmc.ncbi.nlm.nih.gov/articles/PMC3541490/",
+    sourceUrl:
+      "https://pmc.ncbi.nlm.nih.gov/articles/PMC3541490/",
   },
   {
     date: "2019-10-09",
     title: "Oracle network layers",
     tweetUrl: "https://x.com/jaredwerba/status/1181741486301417472",
-    sourceUrl: "https://docs.oracle.com/cd/E18283_01/network.112/e10836/layers.htm",
+    sourceUrl:
+      "https://docs.oracle.com/cd/E18283_01/network.112/e10836/layers.htm",
   },
   {
     date: "2019-10-09",
@@ -1376,13 +1248,15 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2019-10-26",
     title: "Event-driven programming",
     tweetUrl: "https://x.com/jaredwerba/status/1188097950892867585",
-    sourceUrl: "https://en.wikipedia.org/wiki/Event-driven_programming",
+    sourceUrl:
+      "https://en.wikipedia.org/wiki/Event-driven_programming",
   },
   {
     date: "2019-10-26",
     title: "RabbitMQ tutorials",
     tweetUrl: "https://x.com/jaredwerba/status/1188107135311319041",
-    sourceUrl: "https://www.rabbitmq.com/tutorials",
+    sourceUrl:
+      "https://www.rabbitmq.com/tutorials",
   },
   {
     date: "2019-10-26",
@@ -1393,13 +1267,15 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2019-11-01",
     title: "Real-time operating system",
     tweetUrl: "https://x.com/jaredwerba/status/1190219843984867333",
-    sourceUrl: "https://en.wikipedia.org/wiki/Real-time_operating_system?wprov=sfti1",
+    sourceUrl:
+      "https://en.wikipedia.org/wiki/Real-time_operating_system?wprov=sfti1",
   },
   {
     date: "2019-11-03",
     title: "Certificate authority",
     tweetUrl: "https://x.com/jaredwerba/status/1191124923223334915",
-    sourceUrl: "https://en.wikipedia.org/wiki/Certificate_authority",
+    sourceUrl:
+      "https://en.wikipedia.org/wiki/Certificate_authority",
   },
   {
     date: "2019-11-04",
@@ -1422,25 +1298,29 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2019-12-17",
     title: "Distributed database",
     tweetUrl: "https://x.com/jaredwerba/status/1207020569637642240",
-    sourceUrl: "https://en.wikipedia.org/wiki/Distributed_database",
+    sourceUrl:
+      "https://en.wikipedia.org/wiki/Distributed_database",
   },
   {
     date: "2019-12-17",
     title: "Oracle / SQL Server migrations",
     tweetUrl: "https://x.com/jaredwerba/status/1207065859124027392",
-    sourceUrl: "https://www.toptal.com/sql/oracle-sql-server-migrations-pt-3",
+    sourceUrl:
+      "https://www.toptal.com/sql/oracle-sql-server-migrations-pt-3",
   },
   {
     date: "2019-12-19",
     title: "How tracking pixels work",
     tweetUrl: "https://x.com/jaredwerba/status/1207648569060143104",
-    sourceUrl: "https://jvns.ca/blog/how-tracking-pixels-work/",
+    sourceUrl:
+      "https://jvns.ca/blog/how-tracking-pixels-work/",
   },
   {
     date: "2020-01-05",
     title: "DARPA LifeLog",
     tweetUrl: "https://x.com/jaredwerba/status/1213944887957164032",
-    sourceUrl: "https://en.wikipedia.org/wiki/DARPA_LifeLog",
+    sourceUrl:
+      "https://en.wikipedia.org/wiki/DARPA_LifeLog",
   },
   {
     date: "2020-01-23",
@@ -1456,25 +1336,36 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2020-05-14",
     title: "Wildcard certificate",
     tweetUrl: "https://x.com/jaredwerba/status/1260926012759724039",
-    sourceUrl: "https://en.wikipedia.org/wiki/Wildcard_certificate",
+    sourceUrl:
+      "https://en.wikipedia.org/wiki/Wildcard_certificate",
   },
   {
     date: "2020-05-26",
     title: "AWS essay",
     tweetUrl: "https://x.com/jaredwerba/status/1265247871085002752",
-    sourceUrl: "https://adayinthelifeof.nl/2020/05/20/aws.html",
+    sourceUrl:
+      "https://adayinthelifeof.nl/2020/05/20/aws.html",
   },
   {
     date: "2020-05-30",
     title: "Tenable Nessus Professional",
     tweetUrl: "https://x.com/jaredwerba/status/1266731755853058049",
-    sourceUrl: "https://www.tenable.com/products/nessus/nessus-professional",
+    sourceUrl:
+      "https://www.tenable.com/products/nessus/nessus-professional",
+  },
+  {
+    date: "2020-06-11",
+    title: "Generic block diagram of a GPU",
+    tweetUrl: "https://x.com/jaredwerba/status/1271186080948240384",
+    receipt: true,
+    why: "Hardware-level GPU study, not just “use CUDA”.",
   },
   {
     date: "2020-06-18",
     title: "Programming notes on monitors",
     tweetUrl: "https://x.com/jaredwerba/status/1273588139467124736",
-    sourceUrl: "https://tonsky.me/blog/monitors/",
+    sourceUrl:
+      "https://tonsky.me/blog/monitors/",
   },
   {
     date: "2020-06-28",
@@ -1482,22 +1373,45 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     tweetUrl: "https://x.com/jaredwerba/status/1277218379909287936",
   },
   {
+    date: "2020-07-12",
+    title: "Remote direct memory access",
+    tweetUrl: "https://x.com/jaredwerba/status/1282138164153536512",
+    sourceUrl:
+      "https://en.wikipedia.org/wiki/Remote_direct_memory_access",
+    receipt: true,
+    star: true,
+    why: "RDMA, two years before the ChatGPT cluster boom.",
+  },
+  {
     date: "2020-07-16",
     title: "Data manipulation language",
     tweetUrl: "https://x.com/jaredwerba/status/1283845174242816002",
-    sourceUrl: "https://en.wikipedia.org/wiki/Data_manipulation_language",
+    sourceUrl:
+      "https://en.wikipedia.org/wiki/Data_manipulation_language",
   },
   {
     date: "2020-07-30",
     title: "IaaS pricing patterns and trends 2020",
     tweetUrl: "https://x.com/jaredwerba/status/1288938071187173376",
-    sourceUrl: "https://redmonk.com/rstephens/2020/07/10/iaas-pricing-patterns-and-trends-2020/",
+    sourceUrl:
+      "https://redmonk.com/rstephens/2020/07/10/iaas-pricing-patterns-and-trends-2020/",
+  },
+  {
+    date: "2020-08-17",
+    title: "GPT-3",
+    tweetUrl: "https://x.com/jaredwerba/status/1295451720626188290",
+    sourceUrl:
+      "https://en.wikipedia.org/wiki/GPT-3",
+    receipt: true,
+    star: true,
+    why: "GPT-3 the month the API started spreading.",
   },
   {
     date: "2020-09-18",
     title: "OWASP source-code analysis tools",
     tweetUrl: "https://x.com/jaredwerba/status/1306956082011688961",
-    sourceUrl: "https://owasp.org/www-community/Source_Code_Analysis_Tools",
+    sourceUrl:
+      "https://owasp.org/www-community/Source_Code_Analysis_Tools",
   },
   {
     date: "2020-09-21",
@@ -1513,19 +1427,42 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2021-05-16",
     title: "Zero-knowledge proof",
     tweetUrl: "https://x.com/jaredwerba/status/1393737427609653250",
-    sourceUrl: "https://en.wikipedia.org/wiki/Zero-knowledge_proof",
+    sourceUrl:
+      "https://en.wikipedia.org/wiki/Zero-knowledge_proof",
+  },
+  {
+    date: "2021-12-23",
+    title: "Using Apache Airflow to orchestrate Oracle Cloud Functions",
+    tweetUrl: "https://x.com/jaredwerba/status/1473819926876114948",
+    sourceUrl:
+      "https://blogs.oracle.com/cloud-infrastructure/post/using-apache-airflow-orchestrate-oracle-cloud-functions",
+  },
+  {
+    date: "2021-12-24",
+    title: "Apple to Apple Comparison: M1 Max vs Intel — Unifying CS and HPC for the future of AGI",
+    tweetUrl: "https://x.com/jaredwerba/status/1474441311994494982",
+    sourceUrl:
+      "https://www.unum.cloud/post/2021-12-21-macbook/",
+    receipt: true,
+    why: "HPC and AGI in the same sentence, 2021.",
   },
   {
     date: "2022-02-23",
     title: "CRISP-DM",
     tweetUrl: "https://x.com/jaredwerba/status/1496312908510289922",
-    sourceUrl: "https://en.wikipedia.org/wiki/Cross-industry_standard_process_for_data_mining",
+    sourceUrl:
+      "https://en.wikipedia.org/wiki/Cross-industry_standard_process_for_data_mining",
+    receipt: true,
+    why: "A named process for ML work, not a vibe.",
   },
   {
     date: "2022-05-28",
     title: "DeepDream",
     tweetUrl: "https://x.com/jaredwerba/status/1530553642725646338",
-    sourceUrl: "https://en.wikipedia.org/wiki/DeepDream",
+    sourceUrl:
+      "https://en.wikipedia.org/wiki/DeepDream",
+    receipt: true,
+    why: "Generative models, still tracking them in 2022.",
   },
   {
     date: "2022-09-06",
@@ -1540,9 +1477,61 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     tweetUrl: "https://x.com/jaredwerba/status/1588211407832727553",
   },
   {
+    date: "2022-12-05",
+    title: "Generative Adversarial Network",
+    tweetUrl: "https://x.com/jaredwerba/status/1599564262266937345",
+    receipt: true,
+    why: "GAN Wikipedia. Same breadcrumb style.",
+  },
+  {
+    date: "2023-07-14",
+    title: "Oracle Generative AI",
+    tweetUrl: "https://x.com/jaredwerba/status/1679644978388037632",
+    sourceUrl:
+      "https://www.oracle.com/artificial-intelligence/generative-ai/",
+    receipt: true,
+    why: "GenAI product page as it launched.",
+  },
+  {
+    date: "2023-07-25",
+    title: "Oracle & NVIDIA solve the largest AI and NLP models",
+    tweetUrl: "https://x.com/jaredwerba/status/1683950594820546560",
+    sourceUrl:
+      "https://blogs.oracle.com/cloud-infrastructure/post/oracle-partners-with-nvidia-to-solve-the-largest-ai-and-nlp-models",
+    receipt: true,
+    why: "I quoted my own 2019 Optane tweet. 2019 memory work tied to 2023 GPU-cluster AI.",
+  },
+  {
+    date: "2023-09-23",
+    title: "OCI Gen AI Preview",
+    tweetUrl: "https://x.com/jaredwerba/status/1705637338615812266",
+    sourceUrl:
+      "https://www.youtube.com/live/ESuP_rtTeQo?si=--4TiLoMz2j0N2rR&t=2843",
+    receipt: true,
+    why: "Watching the actual OCI genAI preview.",
+  },
+  {
+    date: "2023-10-02",
+    title: "What Is Retrieval-Augmented Generation (RAG)?",
+    tweetUrl: "https://x.com/jaredwerba/status/1708875261322711098",
+    sourceUrl:
+      "https://www.oracle.com/artificial-intelligence/generative-ai/retrieval-augmented-generation-rag/",
+    receipt: true,
+    why: "RAG as it entered the stack.",
+  },
+  {
+    date: "2023-10-27",
+    title: "Deploy Llama 2 in OCI Data Science",
+    tweetUrl: "https://x.com/jaredwerba/status/1717933771591209026",
+    receipt: true,
+    why: "Open-weight serving on GPU cloud.",
+  },
+  {
     date: "2023-12-01",
     title: "What Is Retrieval Augmented Generation",
     tweetUrl: "https://x.com/jaredwerba/status/1730713785340723475",
+    receipt: true,
+    why: "RAG again, two months after the first one.",
   },
   {
     date: "2023-12-07",
@@ -1553,17 +1542,31 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2023-12-07",
     title: "Models — Machine Learning — Apple Developer",
     tweetUrl: "https://x.com/jaredwerba/status/1732616808514138444",
+    receipt: true,
+    why: "On-device inference, from the vendor's own docs.",
   },
   {
     date: "2023-12-19",
     title: "Prompt engineering — OpenAI API",
     tweetUrl: "https://x.com/jaredwerba/status/1737163052934475823",
+    receipt: true,
+    why: "The provider's guide, not a thread about it.",
+  },
+  {
+    date: "2024-03-13",
+    title: "Building Meta’s GenAI Infrastructure",
+    tweetUrl: "https://x.com/jaredwerba/status/1767915599748112716",
+    receipt: true,
+    why: "Cluster and fabric design, not just models.",
   },
   {
     date: "2024-05-22",
     title: "AI Vector Search",
     tweetUrl: "https://x.com/jaredwerba/status/1793312577084129438",
-    sourceUrl: "https://www.youtube.com/watch?v=5o5Ds8KLqVw",
+    sourceUrl:
+      "https://www.youtube.com/watch?v=5o5Ds8KLqVw",
+    receipt: true,
+    why: "Embeddings and vector search, 2024.",
   },
   {
     date: "2024-06-13",
@@ -1586,16 +1589,35 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2024-07-19",
     title: "Implement Semantic Search in Oracle APEX using AI Vector Search of Oracle Database 23ai",
     tweetUrl: "https://x.com/jaredwerba/status/1814272473631764686",
+    receipt: true,
+    why: "Vector search inside a database I sold.",
   },
   {
     date: "2024-07-25",
     title: "Open-weights genAI models — control & transparency",
     tweetUrl: "https://x.com/jaredwerba/status/1816480103557185617",
+    receipt: true,
+    why: "Why open weights, before I served them myself.",
   },
   {
     date: "2024-08-02",
     title: "Databricks vs Snowflake: A Complete 2024 Comparison",
     tweetUrl: "https://x.com/jaredwerba/status/1819451560042418315",
+  },
+  {
+    date: "2024-08-05",
+    title: "RoCE networks for distributed AI training at scale",
+    tweetUrl: "https://x.com/jaredwerba/status/1820550430667276400",
+    receipt: true,
+    star: true,
+    why: "Ethernet-RDMA versus InfiniBand, at training scale.",
+  },
+  {
+    date: "2024-09-25",
+    title: "Fine-tune and deploy Llama 3.2 models on OCI Data Science",
+    tweetUrl: "https://x.com/jaredwerba/status/1839068099586228566",
+    receipt: true,
+    why: "Open-weight training and serve.",
   },
   {
     date: "2024-09-27",
@@ -1606,7 +1628,15 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2024-10-28",
     title: "MacVTap",
     tweetUrl: "https://x.com/jaredwerba/status/1850954241717784689",
-    sourceUrl: "https://en.wikipedia.org/wiki/MacVTap?wprov=sfti1",
+    sourceUrl:
+      "https://en.wikipedia.org/wiki/MacVTap?wprov=sfti1",
+  },
+  {
+    date: "2024-12-28",
+    title: "OpenAI is running the 2000s Google playbook",
+    tweetUrl: "https://x.com/jaredwerba/status/1873060011389133259",
+    receipt: true,
+    why: "Where the model market is going.",
   },
   {
     date: "2024-12-29",
@@ -1617,7 +1647,17 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     date: "2025-02-11",
     title: "ZippyDB: Facebook's key value store",
     tweetUrl: "https://x.com/jaredwerba/status/1889345576912736536",
-    sourceUrl: "https://engineering.fb.com/2021/08/06/core-infra/zippydb/",
+    sourceUrl:
+      "https://engineering.fb.com/2021/08/06/core-infra/zippydb/",
+  },
+  {
+    date: "2025-03-19",
+    title: "Quantum-2 InfiniBand Platform",
+    tweetUrl: "https://x.com/jaredwerba/status/1902410926500004322",
+    sourceUrl:
+      "https://www.nvidia.com/en-us/networking/quantum2/",
+    receipt: true,
+    why: "Current-gen InfiniBand fabric.",
   },
   {
     date: "2025-04-12",
@@ -1627,21 +1667,73 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     why: "GPU cluster training in production.",
   },
   {
+    date: "2025-05-28",
+    title: "Frontier models will specialise by industry",
+    tweetUrl: "https://x.com/jaredwerba/status/1927553249470468536",
+    receipt: true,
+    why: "A dated call on specialised models.",
+  },
+  {
     date: "2025-06-04",
     title: "Oracle Cloud economics",
     tweetUrl: "https://x.com/jaredwerba/status/1930254863448834392",
-    sourceUrl: "https://www.oracle.com/cloud/economics/",
+    sourceUrl:
+      "https://www.oracle.com/cloud/economics/",
+  },
+  {
+    date: "2025-06-18",
+    title: "AMD’s CDNA 4 Architecture Announcement",
+    tweetUrl: "https://x.com/jaredwerba/status/1935140753446953245",
+    sourceUrl:
+      "https://chipsandcheese.com/p/amds-cdna-4-architecture-announcement",
+    receipt: true,
+    why: "GPU microarchitecture, not only NVIDIA.",
+  },
+  {
+    date: "2025-06-18",
+    title: "Ultra Ethernet Consortium",
+    tweetUrl: "https://x.com/jaredwerba/status/1935141352985215367",
+    receipt: true,
+    why: "Next-gen Ethernet for AI fabrics.",
+  },
+  {
+    date: "2025-06-25",
+    title: "Basic facts about GPUs",
+    tweetUrl: "https://x.com/jaredwerba/status/1937878665045426178",
+    sourceUrl:
+      "https://damek.github.io/random/basic-facts-about-gpus/",
+    receipt: true,
+    why: "Bottlenecks, occupancy, measurement.",
+  },
+  {
+    date: "2025-06-29",
+    title: "I want a good parallel computer",
+    tweetUrl: "https://x.com/jaredwerba/status/1939418237856370847",
+    sourceUrl:
+      "https://raphlinus.github.io/gpu/2025/03/21/good-parallel-computer.html",
+    receipt: true,
+    why: "Parallel-machine design.",
   },
   {
     date: "2025-06-30",
     title: "Advanced Insights: Deploying Intelligence at Scale",
     tweetUrl: "https://x.com/jaredwerba/status/1939806421089919012",
-    sourceUrl: "https://www.youtube.com/watch?v=QF1Qo9ktwHo",
+    sourceUrl:
+      "https://www.youtube.com/watch?v=QF1Qo9ktwHo",
   },
   {
     date: "2025-06-30",
     title: "Hybrid Search with OCI PostgreSQL",
     tweetUrl: "https://x.com/jaredwerba/status/1939811659704394167",
+  },
+  {
+    date: "2025-07-12",
+    title: "Zettascale Computing — 10^21 FLOPS + OCI Superclusters",
+    tweetUrl: "https://x.com/jaredwerba/status/1944083149509587186",
+    sourceUrl:
+      "https://en.wikipedia.org/wiki/Zettascale_computing",
+    receipt: true,
+    why: "Supercluster first principles.",
   },
   {
     date: "2025-07-30",
@@ -1661,6 +1753,20 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
       "https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/select-ai-about.html",
   },
   {
+    date: "2025-08-16",
+    title: "BCI + NeuroLM + screen recording that models engagement",
+    tweetUrl: "https://x.com/jaredwerba/status/1956532146060890336",
+    receipt: true,
+    why: "Extending the hackathon build, in public.",
+  },
+  {
+    date: "2025-09-04",
+    title: "Dylan Patel on GPT-5's router moment, GPUs vs TPUs",
+    tweetUrl: "https://x.com/jaredwerba/status/1963407408283124206",
+    receipt: true,
+    why: "Routing, and accelerator economics.",
+  },
+  {
     date: "2025-09-30",
     title: "Is this like RDMA or InfiniBand? Is this networking?",
     tweetUrl: "https://x.com/jaredwerba/status/1973006362537074888",
@@ -1668,11 +1774,73 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
     why: "Asking the interconnect question in public.",
   },
   {
+    date: "2026-02-13",
+    title: "GPT-5.3-Codex trains its own successor",
+    tweetUrl: "https://x.com/jaredwerba/status/2022410897030041957",
+    receipt: true,
+    why: "Models training the next model.",
+  },
+  {
+    date: "2026-02-24",
+    title: "What about unified memory & RDMA tho?",
+    tweetUrl: "https://x.com/jaredwerba/status/2026366599729647728",
+    receipt: true,
+    why: "Still thinking in fabrics, not just tokens.",
+  },
+  {
+    date: "2026-03-03",
+    title: "Memory IO is not unified. The M5 Max fuses CPU and GPU memory",
+    tweetUrl: "https://x.com/jaredwerba/status/2028939571447103883",
+    receipt: true,
+    why: "Reading memory IO, not headline specs.",
+  },
+  {
     date: "2026-03-12",
     title: "Lights off bc your utilities bill for 24 RDMA Mac studios",
     tweetUrl: "https://x.com/jaredwerba/status/2032087875521565059",
     receipt: true,
     why: "RDMA at home, and what it costs.",
+  },
+  {
+    date: "2026-04-16",
+    title: "Cohere design versus OpenAI: attention to design is all you need",
+    tweetUrl: "https://x.com/jaredwerba/status/2044581370593263943",
+    receipt: true,
+    why: "Developer experience as the product.",
+  },
+  {
+    date: "2026-04-29",
+    title: "Cohere Command R+ for private RAG",
+    tweetUrl: "https://x.com/jaredwerba/status/2049555253440155840",
+    receipt: true,
+    why: "Private RAG, named and dated.",
+  },
+  {
+    date: "2026-05-11",
+    title: "Static random-access memory",
+    tweetUrl: "https://x.com/jaredwerba/status/2053856132741935184",
+    sourceUrl:
+      "https://en.wikipedia.org/wiki/Static_random-access_memory",
+    receipt: true,
+    why: "Memory hierarchy, still.",
+  },
+  {
+    date: "2026-06-28",
+    title: "BM25, the best-matching ranking algorithm",
+    tweetUrl: "https://x.com/jaredwerba/status/2071331116045193372",
+    sourceUrl:
+      "https://www.geeksforgeeks.org/nlp/what-is-bm25-best-matching-25-algorithm/",
+    receipt: true,
+    why: "Lexical ranking — the baseline embeddings have to beat.",
+  },
+  {
+    date: "2026-07-10",
+    title: "Unified Memory, Explained: Why Mini PCs Can Run 70B Models a Big GPU Can't",
+    tweetUrl: "https://x.com/jaredwerba/status/2075605997830226299",
+    sourceUrl:
+      "https://vettedconsumer.com/unified-memory-explained-why-mini-pcs-can-run-70b-models-a-big-gpu-cant-and-where-they-slow-down/",
+    receipt: true,
+    why: "Memory bandwidth as the product.",
   },
 ];
 
