@@ -783,10 +783,9 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "Both models served on one H200, and both answered through the tunnel. For model 1, GPU memory stayed at approximately 120 GB of 144 GB. This agrees with the size I calculated.",
       "The server software is not a free choice. The weights, the GPU and the port were the same for model 2. vLLM refused it and SGLang served it. The cause is the vision tower in the checkpoint. Select the server software when you size the deployment, not after it.",
       "Five failures were not model problems. They were platform problems. I used SSH to a 10.x address, which exists only inside the VPC. I made a VM with no public address. I put the SSH key comment in the username field. The form wrapped my public key onto two lines. A vllm serve command with no arguments started Qwen3-0.6B on 0.0.0.0. The dynamic public address also went away when I stopped the VM. A new user finds all of this before the GPU is important.",
-      "The cost trap is the disk, not the GPU. I selected a 1280 GiB boot disk, and the recommendation is 200 GiB. The disk bills while the VM exists, also when the VM is stopped. When you stop the VM, the GPU cost becomes zero and the disk cost continues.",
       "The weights stay in the Hugging Face cache on the boot disk. A restart reads them from the disk and does not download them again. The compile and warmup steps still take some minutes.",
       "Both models have their refusal behaviour removed. You can only run this class of model yourself. This is the clearest reason I know to rent a GPU instead of a call to a hosted API. I know it now from use, not from an argument.",
-      "The written record is the part that other people can use. If you repeat this on Nebius, you can avoid the Python.h error. You can size the GPU in one read. You know which disk number to change. You know to use SGLang when a checkpoint contains weights that your loader refuses.",
+      "The written record is the part that other people can use. If you repeat this on Nebius, you can avoid the Python.h error. You can size the GPU in one read. You know to use SGLang when a checkpoint contains weights that your loader refuses.",
     ],
   },
   {
