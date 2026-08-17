@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import {
   BACKGROUND,
   OVERVIEW,
@@ -5,6 +6,7 @@ import {
   CAPABILITY_LEAD,
   NEBIUS_PROJECTS,
   TWEET_LEDGER_INTRO,
+  TWEET_THEMES,
   TWEET_LEDGER_RECEIPTS,
   TWEET_LEDGER_FULL,
   type NebiusProject,
@@ -326,16 +328,84 @@ function LedgerLink({ href, children }: { href: string; children: React.ReactNod
   );
 }
 
-function LedgerRow({ row, showWhy }: { row: TweetLedgerEntry; showWhy?: boolean }) {
+function LedgerRow({ row }: { row: TweetLedgerEntry }) {
+  const relevant = Boolean(row.receipt);
   return (
-    <tr className={row.star ? "ac-table__row--active" : undefined}>
+    <tr
+      className={row.star ? "ac-table__row--active" : undefined}
+      data-row
+      data-rel={relevant ? "1" : "0"}
+      data-theme={row.theme}
+      data-year={row.date.slice(0, 4)}
+      data-date={row.date}
+    >
+      <td className="nbx-rel">
+        {relevant ? (
+          <span className="nbx-rel__flag" title="Bears directly on this role">
+            ●<span className="ac-sr-only"> relevant</span>
+          </span>
+        ) : (
+          <span className="ac-sr-only">not flagged</span>
+        )}
+      </td>
       <td className="ac-table__num ac-table__date">{row.date}</td>
-      <td>{row.title}</td>
-      {showWhy ? <td>{row.why}</td> : null}
+      <td>
+        {row.title}
+        {/* The reason rides under the title rather than in its own column. It
+            exists for 64 of 153 rows, so a column would be mostly empty and
+            would cost the title the width it actually needs. */}
+        {row.why ? <span className="nbx-why">{row.why}</span> : null}
+      </td>
+      <td className="nbx-theme">{row.theme}</td>
       <td>
         <LedgerLink href={row.tweetUrl}>OPEN</LedgerLink>
       </td>
     </tr>
+  );
+}
+
+/** A boundary row. All three sets are rendered; the element shows one set. */
+function LedgerGroup({
+  kind,
+  keyName,
+  label,
+  count,
+}: {
+  kind: "theme" | "year" | "rel";
+  keyName: string;
+  label: string;
+  count: number;
+}) {
+  return (
+    <tr className="ac-table__group" data-group={kind} data-key={keyName} hidden={kind !== "theme"}>
+      <th scope="colgroup" colSpan={5}>
+        {label}
+        <span className="ac-table__group-count">
+          {count} {count === 1 ? "post" : "posts"}
+        </span>
+      </th>
+    </tr>
+  );
+}
+
+function SortHeader({
+  sort,
+  label,
+  className,
+  initial,
+}: {
+  sort: string;
+  label: string;
+  className?: string;
+  initial?: "ascending";
+}) {
+  return (
+    <th className={className} aria-sort={initial ?? "none"} data-sort-col={sort}>
+      <button type="button" className="nbx-sort" data-sort={sort}>
+        {label}
+        <span className="nbx-sort__mark" aria-hidden="true" />
+      </button>
+    </th>
   );
 }
 
@@ -345,61 +415,69 @@ function LedgerRow({ row, showWhy }: { row: TweetLedgerEntry; showWhy?: boolean 
  * column of small independently-scrolling panes is miserable to read, and it
  * hides how long the record actually is.
  */
-function LedgerTable({
-  rows,
-  showWhy,
-  byYear,
-}: {
-  rows: TweetLedgerEntry[];
-  showWhy?: boolean;
-  byYear?: boolean;
-}) {
-  const cols = showWhy ? 4 : 3;
-
-  const years = new Map<string, TweetLedgerEntry[]>();
-  if (byYear) {
-    for (const row of rows) {
-      const y = row.date.slice(0, 4);
-      const list = years.get(y) ?? [];
-      list.push(row);
-      years.set(y, list);
-    }
+/**
+ * One table for the whole record. Sortable by relevance, date or theme, and
+ * grouped by whichever of those you sorted on.
+ *
+ * Every row and every group boundary is server-rendered once. <ac-ledger>
+ * reorders by moving existing nodes and toggles `hidden` on the group sets it
+ * is not showing — it never creates or destroys one. Without JavaScript the
+ * table renders grouped by theme, which is the default anyway.
+ */
+function LedgerTable({ rows }: { rows: TweetLedgerEntry[] }) {
+  const byTheme = new Map<string, TweetLedgerEntry[]>();
+  const byYear = new Map<string, TweetLedgerEntry[]>();
+  let relCount = 0;
+  for (const row of rows) {
+    (byTheme.get(row.theme) ?? byTheme.set(row.theme, []).get(row.theme)!).push(row);
+    const y = row.date.slice(0, 4);
+    (byYear.get(y) ?? byYear.set(y, []).get(y)!).push(row);
+    if (row.receipt) relCount += 1;
   }
+  const themes = TWEET_THEMES.filter((t) => byTheme.has(t));
 
   return (
     <div className="ac-table-scroll">
-      <table className="ac-table ac-table--dense ac-table--prose">
+      <table className="ac-table ac-table--dense ac-table--prose nbx-ledger">
         <thead>
           <tr>
-            <th>Date</th>
+            <SortHeader sort="rel" label="Rel" className="nbx-rel" />
+            <SortHeader sort="year" label="Date" />
             <th>What I posted</th>
-            {showWhy ? <th>Why it matters</th> : null}
+            <SortHeader sort="theme" label="Theme" className="nbx-theme" initial="ascending" />
             <th>Tweet</th>
           </tr>
         </thead>
-        {byYear ? (
-          [...years.entries()].map(([year, yearRows]) => (
-            <tbody key={year}>
-              <tr className="ac-table__group">
-                <th scope="colgroup" colSpan={cols}>
-                  {year}
-                  <span className="ac-table__group-count">
-                    {yearRows.length} {yearRows.length === 1 ? "post" : "posts"}
-                  </span>
-                </th>
-              </tr>
-              {yearRows.map((row) => (
-                <LedgerRow key={row.tweetUrl} row={row} showWhy={showWhy} />
+        <tbody>
+          {/* Server order is the default sort: theme headings interleaved with
+              their rows, so the table reads correctly with no JavaScript. */}
+          {themes.map((t) => (
+            <Fragment key={`g-${t}`}>
+              <LedgerGroup kind="theme" keyName={t} label={t} count={byTheme.get(t)!.length} />
+              {byTheme.get(t)!.map((row) => (
+                <LedgerRow key={row.tweetUrl} row={row} />
               ))}
-            </tbody>
-          ))
-        ) : (
-          <tbody>
-            {rows.map((row) => (
-              <LedgerRow key={row.tweetUrl} row={row} showWhy={showWhy} />
-            ))}
-          </tbody>
-        )}
+            </Fragment>
+          ))}
+
+          {/* Boundaries for the other two sorts, parked and hidden until used. */}
+          {[...byYear.keys()].map((y) => (
+            <LedgerGroup
+              key={`year-${y}`}
+              kind="year"
+              keyName={y}
+              label={y}
+              count={byYear.get(y)!.length}
+            />
+          ))}
+          <LedgerGroup kind="rel" keyName="1" label="Relevant to this role" count={relCount} />
+          <LedgerGroup
+            kind="rel"
+            keyName="0"
+            label="The rest of the record"
+            count={rows.length - relCount}
+          />
+        </tbody>
       </table>
     </div>
   );
@@ -416,23 +494,16 @@ function LedgerDoc() {
 
       <section className="ac-block">
         <h3 className="ac-block__title">
-          SELECTED &mdash; {TWEET_LEDGER_RECEIPTS.length}
-        </h3>
-        <LedgerTable rows={TWEET_LEDGER_RECEIPTS} showWhy />
-      </section>
-
-      {/* A hard break, so the picked posts and the whole record are not two
-          tables a reader has to tell apart by their column count. */}
-      <hr className="ac-hr" />
-
-      <section className="ac-block">
-        <h3 className="ac-block__title">
-          EVERY POST &mdash; {TWEET_LEDGER_FULL.length}
+          THE RECORD &mdash; {TWEET_LEDGER_FULL.length}
         </h3>
         <p className="ac-prose ac-ledger__note">
-          One list, oldest first, in a single scroll.
+          Grouped by theme. Sort by relevance, date or theme from the column
+          headings. {TWEET_LEDGER_RECEIPTS.length} rows carry a dot: those are
+          the ones that bear on this role.
         </p>
-        <LedgerTable rows={TWEET_LEDGER_FULL} byYear />
+        <ac-ledger>
+          <LedgerTable rows={TWEET_LEDGER_FULL} />
+        </ac-ledger>
       </section>
     </DocShell>
   );

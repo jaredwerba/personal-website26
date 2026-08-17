@@ -146,6 +146,103 @@ class AcSearch extends HTMLElement {
   };
 }
 
+/**
+ * The ledger. Sorts by relevance, date or theme, and groups by whatever it
+ * sorted on.
+ *
+ * This is the one element that moves nodes rather than only toggling
+ * attributes. It is safe here because it only ever calls appendChild on rows
+ * that already exist — a move, never a create or a destroy — and the table is
+ * server-rendered into a subtree that never re-renders, so React has nothing
+ * to reconcile against. The row and group counts are fixed at build time.
+ */
+type SortMode = "rel" | "year" | "theme";
+
+class AcLedger extends HTMLElement {
+  #dir: 1 | -1 = 1;
+  #mode: SortMode = "theme";
+
+  connectedCallback() {
+    this.addEventListener("click", this.#onClick);
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener("click", this.#onClick);
+  }
+
+  #onClick = (event: MouseEvent) => {
+    const btn = (event.target as HTMLElement).closest<HTMLElement>("[data-sort]");
+    if (!btn) return;
+    const mode = btn.getAttribute("data-sort") as SortMode | null;
+    if (!mode) return;
+    // Re-clicking the active column reverses it. A new column starts ascending,
+    // because "oldest first" and "most relevant first" are the useful defaults.
+    this.#dir = mode === this.#mode ? ((this.#dir * -1) as 1 | -1) : 1;
+    this.#mode = mode;
+    this.#apply();
+  };
+
+  #apply() {
+    const body = this.querySelector("tbody");
+    if (!body) return;
+
+    const rows = Array.from(body.querySelectorAll<HTMLElement>("[data-row]"));
+    const groups = Array.from(body.querySelectorAll<HTMLElement>("[data-group]"));
+
+    const keyOf = (r: HTMLElement) =>
+      this.#mode === "theme"
+        ? (r.getAttribute("data-theme") ?? "")
+        : this.#mode === "year"
+          ? (r.getAttribute("data-year") ?? "")
+          : (r.getAttribute("data-rel") ?? "0");
+
+    // Group order follows the order the boundary rows were rendered in, which
+    // for themes is the curated TWEET_THEMES order rather than the alphabet.
+    const order: string[] = [];
+    for (const g of groups) {
+      if (g.getAttribute("data-group") !== this.#mode) continue;
+      const k = g.getAttribute("data-key");
+      if (k !== null) order.push(k);
+    }
+    if (this.#dir === -1) order.reverse();
+
+    const buckets = new Map<string, HTMLElement[]>(order.map((k) => [k, []]));
+    for (const r of rows) buckets.get(keyOf(r))?.push(r);
+
+    const date = (r: HTMLElement) => r.getAttribute("data-date") ?? "";
+    for (const list of buckets.values()) {
+      list.sort((a, b) => (date(a) < date(b) ? -1 : date(a) > date(b) ? 1 : 0));
+      if (this.#dir === -1) list.reverse();
+    }
+
+    for (const g of groups) g.hidden = g.getAttribute("data-group") !== this.#mode;
+
+    const frag = document.createDocumentFragment();
+    for (const k of order) {
+      const head = groups.find(
+        (g) => g.getAttribute("data-group") === this.#mode && g.getAttribute("data-key") === k,
+      );
+      if (head) frag.appendChild(head);
+      for (const r of buckets.get(k) ?? []) frag.appendChild(r);
+    }
+    // Boundary rows for the other two modes stay in the DOM, parked and hidden.
+    for (const g of groups) {
+      if (g.getAttribute("data-group") !== this.#mode) frag.appendChild(g);
+    }
+    body.appendChild(frag);
+
+    this.querySelectorAll<HTMLElement>("[data-sort-col]").forEach((th) => {
+      const active = th.getAttribute("data-sort-col") === this.#mode;
+      th.setAttribute(
+        "aria-sort",
+        active ? (this.#dir === 1 ? "ascending" : "descending") : "none",
+      );
+    });
+    this.setAttribute("data-mode", this.#mode);
+    this.setAttribute("data-dir", this.#dir === 1 ? "asc" : "desc");
+  }
+}
+
 const READABLE_KEY = "nebius:readable";
 
 /** The shell. Owns which document is showing, and the URL that reflects it. */
@@ -319,4 +416,5 @@ export function registerConsoleElements() {
   if (!customElements.get("ac-index")) customElements.define("ac-index", AcIndex);
   if (!customElements.get("ac-search")) customElements.define("ac-search", AcSearch);
   if (!customElements.get("ac-console")) customElements.define("ac-console", AcConsole);
+  if (!customElements.get("ac-ledger")) customElements.define("ac-ledger", AcLedger);
 }

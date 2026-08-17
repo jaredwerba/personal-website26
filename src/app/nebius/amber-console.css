@@ -3789,3 +3789,106 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
   .ac-root .ac-block .ac-table-scroll { max-height: 70vh; }
   .ac-root .ac-table__group th { font-size: 0.72rem; }
 }
+
+/* ===========================================================================
+   Ledger: one sortable, theme-grouped table.
+   =========================================================================== */
+
+/* Sortable column headings. A button inside the th, so the whole thing is
+   reachable by keyboard and announced as a control rather than as text. */
+.ac-root .nbx-sort {
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+/* A three-letter heading in a narrow column wraps to one letter per line. */
+.ac-root .nbx-sort { white-space: nowrap; }
+.ac-root .nbx-sort:hover { color: var(--ac-on-fill); text-decoration: underline; }
+.ac-root .nbx-sort:focus-visible { outline: 2px dashed currentColor; outline-offset: 2px; }
+
+/* The caret only appears on the column actually in use, so the header row does
+   not read as three competing controls. */
+.ac-root .nbx-sort__mark::after { content: ""; }
+.ac-root [aria-sort="ascending"] .nbx-sort__mark::after { content: "\2191"; }
+.ac-root [aria-sort="descending"] .nbx-sort__mark::after { content: "\2193"; }
+
+/* Relevance flag. A dot, not a word: it has to be scannable down a column of
+   153 rows, and the reason it is flagged is already under the title. */
+.ac-root .ac-table-scroll .nbx-ledger th.nbx-rel,
+.ac-root .ac-table-scroll .nbx-ledger td.nbx-rel { width: 3.25rem; text-align: left; }
+.ac-root .nbx-rel__flag {
+  color: var(--ac-ink-bright);
+  text-shadow: var(--ac-glow-text);
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+/* Theme column. Dim, because it is context rather than content — and when the
+   table is grouped by theme it is repeating the heading above it. */
+.ac-root .ac-table-scroll .nbx-ledger th.nbx-theme,
+.ac-root .ac-table-scroll .nbx-ledger td.nbx-theme {
+  width: 8rem;
+  color: var(--ac-ink-dim);
+  text-align: left;
+}
+
+/* Why it matters, under its title rather than in a column of its own. */
+.ac-root .nbx-why {
+  display: block;
+  margin-top: 2px;
+  color: var(--ac-ink-dim);
+  font-size: 0.86em;
+}
+
+/* Column widths for the five-column ledger. The generic table rules further up
+   this file assume three or four columns and cap the third at 30%; here the
+   third column is the title and has to take whatever is left. These carry
+   .ac-table-scroll purely to match that specificity and win on order. */
+.ac-root .ac-table-scroll .nbx-ledger th:nth-child(2),
+.ac-root .ac-table-scroll .nbx-ledger td:nth-child(2) { width: 7rem; }
+.ac-root .ac-table-scroll .nbx-ledger th:nth-child(3),
+.ac-root .ac-table-scroll .nbx-ledger td:nth-child(3) { width: auto; }
+.ac-root .ac-table-scroll .nbx-ledger th:last-child,
+.ac-root .ac-table-scroll .nbx-ledger td:last-child { width: 4.5rem; }
+
+@media (max-width: 640px) {
+  /* Theme goes on a phone: the grouping heading already carries it, and the
+     title needs the width more. The relevance dot stays — it is the point. */
+  .ac-root .ac-table-scroll .nbx-ledger th.nbx-theme,
+  .ac-root .ac-table-scroll .nbx-ledger td.nbx-theme { display: none; }
+  /* Percentages rather than rem here. With table-layout: fixed and the theme
+     column removed, the `auto` title column stopped claiming the freed space
+     and settled at a quarter of the table. Four explicit widths that sum to
+     100 leave nothing to redistribute. */
+  .ac-root .ac-table-scroll .nbx-ledger th.nbx-rel,
+  .ac-root .ac-table-scroll .nbx-ledger td.nbx-rel {
+    width: 13%;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+  .ac-root .ac-table-scroll .nbx-ledger th:nth-child(2),
+  .ac-root .ac-table-scroll .nbx-ledger td:nth-child(2) { width: 25%; }
+  .ac-root .ac-table-scroll .nbx-ledger th:nth-child(3),
+  .ac-root .ac-table-scroll .nbx-ledger td:nth-child(3) { width: 47%; }
+  .ac-root .ac-table-scroll .nbx-ledger th:last-child,
+  .ac-root .ac-table-scroll .nbx-ledger td:last-child { width: 15%; }
+  /* The generic mobile rule hides the third column of a four-column table.
+     Here the third column is the title, so that rule must not reach it. */
+  .ac-root .ac-table-scroll .nbx-ledger th:nth-child(3):not(:last-child),
+  .ac-root .ac-table-scroll .nbx-ledger td:nth-child(3):not(:last-child) { display: table-cell; }
+}
+
+/* Plain view: the dot needs a colour that exists outside the phosphor palette,
+   and the theme column earns its place back on a wide, quiet page. */
+.ac-root[data-readable] .nbx-rel__flag { color: #7ee787; text-shadow: none; }
+.ac-root[data-readable] .nbx-why { color: #9a9a9a; font-size: 14px; }
+.ac-root[data-readable] .nbx-theme { color: #9a9a9a; }
+.ac-root[data-readable] .nbx-sort { text-decoration: underline; cursor: pointer; }

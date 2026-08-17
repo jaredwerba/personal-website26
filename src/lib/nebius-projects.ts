@@ -826,8 +826,27 @@ export const TIER_3 = NEBIUS_PROJECTS.filter((p) => p.tier === 3);
  * guaranteed dump of every URL I ever posted — X search pages small, and
  * older tweets often store only a t.co short link.
  */
+/**
+ * Ledger theme groups, in render order. The four that bear hardest on the role
+ * lead; the rest are the same decade of reading, filed honestly.
+ */
+export const TWEET_THEMES = [
+  "AI & ML",
+  "GPU & Silicon",
+  "Networking",
+  "Memory",
+  "Cloud & HPC",
+  "Data & Databases",
+  "Security",
+  "Software Engineering",
+] as const;
+
+export type TweetTheme = (typeof TWEET_THEMES)[number];
+
 export type TweetLedgerEntry = {
   date: string;
+  /** Which thread this post belongs to. Drives the grouping in Public Record. */
+  theme: TweetTheme;
   title: string;
   tweetUrl: string;
   sourceUrl?: string;
@@ -847,6 +866,7 @@ export const TWEET_LEDGER_INTRO: string[] = [
 export const TWEET_LEDGER: TweetLedgerEntry[] = [
   {
     date: "2017-10-09",
+    theme: "Cloud & HPC",
     title: "The rise of container orchestration storage standards",
     tweetUrl: "https://x.com/jaredwerba/status/917407469781086210",
     receipt: true,
@@ -854,6 +874,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2017-10-13",
+    theme: "AI & ML",
     title: "Colorizing B&W photos with neural networks",
     tweetUrl: "https://x.com/jaredwerba/status/918973257344266240",
     receipt: true,
@@ -861,11 +882,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2017-10-17",
+    theme: "Cloud & HPC",
     title: "How to set up world-class continuous deployment using free hosted tools",
     tweetUrl: "https://x.com/jaredwerba/status/920371633004609536",
   },
   {
     date: "2017-10-23",
+    theme: "AI & ML",
     title: "Andrew Ng has a chatbot that can help with depression",
     tweetUrl: "https://x.com/jaredwerba/status/922301869640290304",
     receipt: true,
@@ -873,11 +896,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2017-10-24",
+    theme: "Cloud & HPC",
     title: "HashiCorp raises $40M for its cloud infrastructure automation services",
     tweetUrl: "https://x.com/jaredwerba/status/922928773552590848",
   },
   {
     date: "2017-10-26",
+    theme: "GPU & Silicon",
     title: "Introducing Amazon EC2 P3 instances",
     tweetUrl: "https://x.com/jaredwerba/status/923516497036750850",
     receipt: true,
@@ -885,21 +910,25 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2017-10-28",
+    theme: "Security",
     title: "The OWASP Top 10 is killing me, and killing you!",
     tweetUrl: "https://x.com/jaredwerba/status/924414761802125313",
   },
   {
     date: "2017-11-01",
+    theme: "Cloud & HPC",
     title: "10 Things to Consider when Securing Docker",
     tweetUrl: "https://x.com/jaredwerba/status/925711242903343104",
   },
   {
     date: "2017-11-04",
+    theme: "Cloud & HPC",
     title: "Azure Functions Now Support Java",
     tweetUrl: "https://x.com/jaredwerba/status/926670669659635713",
   },
   {
     date: "2017-11-10",
+    theme: "AI & ML",
     title: "Business questions engineers should ask when interviewing at ML/AI companies",
     tweetUrl: "https://x.com/jaredwerba/status/928829344113397760",
     receipt: true,
@@ -908,11 +937,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2017-11-10",
+    theme: "GPU & Silicon",
     title: "Observing the A11's Heterogenous Cores",
     tweetUrl: "https://x.com/jaredwerba/status/929044799889530880",
   },
   {
     date: "2017-11-16",
+    theme: "Cloud & HPC",
     title: "Linux totally dominates supercomputers",
     tweetUrl: "https://x.com/jaredwerba/status/930992098698055680",
     receipt: true,
@@ -920,16 +951,19 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2017-11-18",
+    theme: "Software Engineering",
     title: "Augmenting a Ruby on Rails App with Vue.js",
     tweetUrl: "https://x.com/jaredwerba/status/931965542465966080",
   },
   {
     date: "2017-11-18",
+    theme: "Software Engineering",
     title: "The React Story: How Facebook's Instagram Acquisition",
     tweetUrl: "https://x.com/jaredwerba/status/931985527691149315",
   },
   {
     date: "2017-11-29",
+    theme: "GPU & Silicon",
     title: "Amazon EC2 Bare Metal Instances with Direct Access to Hardware",
     tweetUrl: "https://x.com/jaredwerba/status/935824872969732098",
     receipt: true,
@@ -938,6 +972,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2017-12-01",
+    theme: "GPU & Silicon",
     title: "BlazingDB Origins — raised from NVIDIA and Samsung",
     tweetUrl: "https://x.com/jaredwerba/status/936386827069591552",
     receipt: true,
@@ -945,46 +980,55 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2017-12-01",
+    theme: "Cloud & HPC",
     title: "AWS announces a serverless database service",
     tweetUrl: "https://x.com/jaredwerba/status/936424094786080768",
   },
   {
     date: "2017-12-04",
+    theme: "Cloud & HPC",
     title: "WebAssembly Now Supported across All Browsers",
     tweetUrl: "https://x.com/jaredwerba/status/937660612854902785",
   },
   {
     date: "2017-12-04",
+    theme: "Cloud & HPC",
     title: "Serverless Aurora: What it means and why it's the future of data",
     tweetUrl: "https://x.com/jaredwerba/status/937810525299380225",
   },
   {
     date: "2017-12-08",
+    theme: "Security",
     title: "Microsoft leaks TLS private key for cloud ERP product",
     tweetUrl: "https://x.com/jaredwerba/status/939247228581023750",
   },
   {
     date: "2017-12-11",
+    theme: "Cloud & HPC",
     title: "WebAssembly, an executable format for the web",
     tweetUrl: "https://x.com/jaredwerba/status/940310702924947456",
   },
   {
     date: "2017-12-16",
+    theme: "Security",
     title: "Project Zero: privileged UI injected into pages",
     tweetUrl: "https://x.com/jaredwerba/status/941860146296377344",
   },
   {
     date: "2017-12-18",
+    theme: "Memory",
     title: "APFS",
     tweetUrl: "https://x.com/jaredwerba/status/942754650180157443",
   },
   {
     date: "2017-12-19",
+    theme: "Cloud & HPC",
     title: "Introduction to WebAssembly",
     tweetUrl: "https://x.com/jaredwerba/status/943070015783342080",
   },
   {
     date: "2017-12-26",
+    theme: "Cloud & HPC",
     title: "Computer latency: 1977-2017",
     tweetUrl: "https://x.com/jaredwerba/status/945788796200783874",
     receipt: true,
@@ -992,6 +1036,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2018-01-22",
+    theme: "GPU & Silicon",
     title: "Bitmain buys 20k 16nm wafers a month from TSMC, more than NVIDIA",
     tweetUrl: "https://x.com/jaredwerba/status/955589685996347392",
     receipt: true,
@@ -999,6 +1044,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2018-01-28",
+    theme: "Memory",
     title: "Intel Optane Memory: How to make revolutionary technology totally boring",
     tweetUrl: "https://x.com/jaredwerba/status/957602685443813376",
     receipt: true,
@@ -1006,6 +1052,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2018-01-28",
+    theme: "Memory",
     title: "Intel: Meltdown, Spectre silicon fixes coming 2018; 3D XPoint RAM, not so much",
     tweetUrl: "https://x.com/jaredwerba/status/957602731736387589",
     sourceUrl:
@@ -1015,11 +1062,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2018-01-30",
+    theme: "GPU & Silicon",
     title: "How Apple Built a Chip Powerhouse to Threaten Qualcomm and Intel",
     tweetUrl: "https://x.com/jaredwerba/status/958142393051766784",
   },
   {
     date: "2018-02-21",
+    theme: "AI & ML",
     title: "NVIDIA FastPhotoStyle",
     tweetUrl: "https://x.com/jaredwerba/status/966104218510741504",
     sourceUrl:
@@ -1029,26 +1078,31 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2018-04-02",
+    theme: "Security",
     title: "Data Integrity Follow Up: Ways to Protect Your Data",
     tweetUrl: "https://x.com/jaredwerba/status/980657288678526976",
   },
   {
     date: "2018-05-12",
+    theme: "Networking",
     title: "Passive Wi-Fi: Bringing Low Power to Wi-Fi Transmissions",
     tweetUrl: "https://x.com/jaredwerba/status/995344771823620098",
   },
   {
     date: "2018-05-16",
+    theme: "Cloud & HPC",
     title: "What is edge computing?",
     tweetUrl: "https://x.com/jaredwerba/status/996851184823566336",
   },
   {
     date: "2018-05-26",
+    theme: "Cloud & HPC",
     title: "Living in a Docker world",
     tweetUrl: "https://x.com/jaredwerba/status/1000508850909392898",
   },
   {
     date: "2018-06-06",
+    theme: "AI & ML",
     title: "How NLP is transforming the news industry",
     tweetUrl: "https://x.com/jaredwerba/status/1004349414012588032",
     receipt: true,
@@ -1056,16 +1110,19 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2018-06-23",
+    theme: "Data & Databases",
     title: "5 Benefits of Using MYSQL",
     tweetUrl: "https://x.com/jaredwerba/status/1010594314936778759",
   },
   {
     date: "2018-07-19",
+    theme: "Cloud & HPC",
     title: "How Facebook configures its millions of servers every day",
     tweetUrl: "https://x.com/jaredwerba/status/1020040631236943873",
   },
   {
     date: "2018-08-06",
+    theme: "AI & ML",
     title: "T2F: text to face generation using Deep Learning",
     tweetUrl: "https://x.com/jaredwerba/status/1026379661608214528",
     receipt: true,
@@ -1073,16 +1130,19 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2018-08-21",
+    theme: "Cloud & HPC",
     title: "Using AWS EC2 instance store vs EBS for MySQL",
     tweetUrl: "https://x.com/jaredwerba/status/1031877481228320768",
   },
   {
     date: "2018-08-24",
+    theme: "Cloud & HPC",
     title: "Adtech Startup Overcomes Cloud Infrastructure Gridlock",
     tweetUrl: "https://x.com/jaredwerba/status/1033031234698575872",
   },
   {
     date: "2018-08-29",
+    theme: "Cloud & HPC",
     title: "Google steps back from running the Kubernetes infrastructure",
     tweetUrl: "https://x.com/jaredwerba/status/1034851702019698688",
     receipt: true,
@@ -1090,26 +1150,31 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2018-09-03",
+    theme: "AI & ML",
     title: "Deep Angel, The Artificial Intelligence of Absence",
     tweetUrl: "https://x.com/jaredwerba/status/1036521558678884353",
   },
   {
     date: "2018-09-14",
+    theme: "Security",
     title: "TLS 1.3 is approved",
     tweetUrl: "https://x.com/jaredwerba/status/1040605632364269569",
   },
   {
     date: "2018-10-05",
+    theme: "Cloud & HPC",
     title: "A Brief History of High Availability",
     tweetUrl: "https://x.com/jaredwerba/status/1048229511756701697",
   },
   {
     date: "2018-10-17",
+    theme: "Cloud & HPC",
     title: "How We Built Snowflake on Azure",
     tweetUrl: "https://x.com/jaredwerba/status/1052349889022226432",
   },
   {
     date: "2018-10-26",
+    theme: "AI & ML",
     title: "Generating custom photo-realistic faces using AI",
     tweetUrl: "https://x.com/jaredwerba/status/1055871284264030209",
     receipt: true,
@@ -1117,51 +1182,61 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2018-11-01",
+    theme: "AI & ML",
     title: "Optical character recognition",
     tweetUrl: "https://x.com/jaredwerba/status/1058092721557159936",
   },
   {
     date: "2018-11-11",
+    theme: "GPU & Silicon",
     title: "Why Intel Processors Draw More Power Than Expected: TDP and Turbo Explained",
     tweetUrl: "https://x.com/jaredwerba/status/1061711515194142720",
   },
   {
     date: "2018-12-07",
+    theme: "Cloud & HPC",
     title: "Basic Docker Node.js Setup",
     tweetUrl: "https://x.com/jaredwerba/status/1071092220906926081",
   },
   {
     date: "2018-12-13",
+    theme: "Cloud & HPC",
     title: "AWS Outperforms GCP in the 2018 Cloud Report",
     tweetUrl: "https://x.com/jaredwerba/status/1073338310343430145",
   },
   {
     date: "2018-12-17",
+    theme: "Software Engineering",
     title: "The Most Important Software Innovations",
     tweetUrl: "https://x.com/jaredwerba/status/1074659521493155840",
   },
   {
     date: "2018-12-20",
+    theme: "Data & Databases",
     title: "Bye bye Mongo, Hello Postgres",
     tweetUrl: "https://x.com/jaredwerba/status/1075616924770287616",
   },
   {
     date: "2019-01-14",
+    theme: "Cloud & HPC",
     title: "AWS, MongoDB, and the Economic Realities of Open Source",
     tweetUrl: "https://x.com/jaredwerba/status/1084801371201830913",
   },
   {
     date: "2019-03-06",
+    theme: "Cloud & HPC",
     title: "Microservices, Containers and Kubernetes in 10 minutes",
     tweetUrl: "https://x.com/jaredwerba/status/1103361222211186689",
   },
   {
     date: "2019-03-07",
+    theme: "Cloud & HPC",
     title: "Serverless Architecture: When To Use This Approach",
     tweetUrl: "https://x.com/jaredwerba/status/1103712806736723968",
   },
   {
     date: "2019-04-26",
+    theme: "Cloud & HPC",
     title: "6 Technical Challenges Developing a Distributed SQL Database",
     tweetUrl: "https://x.com/jaredwerba/status/1121892106161803264",
     sourceUrl:
@@ -1169,6 +1244,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2019-04-30",
+    theme: "Memory",
     title: "Data in a Flash: the Evolution of Disk Storage and NVMe",
     tweetUrl: "https://x.com/jaredwerba/status/1123237047249063936",
     sourceUrl:
@@ -1176,11 +1252,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2019-06-09",
+    theme: "Cloud & HPC",
     title: "AWS costs every programmer should know",
     tweetUrl: "https://x.com/jaredwerba/status/1137763212240261120",
   },
   {
     date: "2019-07-24",
+    theme: "Cloud & HPC",
     title: "Oracle Cloud — Networking as a differentiator?",
     tweetUrl: "https://x.com/jaredwerba/status/1154144784963055622",
     receipt: true,
@@ -1188,6 +1266,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2019-09-08",
+    theme: "Networking",
     title: "Oracle engineers its own InfiniBand interconnects",
     tweetUrl: "https://x.com/jaredwerba/status/1170785178681315331",
     sourceUrl:
@@ -1198,6 +1277,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2019-09-22",
+    theme: "Memory",
     title: "Intel Announces New Optane DC Persistent Memory",
     tweetUrl: "https://x.com/jaredwerba/status/1175842173243277319",
     sourceUrl:
@@ -1207,6 +1287,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2019-09-29",
+    theme: "Data & Databases",
     title: "NCBI paper",
     tweetUrl: "https://x.com/jaredwerba/status/1178317280096276481",
     sourceUrl:
@@ -1214,6 +1295,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2019-10-09",
+    theme: "Networking",
     title: "Oracle network layers",
     tweetUrl: "https://x.com/jaredwerba/status/1181741486301417472",
     sourceUrl:
@@ -1221,31 +1303,37 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2019-10-09",
+    theme: "Security",
     title: "Authentication vs federation vs SSO",
     tweetUrl: "https://x.com/jaredwerba/status/1181745687622488065",
   },
   {
     date: "2019-10-16",
+    theme: "Cloud & HPC",
     title: "Do Oracle Cloud's no-Oracle-code servers make it more secure?",
     tweetUrl: "https://x.com/jaredwerba/status/1184407573816102912",
   },
   {
     date: "2019-10-18",
+    theme: "Cloud & HPC",
     title: "OCI Identity federation",
     tweetUrl: "https://x.com/jaredwerba/status/1185214993496772609",
   },
   {
     date: "2019-10-22",
+    theme: "GPU & Silicon",
     title: "Why the Apple A13 Bionic blows past Qualcomm Snapdragon 855 Plus",
     tweetUrl: "https://x.com/jaredwerba/status/1186730738181390336",
   },
   {
     date: "2019-10-23",
+    theme: "Cloud & HPC",
     title: "SSO E-Business Suite / Azure AD",
     tweetUrl: "https://x.com/jaredwerba/status/1187074722430967808",
   },
   {
     date: "2019-10-26",
+    theme: "Software Engineering",
     title: "Event-driven programming",
     tweetUrl: "https://x.com/jaredwerba/status/1188097950892867585",
     sourceUrl:
@@ -1253,6 +1341,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2019-10-26",
+    theme: "Software Engineering",
     title: "RabbitMQ tutorials",
     tweetUrl: "https://x.com/jaredwerba/status/1188107135311319041",
     sourceUrl:
@@ -1260,11 +1349,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2019-10-26",
+    theme: "Data & Databases",
     title: "MySQL + Node.js",
     tweetUrl: "https://x.com/jaredwerba/status/1188208349340405760",
   },
   {
     date: "2019-11-01",
+    theme: "Cloud & HPC",
     title: "Real-time operating system",
     tweetUrl: "https://x.com/jaredwerba/status/1190219843984867333",
     sourceUrl:
@@ -1272,6 +1363,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2019-11-03",
+    theme: "Security",
     title: "Certificate authority",
     tweetUrl: "https://x.com/jaredwerba/status/1191124923223334915",
     sourceUrl:
@@ -1279,16 +1371,19 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2019-11-04",
+    theme: "Data & Databases",
     title: "Oracle vs Hadoop",
     tweetUrl: "https://x.com/jaredwerba/status/1191345805086666753",
   },
   {
     date: "2019-11-06",
+    theme: "GPU & Silicon",
     title: "ARM to A4 — how Apple changed mobile silicon",
     tweetUrl: "https://x.com/jaredwerba/status/1192126334031544321",
   },
   {
     date: "2019-12-09",
+    theme: "Cloud & HPC",
     title: "The sad state of sysadmin in the age of containers",
     tweetUrl: "https://x.com/jaredwerba/status/1204049743288193024",
     sourceUrl:
@@ -1296,6 +1391,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2019-12-17",
+    theme: "Cloud & HPC",
     title: "Distributed database",
     tweetUrl: "https://x.com/jaredwerba/status/1207020569637642240",
     sourceUrl:
@@ -1303,6 +1399,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2019-12-17",
+    theme: "Data & Databases",
     title: "Oracle / SQL Server migrations",
     tweetUrl: "https://x.com/jaredwerba/status/1207065859124027392",
     sourceUrl:
@@ -1310,6 +1407,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2019-12-19",
+    theme: "Security",
     title: "How tracking pixels work",
     tweetUrl: "https://x.com/jaredwerba/status/1207648569060143104",
     sourceUrl:
@@ -1317,6 +1415,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2020-01-05",
+    theme: "Security",
     title: "DARPA LifeLog",
     tweetUrl: "https://x.com/jaredwerba/status/1213944887957164032",
     sourceUrl:
@@ -1324,16 +1423,19 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2020-01-23",
+    theme: "Security",
     title: "Metasploit Project",
     tweetUrl: "https://x.com/jaredwerba/status/1220472774172475397",
   },
   {
     date: "2020-02-14",
+    theme: "Software Engineering",
     title: "Regular expression",
     tweetUrl: "https://x.com/jaredwerba/status/1228148536384139264",
   },
   {
     date: "2020-05-14",
+    theme: "Security",
     title: "Wildcard certificate",
     tweetUrl: "https://x.com/jaredwerba/status/1260926012759724039",
     sourceUrl:
@@ -1341,6 +1443,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2020-05-26",
+    theme: "Cloud & HPC",
     title: "AWS essay",
     tweetUrl: "https://x.com/jaredwerba/status/1265247871085002752",
     sourceUrl:
@@ -1348,6 +1451,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2020-05-30",
+    theme: "Security",
     title: "Tenable Nessus Professional",
     tweetUrl: "https://x.com/jaredwerba/status/1266731755853058049",
     sourceUrl:
@@ -1355,6 +1459,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2020-06-11",
+    theme: "GPU & Silicon",
     title: "Generic block diagram of a GPU",
     tweetUrl: "https://x.com/jaredwerba/status/1271186080948240384",
     receipt: true,
@@ -1362,6 +1467,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2020-06-18",
+    theme: "Cloud & HPC",
     title: "Programming notes on monitors",
     tweetUrl: "https://x.com/jaredwerba/status/1273588139467124736",
     sourceUrl:
@@ -1369,11 +1475,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2020-06-28",
+    theme: "Security",
     title: "Encrypted DNS on Apple devices",
     tweetUrl: "https://x.com/jaredwerba/status/1277218379909287936",
   },
   {
     date: "2020-07-12",
+    theme: "Networking",
     title: "Remote direct memory access",
     tweetUrl: "https://x.com/jaredwerba/status/1282138164153536512",
     sourceUrl:
@@ -1384,6 +1492,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2020-07-16",
+    theme: "Data & Databases",
     title: "Data manipulation language",
     tweetUrl: "https://x.com/jaredwerba/status/1283845174242816002",
     sourceUrl:
@@ -1391,6 +1500,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2020-07-30",
+    theme: "Cloud & HPC",
     title: "IaaS pricing patterns and trends 2020",
     tweetUrl: "https://x.com/jaredwerba/status/1288938071187173376",
     sourceUrl:
@@ -1398,6 +1508,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2020-08-17",
+    theme: "AI & ML",
     title: "GPT-3",
     tweetUrl: "https://x.com/jaredwerba/status/1295451720626188290",
     sourceUrl:
@@ -1408,6 +1519,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2020-09-18",
+    theme: "Security",
     title: "OWASP source-code analysis tools",
     tweetUrl: "https://x.com/jaredwerba/status/1306956082011688961",
     sourceUrl:
@@ -1415,16 +1527,19 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2020-09-21",
+    theme: "Cloud & HPC",
     title: "Difference between VDI, VHD, VMDK, VHDX",
     tweetUrl: "https://x.com/jaredwerba/status/1308118184889856000",
   },
   {
     date: "2020-11-07",
+    theme: "GPU & Silicon",
     title: "Look inside iPad Pro 11's LiDAR scanner",
     tweetUrl: "https://x.com/jaredwerba/status/1325071893397909504",
   },
   {
     date: "2021-05-16",
+    theme: "Security",
     title: "Zero-knowledge proof",
     tweetUrl: "https://x.com/jaredwerba/status/1393737427609653250",
     sourceUrl:
@@ -1432,6 +1547,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2021-12-23",
+    theme: "Cloud & HPC",
     title: "Using Apache Airflow to orchestrate Oracle Cloud Functions",
     tweetUrl: "https://x.com/jaredwerba/status/1473819926876114948",
     sourceUrl:
@@ -1439,6 +1555,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2021-12-24",
+    theme: "Cloud & HPC",
     title: "Apple to Apple Comparison: M1 Max vs Intel — Unifying CS and HPC for the future of AGI",
     tweetUrl: "https://x.com/jaredwerba/status/1474441311994494982",
     sourceUrl:
@@ -1448,6 +1565,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2022-02-23",
+    theme: "AI & ML",
     title: "CRISP-DM",
     tweetUrl: "https://x.com/jaredwerba/status/1496312908510289922",
     sourceUrl:
@@ -1457,6 +1575,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2022-05-28",
+    theme: "AI & ML",
     title: "DeepDream",
     tweetUrl: "https://x.com/jaredwerba/status/1530553642725646338",
     sourceUrl:
@@ -1466,6 +1585,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2022-09-06",
+    theme: "Cloud & HPC",
     title: "what is edge compute",
     tweetUrl: "https://x.com/jaredwerba/status/1567227596198363137",
     receipt: true,
@@ -1473,11 +1593,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2022-11-03",
+    theme: "Data & Databases",
     title: "DDL DML DCL",
     tweetUrl: "https://x.com/jaredwerba/status/1588211407832727553",
   },
   {
     date: "2022-12-05",
+    theme: "AI & ML",
     title: "Generative Adversarial Network",
     tweetUrl: "https://x.com/jaredwerba/status/1599564262266937345",
     receipt: true,
@@ -1485,6 +1607,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2023-07-14",
+    theme: "AI & ML",
     title: "Oracle Generative AI",
     tweetUrl: "https://x.com/jaredwerba/status/1679644978388037632",
     sourceUrl:
@@ -1494,6 +1617,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2023-07-25",
+    theme: "GPU & Silicon",
     title: "Oracle & NVIDIA solve the largest AI and NLP models",
     tweetUrl: "https://x.com/jaredwerba/status/1683950594820546560",
     sourceUrl:
@@ -1503,6 +1627,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2023-09-23",
+    theme: "AI & ML",
     title: "OCI Gen AI Preview",
     tweetUrl: "https://x.com/jaredwerba/status/1705637338615812266",
     sourceUrl:
@@ -1512,6 +1637,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2023-10-02",
+    theme: "AI & ML",
     title: "What Is Retrieval-Augmented Generation (RAG)?",
     tweetUrl: "https://x.com/jaredwerba/status/1708875261322711098",
     sourceUrl:
@@ -1521,6 +1647,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2023-10-27",
+    theme: "AI & ML",
     title: "Deploy Llama 2 in OCI Data Science",
     tweetUrl: "https://x.com/jaredwerba/status/1717933771591209026",
     receipt: true,
@@ -1528,6 +1655,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2023-12-01",
+    theme: "AI & ML",
     title: "What Is Retrieval Augmented Generation",
     tweetUrl: "https://x.com/jaredwerba/status/1730713785340723475",
     receipt: true,
@@ -1535,11 +1663,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2023-12-07",
+    theme: "Data & Databases",
     title: "Data Oriented Design",
     tweetUrl: "https://x.com/jaredwerba/status/1732575258966995131",
   },
   {
     date: "2023-12-07",
+    theme: "AI & ML",
     title: "Models — Machine Learning — Apple Developer",
     tweetUrl: "https://x.com/jaredwerba/status/1732616808514138444",
     receipt: true,
@@ -1547,6 +1677,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2023-12-19",
+    theme: "AI & ML",
     title: "Prompt engineering — OpenAI API",
     tweetUrl: "https://x.com/jaredwerba/status/1737163052934475823",
     receipt: true,
@@ -1554,6 +1685,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2024-03-13",
+    theme: "AI & ML",
     title: "Building Meta’s GenAI Infrastructure",
     tweetUrl: "https://x.com/jaredwerba/status/1767915599748112716",
     receipt: true,
@@ -1561,6 +1693,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2024-05-22",
+    theme: "AI & ML",
     title: "AI Vector Search",
     tweetUrl: "https://x.com/jaredwerba/status/1793312577084129438",
     sourceUrl:
@@ -1570,6 +1703,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2024-06-13",
+    theme: "Networking",
     title: "Reply in the 2019 InfiniBand thread",
     tweetUrl: "https://x.com/jaredwerba/status/1801320252468564208",
     receipt: true,
@@ -1577,16 +1711,19 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2024-06-28",
+    theme: "Cloud & HPC",
     title: "Why is VMware on OCI different",
     tweetUrl: "https://x.com/jaredwerba/status/1806665613479207367",
   },
   {
     date: "2024-07-02",
+    theme: "Cloud & HPC",
     title: "Bring your own model to OCI Data Science AI Quick Actions",
     tweetUrl: "https://x.com/jaredwerba/status/1808158210731159739",
   },
   {
     date: "2024-07-19",
+    theme: "AI & ML",
     title: "Implement Semantic Search in Oracle APEX using AI Vector Search of Oracle Database 23ai",
     tweetUrl: "https://x.com/jaredwerba/status/1814272473631764686",
     receipt: true,
@@ -1594,6 +1731,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2024-07-25",
+    theme: "AI & ML",
     title: "Open-weights genAI models — control & transparency",
     tweetUrl: "https://x.com/jaredwerba/status/1816480103557185617",
     receipt: true,
@@ -1601,11 +1739,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2024-08-02",
+    theme: "Cloud & HPC",
     title: "Databricks vs Snowflake: A Complete 2024 Comparison",
     tweetUrl: "https://x.com/jaredwerba/status/1819451560042418315",
   },
   {
     date: "2024-08-05",
+    theme: "Networking",
     title: "RoCE networks for distributed AI training at scale",
     tweetUrl: "https://x.com/jaredwerba/status/1820550430667276400",
     receipt: true,
@@ -1614,6 +1754,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2024-09-25",
+    theme: "AI & ML",
     title: "Fine-tune and deploy Llama 3.2 models on OCI Data Science",
     tweetUrl: "https://x.com/jaredwerba/status/1839068099586228566",
     receipt: true,
@@ -1621,11 +1762,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2024-09-27",
+    theme: "Cloud & HPC",
     title: "OCI Utilities on Oracle Linux",
     tweetUrl: "https://x.com/jaredwerba/status/1839722472607830446",
   },
   {
     date: "2024-10-28",
+    theme: "Cloud & HPC",
     title: "MacVTap",
     tweetUrl: "https://x.com/jaredwerba/status/1850954241717784689",
     sourceUrl:
@@ -1633,6 +1776,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2024-12-28",
+    theme: "AI & ML",
     title: "OpenAI is running the 2000s Google playbook",
     tweetUrl: "https://x.com/jaredwerba/status/1873060011389133259",
     receipt: true,
@@ -1640,11 +1784,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2024-12-29",
+    theme: "Data & Databases",
     title: "Autonomous Data Management: Andrew Mendelsohn at Oracle OpenWorld 2019",
     tweetUrl: "https://x.com/jaredwerba/status/1873411001133228086",
   },
   {
     date: "2025-02-11",
+    theme: "Data & Databases",
     title: "ZippyDB: Facebook's key value store",
     tweetUrl: "https://x.com/jaredwerba/status/1889345576912736536",
     sourceUrl:
@@ -1652,6 +1798,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2025-03-19",
+    theme: "Networking",
     title: "Quantum-2 InfiniBand Platform",
     tweetUrl: "https://x.com/jaredwerba/status/1902410926500004322",
     sourceUrl:
@@ -1661,6 +1808,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2025-04-12",
+    theme: "GPU & Silicon",
     title: "Overjet training models on GPU clusters",
     tweetUrl: "https://x.com/jaredwerba/status/1911040409079267574",
     receipt: true,
@@ -1668,6 +1816,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2025-05-28",
+    theme: "AI & ML",
     title: "Frontier models will specialise by industry",
     tweetUrl: "https://x.com/jaredwerba/status/1927553249470468536",
     receipt: true,
@@ -1675,6 +1824,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2025-06-04",
+    theme: "Cloud & HPC",
     title: "Oracle Cloud economics",
     tweetUrl: "https://x.com/jaredwerba/status/1930254863448834392",
     sourceUrl:
@@ -1682,6 +1832,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2025-06-18",
+    theme: "GPU & Silicon",
     title: "AMD’s CDNA 4 Architecture Announcement",
     tweetUrl: "https://x.com/jaredwerba/status/1935140753446953245",
     sourceUrl:
@@ -1691,6 +1842,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2025-06-18",
+    theme: "Networking",
     title: "Ultra Ethernet Consortium",
     tweetUrl: "https://x.com/jaredwerba/status/1935141352985215367",
     receipt: true,
@@ -1698,6 +1850,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2025-06-25",
+    theme: "GPU & Silicon",
     title: "Basic facts about GPUs",
     tweetUrl: "https://x.com/jaredwerba/status/1937878665045426178",
     sourceUrl:
@@ -1707,6 +1860,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2025-06-29",
+    theme: "Cloud & HPC",
     title: "I want a good parallel computer",
     tweetUrl: "https://x.com/jaredwerba/status/1939418237856370847",
     sourceUrl:
@@ -1716,6 +1870,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2025-06-30",
+    theme: "AI & ML",
     title: "Advanced Insights: Deploying Intelligence at Scale",
     tweetUrl: "https://x.com/jaredwerba/status/1939806421089919012",
     sourceUrl:
@@ -1723,11 +1878,13 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2025-06-30",
+    theme: "Cloud & HPC",
     title: "Hybrid Search with OCI PostgreSQL",
     tweetUrl: "https://x.com/jaredwerba/status/1939811659704394167",
   },
   {
     date: "2025-07-12",
+    theme: "Cloud & HPC",
     title: "Zettascale Computing — 10^21 FLOPS + OCI Superclusters",
     tweetUrl: "https://x.com/jaredwerba/status/1944083149509587186",
     sourceUrl:
@@ -1737,16 +1894,19 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2025-07-30",
+    theme: "AI & ML",
     title: "Oracle OAC AI Assistant",
     tweetUrl: "https://x.com/jaredwerba/status/1950527498539733026",
   },
   {
     date: "2025-08-03",
+    theme: "Cloud & HPC",
     title: "Oracle GovCloud + Dedicated Region",
     tweetUrl: "https://x.com/jaredwerba/status/1952044569522278687",
   },
   {
     date: "2025-08-05",
+    theme: "Data & Databases",
     title: "Autonomous Database Select AI",
     tweetUrl: "https://x.com/jaredwerba/status/1952532298613588455",
     sourceUrl:
@@ -1754,6 +1914,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2025-08-16",
+    theme: "AI & ML",
     title: "BCI + NeuroLM + screen recording that models engagement",
     tweetUrl: "https://x.com/jaredwerba/status/1956532146060890336",
     receipt: true,
@@ -1761,6 +1922,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2025-09-04",
+    theme: "AI & ML",
     title: "Dylan Patel on GPT-5's router moment, GPUs vs TPUs",
     tweetUrl: "https://x.com/jaredwerba/status/1963407408283124206",
     receipt: true,
@@ -1768,6 +1930,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2025-09-30",
+    theme: "Networking",
     title: "Is this like RDMA or InfiniBand? Is this networking?",
     tweetUrl: "https://x.com/jaredwerba/status/1973006362537074888",
     receipt: true,
@@ -1775,6 +1938,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2026-02-13",
+    theme: "AI & ML",
     title: "GPT-5.3-Codex trains its own successor",
     tweetUrl: "https://x.com/jaredwerba/status/2022410897030041957",
     receipt: true,
@@ -1782,6 +1946,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2026-02-24",
+    theme: "Networking",
     title: "What about unified memory & RDMA tho?",
     tweetUrl: "https://x.com/jaredwerba/status/2026366599729647728",
     receipt: true,
@@ -1789,6 +1954,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2026-03-03",
+    theme: "GPU & Silicon",
     title: "Memory IO is not unified. The M5 Max fuses CPU and GPU memory",
     tweetUrl: "https://x.com/jaredwerba/status/2028939571447103883",
     receipt: true,
@@ -1796,6 +1962,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2026-03-12",
+    theme: "Networking",
     title: "Lights off bc your utilities bill for 24 RDMA Mac studios",
     tweetUrl: "https://x.com/jaredwerba/status/2032087875521565059",
     receipt: true,
@@ -1803,6 +1970,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2026-04-16",
+    theme: "AI & ML",
     title: "Cohere design versus OpenAI: attention to design is all you need",
     tweetUrl: "https://x.com/jaredwerba/status/2044581370593263943",
     receipt: true,
@@ -1810,6 +1978,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2026-04-29",
+    theme: "AI & ML",
     title: "Cohere Command R+ for private RAG",
     tweetUrl: "https://x.com/jaredwerba/status/2049555253440155840",
     receipt: true,
@@ -1817,6 +1986,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2026-05-11",
+    theme: "Memory",
     title: "Static random-access memory",
     tweetUrl: "https://x.com/jaredwerba/status/2053856132741935184",
     sourceUrl:
@@ -1826,6 +1996,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2026-06-28",
+    theme: "AI & ML",
     title: "BM25, the best-matching ranking algorithm",
     tweetUrl: "https://x.com/jaredwerba/status/2071331116045193372",
     sourceUrl:
@@ -1835,6 +2006,7 @@ export const TWEET_LEDGER: TweetLedgerEntry[] = [
   },
   {
     date: "2026-07-10",
+    theme: "GPU & Silicon",
     title: "Unified Memory, Explained: Why Mini PCs Can Run 70B Models a Big GPU Can't",
     tweetUrl: "https://x.com/jaredwerba/status/2075605997830226299",
     sourceUrl:
