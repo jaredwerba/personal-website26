@@ -801,7 +801,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "I worked out the GPU before I rented anything. The weights are 55.6 GB. With the KV cache the model needs 70 to 80 GB. One H200 has 141 GB, so one card was enough. I did not need a cluster and I did not need the eight-GPU shape. That was one calculation, and it saved most of the bill.",
       "I served the first model with vLLM. That is the usual choice and it worked.",
       "vLLM would not serve the second model. It pulled down 65 GiB, then stopped with an error about a module named visual. The checkpoint carries a vision tower, and the text loader takes the language experts and refuses the vision weights. I served the same model with SGLang instead, on the same GPU and the same port. It loaded with no change at all.",
-      "The first model kept cutting its answers off in the middle. That was my limit, not the model. I raised the output token cap and the answers finished.",
+      "The first model kept cutting its answers off in the middle. I raised the output token cap and the answers finished.",
       "Before I deleted the machine I spent an hour making it fast. I changed one setting: how many requests the server keeps in flight at once. I had it at four. I put it at sixty-four.",
     ],
     outcome: [
