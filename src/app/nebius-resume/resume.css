@@ -360,3 +360,104 @@
   .rs a { color: #000; text-decoration: underline; }
   .rs-btn { border: 0; padding: 0; margin-right: 12px; }
 }
+
+/* ===========================================================================
+   The H200 sweep figure. CSS bars rather than a chart library: seven rows of
+   data, and it has to survive being printed.
+   =========================================================================== */
+
+.rs-fig {
+  margin: 22px 0;
+  padding: 18px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--bg-2);
+}
+.rs-fig__cap { font-size: 13px; color: var(--ink-3); margin: 0 0 12px; max-width: none; }
+.rs-fig__cap code { background: #fff; }
+
+.rs-fig__key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  font-size: 12.5px;
+  color: var(--ink-2);
+  margin: 0 0 18px;
+}
+.rs-key { display: inline-block; width: 14px; height: 9px; margin-right: 6px; vertical-align: middle; border-radius: 2px; }
+.rs-key--old { background: #c3cad2; }
+.rs-key--new { background: var(--accent); }
+
+.rs-fig__title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 20px 0 8px;
+}
+.rs-fig__title:first-of-type { margin-top: 0; }
+
+/* Label column, then the paired bars. */
+.rs-fig__grid {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr);
+  gap: 7px 12px;
+  align-items: center;
+}
+.rs-fig__label { font-size: 12.5px; color: var(--ink-3); white-space: nowrap; }
+
+.rs-bars { min-width: 0; }
+.rs-bars__row { display: flex; align-items: center; gap: 8px; }
+.rs-bars__row + .rs-bars__row { margin-top: 3px; }
+.rs-bars__track {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 10px;
+  background: #eef1f4;
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+.rs-bars__fill { position: absolute; inset: 0 auto 0 0; border-radius: 2px; }
+.rs-bars__fill--old { background: #c3cad2; }
+.rs-bars__fill--new { background: var(--accent); }
+.rs-bars__none {
+  position: absolute;
+  inset: 0;
+  font-size: 9px;
+  line-height: 10px;
+  padding-left: 4px;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.rs-bars__val {
+  flex: 0 0 4.4rem;
+  text-align: right;
+  font-size: 12px;
+  color: var(--ink-3);
+  font-variant-numeric: tabular-nums;
+}
+.rs-bars__val--new { color: var(--ink); font-weight: 650; }
+
+.rs-fig__note { font-size: 13px; color: var(--ink-2); margin: 16px 0 0; }
+
+.rs-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12.5px; }
+.rs-nowrap { white-space: nowrap; }
+.rs-same { color: var(--ink-3); font-size: 12px; }
+.rs-unchanged td { color: var(--ink-3); }
+
+@media (max-width: 900px) {
+  .rs-fig { padding: 14px; }
+  .rs-fig__grid { grid-template-columns: 4.6rem minmax(0, 1fr); gap: 6px 8px; }
+  .rs-fig__label { font-size: 11.5px; }
+  .rs-bars__val { flex-basis: 3.6rem; font-size: 11px; }
+}
+
+@media print {
+  .rs-fig { background: #fff; border-color: #ccc; break-inside: avoid; }
+  .rs-bars__fill--new { background: #444 !important; }
+  .rs-bars__fill--old { background: #bbb !important; }
+  .rs-bars__track { background: #f0f0f0 !important; }
+}
