@@ -3693,6 +3693,15 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
   align-items: center;
   gap: var(--ac-space-3);
   margin-bottom: var(--ac-space-2);
+  /* Same measure as the paragraph above it. A bar running twice the width of
+     the prose reads as a different column of the page. The page widens its
+     measure at 1024px, so this tracks it — and both live here, after the
+     media query further up, because media queries add no specificity and the
+     later rule would otherwise win. */
+  max-width: 68ch;
+}
+@media (min-width: 1024px) {
+  .ac-root .nbx-speed__row { max-width: 82ch; }
 }
 .ac-root .nbx-speed__label {
   font-family: var(--ac-font-micro);
