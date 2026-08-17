@@ -3,9 +3,10 @@
 import { useEffect } from "react";
 
 /**
- * Progressive enhancement for the resume. Three jobs, all of which the page
- * reads fine without: highlight the current section in the contents, let any
- * heading be copied as a deep link, and filter the ledger.
+ * Progressive enhancement for the resume. Two jobs, both of which the page reads
+ * fine without: highlight the current section in the contents, and filter the
+ * ledger. Section ids stay in the markup, so #honest and friends remain
+ * linkable without a control on the page.
  *
  * Registered from a client component that renders null, so the page itself
  * stays a server component and keeps its robots: noindex metadata.
@@ -63,26 +64,8 @@ export default function ResumeRuntime() {
     window.addEventListener("resize", onScroll, { passive: true });
     update();
 
-    /* ── Copy a link to any heading ─────────────────────────────────────── */
+    /* ── Ledger filter ─────────────────────────────────────────────────── */
     const onClick = (event: MouseEvent) => {
-      const btn = (event.target as HTMLElement).closest<HTMLElement>("[data-anchor]");
-      if (btn) {
-        const id = btn.getAttribute("data-anchor");
-        if (!id) return;
-        const url = `${location.origin}${location.pathname}#${id}`;
-        history.replaceState(null, "", `#${id}`);
-        // Clipboard needs a secure context. Falling back to the address bar
-        // rather than failing silently.
-        navigator.clipboard?.writeText(url).then(
-          () => {
-            btn.setAttribute("data-copied", "1");
-            window.setTimeout(() => btn.removeAttribute("data-copied"), 1400);
-          },
-          () => {},
-        );
-        return;
-      }
-
       /* ── Ledger filter ───────────────────────────────────────────────── */
       const f = (event.target as HTMLElement).closest<HTMLElement>("[data-filter]");
       if (!f) return;

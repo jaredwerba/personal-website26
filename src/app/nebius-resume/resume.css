@@ -148,23 +148,6 @@
 .rs-blurb { color: var(--ink-3); font-size: 15px; margin: 0 0 22px; }
 .rs p { max-width: 74ch; margin: 0 0 14px; }
 
-/* Anchor links. Present for every heading, so any part of this page can be
-   sent to a colleague on its own. Visible on hover and on keyboard focus. */
-.rs-anchor {
-  font: inherit;
-  font-weight: 400;
-  color: var(--ink-3);
-  background: none;
-  border: 0;
-  padding: 2px 4px;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 120ms ease;
-}
-.rs-h2:hover .rs-anchor,
-.rs-anchor:focus-visible { opacity: 1; }
-.rs-anchor[data-copied="1"] { opacity: 1; color: var(--flag); }
-
 /* --- Bar table ---------------------------------------------------------- */
 
 .rs-tablewrap { overflow-x: auto; margin: 0 0 8px; }
@@ -360,7 +343,6 @@
   /* The TOC becomes a plain block at the top rather than a sticky rail. */
   .rs-toc { position: static; margin: 0 0 30px; padding: 14px 16px; background: var(--bg-2); border: 1px solid var(--rule); border-radius: 6px; }
   .rs-toc__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 2px 14px; }
-  .rs-anchor { display: none; }
   .rs-ledger .rs-theme { display: none; }
   .rs-cap { width: auto; }
   .rs-table { font-size: 14px; }
@@ -370,7 +352,7 @@
 /* --- Print. A hiring manager who prints this should get a clean document. */
 @media print {
   .rs { position: static; overflow: visible; font-size: 11pt; }
-  .rs-bar, .rs-toc, .rs-anchor, .rs-filter { display: none !important; }
+  .rs-bar, .rs-toc, .rs-filter { display: none !important; }
   .rs-wrap { display: block; max-width: none; padding: 0; }
   .rs-card { break-inside: avoid; border-color: #ccc; }
   .rs-card[open] > summary { border-bottom: 1px solid #ccc; }

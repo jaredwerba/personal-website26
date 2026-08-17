@@ -370,7 +370,8 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
   {
     id: "03",
     name: "VENUS",
-    tagline: "Parallel sub-agents that research vendors, then email them under a safety gate.",
+    tagline:
+      "Parallel sub-agents that research wedding vendors, then email each one from my own domain under a safety gate.",
     tier: 1,
     accent: "cyan",
     status: "BUILT // DRY-RUN BY DEFAULT",
@@ -393,6 +394,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "The classifier prompt encodes mistakes I actually made. 'We're not taking a deposit until you confirm the date' is not a decline. Quoted text below an 'On ... wrote:' line is the couple speaking, not the vendor. Both are written into the prompt.",
       "Replaced the framework's built-in web search with a Tavily-backed tool. Built-in search ties research ability to one model vendor, so swapping models would break research with no warning. Backing it with Tavily keeps the capability model-independent.",
       "Layered safety on the one tool with real-world side effects. Approval is graded, not all-or-nothing: an interactive run pauses for a human, an unattended run resolves against pre-authorization and caps so it never parks on a question nobody can answer. Every send re-checks at dispatch, because approval is a gate and not a blank cheque. Three modes — dry run, test inbox, live. Caps per vendor and per day. Cron dispatch fires more than once, so each send carries a lock and an idempotency key.",
+      "Outbound is wired to Resend and it sends real email. Each vendor gets its own generated message — a venue gets a venue enquiry, a florist gets a florist enquiry — written from that vendor's brief rather than from one template. It sends from wedding@jwerba.com, on my own domain, so replies come back to a mailbox I control.",
       "Inbound replies arrive through an svix-verified webhook. A daily cron chases non-responders and handles bounces and complaints.",
     ],
     outcome: [
@@ -491,20 +493,22 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
   {
     id: "06",
     name: "GO DOGS BOSTON",
-    tagline: "A booking platform matching runners with shelter dogs that need the miles.",
+    tagline:
+      "A non-profit idea built as a multi-tenant SaaS: match runners with shelter dogs that need the miles.",
     tier: 2,
     accent: "green",
     status: "LIVE // rundog.boston",
-    signals: ["Integrations", "WebAuthn", "Testing"],
+    signals: ["Multi-tenant SaaS", "Matchmaking", "Platform messaging", "WebAuthn"],
     stack: ["Next.js", "Neon Postgres", "WebAuthn", "Leaflet", "three.js", "Resend"],
     problem:
-      "Shelter dogs need exercise and runners want company, but the logistics kill it: who is running, when, from where, and did anyone confirm. Nothing existed that matched the two sides and handled the scheduling.",
+      "I started this as a non-profit. Shelter dogs need exercise, and some people want a dog before they commit to owning one. Both sides gain, and the logistics stop it: who is running, when, from where, and did anyone confirm. Nothing existed that matched the two sides and handled the scheduling.",
     built: [
       "Group run scheduling and booking, Leaflet route pages, participant management, in-app messaging with unread state, weather, calendar export, and a dog-miles tracker.",
       "Passkey login over iron-session, serverless Postgres on Neon, transactional email through Resend.",
       "Audited my own booking flow, found five bugs in production, then wrote a full end-to-end test for it.",
     ],
     outcome: [
+      "This is the proof that I can build a real SaaS, not a demo. It is multi-tenant, and the matchmaking, the platform messaging and the booking flow are all mine.",
       "Live on its own domain with real pre-launch work done: terms, privacy policy, branded 404, social share image, sitemap and self-serve account deletion.",
       "The end-to-end test exists because I broke my own flow first. Finding five bugs by audit is the reason the harness got written.",
     ],
@@ -546,13 +550,22 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     built: [
       "Google Solar API integration for exact roof geometry, panel placement and a year of sun exposure, drawn as a heatmap over live satellite imagery.",
       "NREL rate lookup, plus a 25-year return model covering SMART 3.0, net metering and state tax credits. It started Massachusetts-specific; I generalized it to all 50 states.",
-      "Nine serverless endpoints, Postgres on Neon, shareable proposal links and an admin view.",
+      "Nine serverless endpoints, Postgres on Neon, and shareable proposal links.",
+      "A management dashboard behind a password. It collects every address anyone has run, with the economic model that came back for each one, so the operator can see demand and results in one place.",
       "Found a Google API key hardcoded in the client and moved it behind serverless proxies. The kind of bug worth fixing before somebody else finds it.",
     ],
     outcome: [
       "A working proposal engine built over one weekend, turning a street address into a full 25-year cost model.",
+      "I proposed it to a real solar business. It was built to be used, not to be shown.",
     ],
-    links: [{ label: "LIVE.SITE", href: "https://sunday-energy.vercel.app", primary: true }],
+    links: [
+      { label: "LIVE.SITE", href: "https://sunday-energy.vercel.app", primary: true },
+      {
+        label: "ADMIN.DASHBOARD",
+        href: "https://sunday-energy.vercel.app/admin",
+        note: "Password: seaport",
+      },
+    ],
   },
   {
     id: "09",
@@ -602,7 +615,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
   },
   {
     id: "11",
-    name: "TRAINER SITE TEMPLATE",
+    name: "EQUINOX PERSONAL TRAINERS — BOOKING SYSTEM",
     tagline: "One client site turned into a reusable template. Second client live in two days.",
     tier: 2,
     accent: "cyan",
@@ -710,7 +723,8 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
   {
     id: "15",
     name: "DEXTER",
-    tagline: "A LangGraph research agent I run in the terminal every day.",
+    tagline:
+      "A LangGraph research agent I ran daily at Oracle to read public company financials and write outbound from them.",
     tier: 3,
     accent: "cyan",
     kind: "operates",
@@ -723,7 +737,8 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "A financial research agent on LangChain and LangGraph, with delegated subagents, an evaluation harness, OpenRouter routing across model providers, and a terminal interface built with Ink.",
     ],
     outcome: [
-      "Running it daily shaped my views on LangGraph before I built my own graph for the Nebius take-home for the take-home. I learned where the prebuilt agent stops being the right abstraction, and why an eval harness needs baselines rather than a single score.",
+      "I ran this at Oracle on my own accounts. It analysed publicly traded companies and generated outbound outreach from their financial data, so the first line of an email came from a filing rather than from a guess.",
+      "Running it daily shaped my views on LangGraph before I built my own graph for the Nebius take-home. I learned where the prebuilt agent stops being the right abstraction, and why an eval harness needs baselines rather than a single score.",
       "Reading and operating other people's agent code is underrated. Most of what I know about failure modes I learned by watching someone else's agent hit them first.",
     ],
     links: [{ label: "SOURCE", href: "https://github.com/virattt/dexter" }],
@@ -731,19 +746,20 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
   {
     id: "16",
     name: "LUNARFORGE",
-    tagline: "A real-time WebGL pipeline in the browser, dressed as a landing page.",
+    tagline:
+      "A weekend WebGPU experiment: a scroll-reveal landing page with PS3-era real-time graphics.",
     tier: 3,
     accent: "cyan",
     status: "LIVE",
     signals: ["Real-time graphics"],
     stack: ["three.js", "GSAP", "Zustand", "Next.js"],
     problem:
-      "I wanted to build a cinematic real-time graphics pipeline in the browser and find out where the frame budget actually goes. A landing page was the excuse.",
+      "A weekend project. I wanted hands-on time with WebGPU and with the current front-end release wave, and I wanted to know where the frame budget actually goes. The look I aimed for is PS3-era real-time graphics. A landing page was the excuse.",
     built: [
       "A PBR render pipeline, a particle simulation of flying lunar dust, a GSAP scroll sequence that assembles a reactor out of that dust, an orbit camera, and hand-built animated SVG scenes using no image files at all.",
     ],
     outcome: [
-      "Pure front-end graphics work. The company is fictional and the site says so.",
+      "A scroll-reveal sequence that holds its frame rate, built on the newest tooling I could find. Pure front-end graphics work, over a weekend. The company is fictional and the site says so.",
     ],
     links: [
       { label: "LIVE.SITE", href: "https://space-forge-taupe.vercel.app/eb", primary: true },

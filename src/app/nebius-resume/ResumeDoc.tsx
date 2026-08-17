@@ -10,8 +10,8 @@ import {
   type TweetLedgerEntry,
 } from "@/lib/nebius-projects";
 import {
-  CLOSING,
   GAPS,
+  GAPS_LEAD,
   HEADER,
   SECTIONS,
   START_HERE,
@@ -57,14 +57,6 @@ function claimOf(proof: string): { tag: string; cls: string } {
   return { tag: "Built", cls: "rs-tag--built" };
 }
 
-function Anchor({ id }: { id: string }) {
-  return (
-    <button type="button" className="rs-anchor" data-anchor={id} title="Copy link to this section">
-      #<span className="rs-sr">Copy link to this section</span>
-    </button>
-  );
-}
-
 function Section({
   id,
   label,
@@ -78,10 +70,7 @@ function Section({
 }) {
   return (
     <section className="rs-sec" id={id} data-section>
-      <h2 className="rs-h2">
-        {label}
-        <Anchor id={id} />
-      </h2>
+      <h2 className="rs-h2">{label}</h2>
       {blurb ? <p className="rs-blurb">{blurb}</p> : null}
       {children}
     </section>
@@ -350,10 +339,7 @@ export default function ResumeDoc() {
 
           {/* ── The gaps ── */}
           <Section id="honest" label={SECTIONS[2].label} blurb={SECTIONS[2].blurb}>
-            <p>
-              Five things I would be learning, not teaching. I would rather you read
-              them from me than find them in the interview.
-            </p>
+            <p>{GAPS_LEAD}</p>
             {GAPS.map((g) => (
               <div key={g.gap} className="rs-card">
                 <div className="rs-card__body">
@@ -509,9 +495,6 @@ export default function ResumeDoc() {
                 ))}
               </tbody>
             </table>
-            {CLOSING.map((p, i) => (
-              <p key={i}>{p}</p>
-            ))}
           </Section>
 
           <footer className="rs-foot">
