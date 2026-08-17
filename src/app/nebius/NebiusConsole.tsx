@@ -37,6 +37,7 @@ const FEATURED = new Set(["01", "02"]);
 const HINTS = [
   "eval harness",
   "vLLM",
+  "SGLang",
   "H200",
   "RAG",
   "Ollama",
