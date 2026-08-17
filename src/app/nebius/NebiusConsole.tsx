@@ -515,7 +515,7 @@ function LedgerDoc() {
 
 export default function NebiusConsole() {
   return (
-    <ac-console className="ac-console" default-doc="01">
+    <ac-console className="ac-console" default-doc="overview">
       {/* Top status bar */}
       <div className="ac-statusbar ac-console__bar" role="status">
         <span className="ac-bar__line">

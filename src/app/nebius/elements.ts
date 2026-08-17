@@ -250,10 +250,17 @@ class AcConsole extends HTMLElement {
     window.addEventListener("hashchange", this.#onHashChange);
 
     // Upgrade from the no-JS state: everything is visible until now.
-    this.#select(this.#docIdFromHash() ?? this.getAttribute("default-doc") ?? "", {
+    const fromHash = this.#docIdFromHash();
+    const id = this.#select(fromHash ?? this.getAttribute("default-doc") ?? "", {
       push: false,
       focus: false,
     });
+    // A bare /nebius resolves to the default doc, so name it in the URL. replace,
+    // not push: the landing view is not a history entry of its own, and back
+    // should leave the page rather than cycle through the opening panel.
+    if (!fromHash && id) {
+      window.history.replaceState(null, "", `#doc-${id}`);
+    }
     this.setAttribute("data-ready", "");
   }
 
@@ -295,9 +302,10 @@ class AcConsole extends HTMLElement {
     if (id) this.#select(id, { push: true, focus: true });
   };
 
-  #select(docId: string, opts: { push: boolean; focus: boolean }) {
+  /** Returns the doc id it settled on, which may not be the one asked for. */
+  #select(docId: string, opts: { push: boolean; focus: boolean }): string | null {
     const docs = Array.from(this.querySelectorAll<HTMLElement>("ac-doc"));
-    if (docs.length === 0) return;
+    if (docs.length === 0) return null;
 
     const wanted =
       docs.find((d) => d.getAttribute("doc-id") === docId) ?? docs[0];
@@ -331,6 +339,8 @@ class AcConsole extends HTMLElement {
       const heading = wanted.querySelector<HTMLElement>("[data-doc-heading]");
       heading?.focus();
     }
+
+    return id;
   }
 }
 
