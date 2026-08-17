@@ -1,0 +1,365 @@
+/* ===========================================================================
+   /nebius-resume — a printable, linkable technical document.
+
+   Scoped entirely to .rs, and rendered inside a fixed, full-viewport layer so
+   the site's black shell and bottom nav do not show through. Every rule here is
+   unlayered on purpose: Tailwind's utilities are layered, and this page needs to
+   win against the shell without fighting specificity.
+   =========================================================================== */
+
+.rs {
+  --ink: #17191c;
+  --ink-2: #40464e;
+  --ink-3: #6b7280;
+  --rule: #e3e6ea;
+  --rule-2: #eef1f4;
+  --bg: #ffffff;
+  --bg-2: #f7f9fa;
+  --link: #0b5cad;
+  --accent: #0b5cad;
+  --flag: #0f7a3d;
+  --warn: #8a5300;
+
+  position: fixed;
+  inset: 0;
+  z-index: 60; /* above the site's fixed bottom nav (z-50) */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.rs *,
+.rs *::before,
+.rs *::after { box-sizing: border-box; }
+
+.rs a { color: var(--link); text-decoration: none; }
+.rs a:hover { text-decoration: underline; }
+.rs a:focus-visible,
+.rs button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.rs code,
+.rs .rs-mono {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.9em;
+}
+.rs code {
+  background: var(--bg-2);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 0.05em 0.32em;
+}
+
+/* --- Shell -------------------------------------------------------------- */
+
+.rs-bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 24px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: saturate(160%) blur(6px);
+  border-bottom: 1px solid var(--rule);
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.rs-bar__name { font-weight: 650; color: var(--ink); font-size: 14px; }
+.rs-bar__sep { color: var(--rule); }
+.rs-bar__right { margin-left: auto; display: flex; gap: 14px; align-items: baseline; }
+
+.rs-wrap {
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr);
+  gap: 48px;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 40px 24px 96px;
+}
+
+/* --- Table of contents -------------------------------------------------- */
+
+.rs-toc { position: sticky; top: 76px; align-self: start; }
+.rs-toc__title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0 0 10px;
+}
+.rs-toc__list { list-style: none; margin: 0; padding: 0; }
+.rs-toc__list a {
+  display: block;
+  padding: 5px 0 5px 12px;
+  border-left: 2px solid var(--rule);
+  color: var(--ink-2);
+  font-size: 14px;
+}
+.rs-toc__list a:hover { color: var(--ink); border-left-color: var(--ink-3); text-decoration: none; }
+/* Scroll-spy. The current section is the only one that gets weight. */
+.rs-toc__list a[aria-current="true"] {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+
+/* --- Sections ----------------------------------------------------------- */
+
+.rs-main { min-width: 0; }
+
+.rs-h1 {
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+.rs-sub { font-size: 18px; color: var(--ink-2); margin: 0 0 4px; }
+.rs-meta { font-size: 14px; color: var(--ink-3); margin: 0 0 34px; }
+.rs-meta a { color: var(--link); }
+
+.rs-sec { scroll-margin-top: 84px; padding-top: 34px; margin-top: 34px; border-top: 1px solid var(--rule); }
+.rs-sec:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
+
+.rs-h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 23px;
+  letter-spacing: -0.01em;
+  font-weight: 680;
+  margin: 0 0 4px;
+}
+.rs-h3 { font-size: 17px; font-weight: 660; margin: 26px 0 6px; }
+.rs-blurb { color: var(--ink-3); font-size: 15px; margin: 0 0 22px; }
+.rs p { max-width: 74ch; margin: 0 0 14px; }
+
+/* Anchor links. Present for every heading, so any part of this page can be
+   sent to a colleague on its own. Visible on hover and on keyboard focus. */
+.rs-anchor {
+  font: inherit;
+  font-weight: 400;
+  color: var(--ink-3);
+  background: none;
+  border: 0;
+  padding: 2px 4px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+.rs-h2:hover .rs-anchor,
+.rs-anchor:focus-visible { opacity: 1; }
+.rs-anchor[data-copied="1"] { opacity: 1; color: var(--flag); }
+
+/* --- Bar table ---------------------------------------------------------- */
+
+.rs-tablewrap { overflow-x: auto; margin: 0 0 8px; }
+.rs-table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+.rs-table th,
+.rs-table td { text-align: left; vertical-align: top; padding: 11px 14px 11px 0; border-bottom: 1px solid var(--rule-2); }
+.rs-table thead th {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 8px;
+}
+.rs-table tbody tr:last-child td { border-bottom: 0; }
+.rs-table__group th {
+  padding-top: 24px;
+  font-size: 12px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  border-bottom: 1px solid var(--rule);
+}
+.rs-cap { width: 26%; font-weight: 600; color: var(--ink); }
+.rs-claim { width: 8.5rem; white-space: nowrap; }
+
+/* Claim level. A word, not a colour-only signal. */
+.rs-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+}
+.rs-tag--built { color: var(--flag); }
+.rs-tag--sold { color: var(--warn); }
+.rs-tag--ops { color: var(--accent); }
+
+/* --- Callout ------------------------------------------------------------ */
+
+.rs-note {
+  border-left: 3px solid var(--accent);
+  background: var(--bg-2);
+  padding: 14px 18px;
+  margin: 0 0 24px;
+  border-radius: 0 4px 4px 0;
+}
+.rs-note p:last-child { margin-bottom: 0; }
+.rs-note__label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 4px;
+}
+
+/* --- Cards -------------------------------------------------------------- */
+
+.rs-cards { display: grid; gap: 14px; margin: 0 0 8px; }
+.rs-card { border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.rs-card > summary {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 13px 16px;
+  cursor: pointer;
+  list-style: none;
+  background: var(--bg);
+}
+.rs-card > summary::-webkit-details-marker { display: none; }
+.rs-card > summary:hover { background: var(--bg-2); }
+.rs-card[open] > summary { border-bottom: 1px solid var(--rule); }
+.rs-card__name { font-weight: 660; font-size: 15.5px; }
+.rs-card__tag { font-size: 13px; color: var(--ink-3); flex: 1 1 auto; min-width: 0; }
+.rs-card__status {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 2px 6px;
+  white-space: nowrap;
+}
+.rs-card__body { padding: 16px; }
+.rs-card__body > *:last-child { margin-bottom: 0; }
+
+.rs-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 14px; }
+.rs-chip {
+  font-size: 11.5px;
+  color: var(--ink-2);
+  background: var(--bg-2);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 2px 7px;
+}
+
+.rs-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 18px 0 6px;
+}
+.rs-card__body ul { margin: 0 0 14px; padding-left: 20px; }
+.rs-card__body li { margin: 0 0 7px; max-width: 74ch; }
+
+.rs-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; }
+.rs-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 11px;
+  border-radius: 4px;
+  border: 1px solid var(--rule);
+  color: var(--link);
+  background: var(--bg);
+}
+.rs-btn:hover { background: var(--bg-2); text-decoration: none; border-color: var(--ink-3); }
+.rs-btn--primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.rs-btn--primary:hover { background: #094a8c; color: #fff; }
+.rs-note-sm { font-size: 12px; color: var(--ink-3); }
+
+/* --- Ledger ------------------------------------------------------------- */
+
+.rs-ledger { font-size: 14px; }
+.rs-ledger .rs-date { width: 6.5rem; white-space: nowrap; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.rs-ledger .rs-theme { width: 9rem; color: var(--ink-3); font-size: 13px; }
+.rs-ledger .rs-open { width: 3.5rem; white-space: nowrap; }
+.rs-why { display: block; color: var(--ink-3); font-size: 13px; margin-top: 2px; }
+.rs-flag { color: var(--flag); font-weight: 700; }
+
+.rs-filter { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+.rs-filter button {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: var(--bg);
+  color: var(--ink-2);
+  cursor: pointer;
+}
+.rs-filter button:hover { border-color: var(--ink-3); }
+.rs-filter button[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* --- Footer ------------------------------------------------------------- */
+
+.rs-foot {
+  margin-top: 48px;
+  padding-top: 22px;
+  border-top: 1px solid var(--rule);
+  font-size: 13px;
+  color: var(--ink-3);
+}
+.rs-foot a { color: var(--link); }
+
+/* --- Narrow ------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .rs-wrap { grid-template-columns: minmax(0, 1fr); gap: 0; padding: 28px 18px 80px; }
+  /* The TOC becomes a plain block at the top rather than a sticky rail. */
+  .rs-toc { position: static; margin: 0 0 30px; padding: 14px 16px; background: var(--bg-2); border: 1px solid var(--rule); border-radius: 6px; }
+  .rs-toc__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 2px 14px; }
+  .rs-anchor { display: none; }
+  .rs-ledger .rs-theme { display: none; }
+  .rs-cap { width: auto; }
+  .rs-table { font-size: 14px; }
+  .rs-table th, .rs-table td { padding-right: 10px; }
+}
+
+/* --- Print. A hiring manager who prints this should get a clean document. */
+@media print {
+  .rs { position: static; overflow: visible; font-size: 11pt; }
+  .rs-bar, .rs-toc, .rs-anchor, .rs-filter { display: none !important; }
+  .rs-wrap { display: block; max-width: none; padding: 0; }
+  .rs-card { break-inside: avoid; border-color: #ccc; }
+  .rs-card[open] > summary { border-bottom: 1px solid #ccc; }
+  .rs-sec { break-before: auto; }
+  .rs a { color: #000; text-decoration: underline; }
+  .rs-btn { border: 0; padding: 0; margin-right: 12px; }
+}

@@ -526,17 +526,13 @@ export default function NebiusConsole() {
           <span>Prepared for: Chris Mulder, Head of Engineering &mdash; AI R&amp;D</span>
         </span>
         <span className="ac-push nbx-barkeys">
-          {/* The escape hatch. Deliberately styled plain rather than as an
-              amber key: it is the one control that is not part of the
-              simulation, and it should not look like it is. */}
-          <button
-            type="button"
-            className="nbx-readability"
-            data-readability-toggle
-            aria-pressed="false"
-          >
+          {/* The escape hatch. A link to the plain-document version of this
+              brief, not an in-page mode — a reader who wants the boring format
+              wants a URL they can forward. Styled plain rather than as an amber
+              key: it is the one control that is not part of the simulation. */}
+          <a className="nbx-readability" href="/nebius-resume">
             READABILITY
-          </button>
+          </a>
           <span className="ac-bar__sep" aria-hidden="true">//</span>
           REC:<span data-match-count>{Object.keys(DOC_META).length}</span>
         </span>

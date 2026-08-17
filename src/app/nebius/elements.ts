@@ -243,28 +243,11 @@ class AcLedger extends HTMLElement {
   }
 }
 
-const READABLE_KEY = "nebius:readable";
-
 /** The shell. Owns which document is showing, and the URL that reflects it. */
 class AcConsole extends HTMLElement {
-  #root: HTMLElement | null = null;
-
   connectedCallback() {
     this.addEventListener("click", this.#onClick);
     window.addEventListener("hashchange", this.#onHashChange);
-
-    this.#root = this.closest(".ac-root");
-
-    // Restore the reader's choice before the first paint of the upgraded view,
-    // so someone who switched to plain text does not get a flash of console.
-    let stored = false;
-    try {
-      stored = window.localStorage.getItem(READABLE_KEY) === "1";
-    } catch {
-      // Private mode or storage disabled. The toggle still works, it just does
-      // not persist, which is not worth failing the page over.
-    }
-    if (stored) this.#applyReadable(true);
 
     // Upgrade from the no-JS state: everything is visible until now.
     this.#select(this.#docIdFromHash() ?? this.getAttribute("default-doc") ?? "", {
@@ -272,42 +255,6 @@ class AcConsole extends HTMLElement {
       focus: false,
     });
     this.setAttribute("data-ready", "");
-  }
-
-  get #readable(): boolean {
-    return this.#root?.hasAttribute("data-readable") ?? false;
-  }
-
-  /** Attribute + button state only. Document visibility is #select's job. */
-  #applyReadable(on: boolean) {
-    if (on) this.#root?.setAttribute("data-readable", "");
-    else this.#root?.removeAttribute("data-readable");
-
-    const btn = this.querySelector<HTMLElement>("[data-readability-toggle]");
-    btn?.setAttribute("aria-pressed", on ? "true" : "false");
-    if (btn) btn.textContent = on ? "CONSOLE VIEW" : "READABILITY";
-  }
-
-  #toggleReadable() {
-    const next = !this.#readable;
-    this.#applyReadable(next);
-    try {
-      window.localStorage.setItem(READABLE_KEY, next ? "1" : "0");
-    } catch {
-      /* see above */
-    }
-    // Re-run selection so the documents match the mode: plain view shows the
-    // whole brief in one scroll, console view goes back to one at a time.
-    const current =
-      this.querySelector<HTMLElement>("ac-doc[data-active]")?.getAttribute("doc-id") ??
-      this.getAttribute("default-doc") ??
-      "";
-    this.#select(current, { push: false, focus: false });
-    if (next) {
-      // Land the reader at the top of the brief, not partway down whichever
-      // document happened to be open.
-      this.#root?.scrollIntoView({ block: "start" });
-    }
   }
 
   disconnectedCallback() {
@@ -329,12 +276,6 @@ class AcConsole extends HTMLElement {
 
   #onClick = (event: MouseEvent) => {
     const el = event.target as HTMLElement;
-
-    if (el.closest("[data-readability-toggle]")) {
-      event.preventDefault();
-      this.#toggleReadable();
-      return;
-    }
 
     // Mobile index drawer.
     if (el.closest("[data-index-toggle]")) {
@@ -362,13 +303,6 @@ class AcConsole extends HTMLElement {
       docs.find((d) => d.getAttribute("doc-id") === docId) ?? docs[0];
     const id = wanted.getAttribute("doc-id") ?? "";
 
-    // Plain view is the whole brief in one scroll, so nothing is hidden. The
-    // active attribute is still tracked, so switching back restores the same
-    // document. Hiding is done here rather than in CSS because a CSS-only hide
-    // would leave aria-hidden="true" behind and keep the text away from a
-    // screen reader in the one mode built for reading.
-    const readable = this.#readable;
-
     // Set `hidden` directly rather than leaning on attributeChangedCallback:
     // that only fires on a *change*, so panels that never carried the attribute
     // would never be told to hide. This also frees us from child-upgrade order.
@@ -376,8 +310,8 @@ class AcConsole extends HTMLElement {
       const active = doc === wanted;
       if (active) doc.setAttribute(ACTIVE_ATTR, "");
       else doc.removeAttribute(ACTIVE_ATTR);
-      doc.hidden = readable ? false : !active;
-      doc.setAttribute("aria-hidden", readable || active ? "false" : "true");
+      doc.hidden = !active;
+      doc.setAttribute("aria-hidden", active ? "false" : "true");
     }
 
     const index = this.querySelector("ac-index") as AcIndex | null;
@@ -390,15 +324,8 @@ class AcConsole extends HTMLElement {
       window.history.pushState(null, "", `#doc-${id}`);
     }
 
-    if (readable) {
-      // Nothing was hidden, so there is no panel to reset. The index and the
-      // START HERE keys become a table of contents instead — without this they
-      // are controls that visibly do nothing.
-      if (opts.push) wanted.scrollIntoView({ block: "start", behavior: "smooth" });
-    } else {
-      const scroller = this.querySelector<HTMLElement>("[data-content-scroll]");
-      if (scroller) scroller.scrollTop = 0;
-    }
+    const scroller = this.querySelector<HTMLElement>("[data-content-scroll]");
+    if (scroller) scroller.scrollTop = 0;
 
     if (opts.focus) {
       const heading = wanted.querySelector<HTMLElement>("[data-doc-heading]");
