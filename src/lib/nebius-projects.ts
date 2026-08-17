@@ -140,9 +140,9 @@ export const CAPABILITIES: Capability[] = [
   // ── Inference ────────────────────────────────────────────────────────────
   {
     group: "Inference",
-    label: "vLLM, SGLang, and sizing the card to the model",
+    label: "vLLM, SGLang, and sizing the GPU to the model",
     proof:
-      "I served a 27B model in BF16 on one Nebius H200 with vLLM 0.27.1, then a 35B mixture-of-experts model on the same card with SGLang. I sized it before renting it: 55.6 GB of weights needs 70 to 80 GB with the KV cache, so one H200 at 141 GB, not the 8-GPU shape and not the L40S at 48 GB. I served with an explicit configuration — bfloat16, a 16384 context, four concurrent sequences, 0.85 memory utilization, the Triton prefill backend, and MTP speculative decoding at three draft tokens — and bound it to localhost behind an SSH tunnel rather than the 0.0.0.0 vLLM defaults to. The second model is why I run two stacks: vLLM rejected its vision-tower weights and SGLang loaded the same repo unchanged.",
+      "I served two models on one Nebius H200. Model 1 is an uncensored Qwen 27B, and I served it with vLLM 0.27.1. Model 2 is an abliterated Qwen 35B mixture of experts, and I served it with SGLang. I sized the GPU before I rented it. Model 1 has 55.6 GB of weights, and it needs 70 to 80 GB with the KV cache. I selected one H200 with 141 GB. I did not select the 8-GPU shape or the L40S with 48 GB. I set each option and did not accept the defaults. These are BF16, a context of 16384 tokens, four concurrent sequences, and 0.85 GPU memory use. I also set the Triton prefill backend and MTP speculative decoding with three draft tokens. I listened on 127.0.0.1 behind an SSH tunnel, because vLLM listens on 0.0.0.0 by default. Model 2 is the reason I use two servers. vLLM refused its vision-tower weights, and SGLang loaded the same repository with no change.",
   },
   {
     group: "Inference",
@@ -274,7 +274,7 @@ export type NebiusProject = {
 export const OVERVIEW: string[] = [
   "This is a technical brief for one conversation. Eighteen projects, ordered by how much they bear on the Forward Deployed Engineer role, not by date. Every entry answers the same three questions: what problem I was solving, what I personally built, and what came of it.",
   "Where the strongest evidence sits, if you only read three: Nebius-XWord is the agent and the eval harness I built to judge it, and it found a gap in the Nebius model catalog along the way. BrainStorm.ai took first place at an MIT-hosted hackathon, running a real model on real hardware. LinkedIn-Automator is the one that ran in production against a live third-party site, and stopped itself when it should have.",
-  "One of these ran on your hardware. I sized and rented an H200, served two models on it — one with vLLM and one with SGLang, because the second checkpoint broke the first loader — and wrote down every place I got stuck. Half of what stopped me was the platform rather than the model. That is under H200 Model Serve.",
+  "One of these ran on your hardware. I sized and rented an H200, and I served two models on it. I served an uncensored Qwen 27B with vLLM, and an abliterated Qwen 35B with SGLang, because the second checkpoint stopped the first server. I wrote down each place where I stopped. Half of the problems came from the platform, not from the models. That record is under H200 Model Serve.",
   "There is also a public trail. I have posted what I was reading since 2017. InfiniBand in 2019. RDMA and GPT-3 in 2020. The dated posts sit under Public Record.",
   "Everything with a live link is running now. Opening one is faster than reading about it.",
 ];
@@ -749,7 +749,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     id: "18",
     name: "H200 MODEL SERVE",
     tagline:
-      "Two models I could not run at home, served on one rented H200 — and the two serving stacks it took.",
+      "Two models on one rented H200. An uncensored Qwen on vLLM, and an abliterated Qwen on SGLang.",
     tier: 1,
     accent: "cyan",
     status: "SERVED // VM STOPPED",
@@ -764,26 +764,29 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "BF16",
     ],
     problem:
-      "I wanted to serve a 27B model whose weights are 55.6 GB in BF16. With the KV cache counted it needs roughly 70 to 80 GB of GPU memory. My MacBook Air M3 has 16 GB of unified memory, so it cannot load it, and the quantized routes did not help: the 4-bit MLX build wants 32 GB and a 12 GB GGUF would swap. The honest answer was that this model needs a real GPU, so I put it on Nebius. Then I did it again with a larger model, and the second one broke the serving stack that worked for the first.",
+      "I wanted to run two large open-weight models. Model 1 is an uncensored Qwen with 27B parameters. Model 2 is an abliterated Qwen with 35B parameters. My computer cannot load either one. My MacBook Air M3 has 16 GB of unified memory. Model 1 needs 70 to 80 GB of GPU memory in BF16. The smaller builds do not solve this. The 4-bit MLX build needs 32 GB. A 12 GB GGUF build swaps to disk. These models need a real GPU, so I rented one from Nebius.",
     built: [
-      "Sized the instance before renting it. I needed 70 to 80 GB, so I took gpu-h200-sxm on the 1gpu-16vcpu-200gb preset: one H200 with 141 GB. I did not take the 8-GPU shape, because one card holds this model, and I did not take the L40S at 48 GB, because it does not. H100 at 80 GB was my fallback. The 200 GB in the preset name is system RAM, not GPU memory, and reading it the other way is how people rent the wrong machine.",
-      "Took preemptible for a first test at about $2.45 an hour, on the Ubuntu 24.04 CUDA 13 image, in us-central1.",
-      "Served the 27B on vLLM 0.27.1 with an explicit configuration rather than defaults: bfloat16, a 16384 context, four concurrent sequences, and 0.85 GPU memory utilization. I turned on the qwen3 reasoning parser, automatic tool choice with the qwen3_coder tool-call parser, the Triton prefill backend for Gated-DeltaNet, and MTP speculative decoding at three draft tokens.",
-      "Bound it to 127.0.0.1 and reached it over an SSH tunnel. An open-weights model on a public IP with no authentication is not something to leave on 0.0.0.0, and vLLM binds there by default.",
-      "Debugged the failure that actually blocked it. vLLM reported that it could not inspect the Qwen3_5ForConditionalGeneration architecture, which reads like an unsupported-model error. It was not. Further down, Triton was compiling a CUDA helper and failing on Python.h: No such file or directory. The fix was python3.12-dev and build-essential. The architecture was supported the whole time.",
-      "Then moved to a 35B mixture-of-experts model with about 3B active parameters, chosen because MoE gives more capacity per token served than the dense 27B at a similar footprint. I passed over a GGUF build of the same size class, because it was a sidegrade rather than a step up.",
-      "vLLM downloaded 65.39 GiB and 20 of 21 shards, then died on ValueError: There is no module or parameter named 'visual' in Qwen3_5Model. The checkpoint carries a vision tower and vLLM 0.27.1 loads the language MoE and rejects the visual weights. I stopped retrying and served the identical repo with SGLang instead, on the same card and the same port, where it loaded. vLLM stayed installed with the 27B as a working fallback rather than being torn out.",
-      "Wrote a small local chat client in the Python standard library — no framework — that proxies to the tunnel, streams the reply, and appends every exchange to disk as both JSONL and Markdown. It looked frozen at first because it only painted delta.content, and a reasoning model emits reasoning_content before it emits any answer.",
-      "Kept the whole thing as a written record while it happened: an overview, a numbered failure log with the cause and the fix for each, a resume-from-here status file, and one note per stretch of work.",
+      "I sized the GPU before I rented it. Model 1 has 55.6 GB of weights in BF16. With the KV cache it needs 70 to 80 GB. I selected gpu-h200-sxm with the 1gpu-16vcpu-200gb preset. This gives one H200 with 141 GB. I did not select the 8-GPU shape, because one GPU holds this model. I did not select the L40S, because 48 GB is too small. The H100 with 80 GB was my second choice.",
+      "The preset name contains 200 GB. That number is the system RAM. It is not the GPU memory. If you read it as GPU memory, you rent the wrong machine.",
+      "I selected a preemptible instance for the first test. The cost is approximately $2.45 per hour. I used the Ubuntu 24.04 image with CUDA 13, in the us-central1 region.",
+      "MODEL 1, ON vLLM. I served AEON-7/Qwen3.8-27B-AEON-ULTIMATE-UNCENSORED-BF16 with vLLM 0.27.1. This model is dense. I set each option and did not accept the defaults: BF16, a context of 16384 tokens, four concurrent sequences, and 0.85 GPU memory use.",
+      "For model 1 I also set the qwen3 reasoning parser and automatic tool choice with the qwen3_coder tool-call parser. I set the Triton prefill backend for Gated-DeltaNet. I set MTP speculative decoding with three draft tokens.",
+      "I set the server to listen on 127.0.0.1, and I connected through an SSH tunnel. vLLM listens on 0.0.0.0 by default. A model on a public address has no authentication in front of it.",
+      "One error stopped model 1 three times. vLLM reported that it cannot examine the Qwen3_5ForConditionalGeneration architecture. That message looks like an unsupported model. It is not the cause. Lower in the log, Triton compiles a CUDA helper and fails, because Python.h is not on the machine. I installed python3.12-dev and build-essential. vLLM supported the model from the start.",
+      "MODEL 2, ON SGLang. I selected Youssofal/Qwen3.6-35B-A3B-Abliterated-Heretic-BF16. It has 35B parameters, but it is a mixture of experts. Approximately 3B parameters are active for each token. This gives more capacity than the dense 27B on the same GPU. I did not select a GGUF build of the same size, because it is not an improvement.",
+      "vLLM cannot serve model 2. It downloaded 65.39 GiB and 20 of 21 shards. Then it stopped with this error: there is no module or parameter named visual in Qwen3_5Model. The checkpoint contains a vision tower. The vLLM text loader takes the language experts and refuses the vision weights.",
+      "I served the same repository with SGLang, on the same GPU and the same port. SGLang loaded the model with no change to the weights. I kept vLLM and model 1 in place as a fallback.",
+      "I wrote a small chat client for my Mac with the Python standard library. It uses no framework. It sends each request through the tunnel, shows the reply, and writes each exchange to disk as JSONL and Markdown. At first the client looked frozen. It showed only delta.content, and a reasoning model sends reasoning_content before it sends an answer.",
+      "I wrote the record while the work continued. It contains an overview and a status file to start again from. It also contains a numbered list of failures. Each failure has a cause and a fix. There is one note for each stretch of work.",
     ],
     outcome: [
-      "Both models served on one H200 and answered through the tunnel. On the 27B, GPU memory settled at about 120 GB of 144 GB, close to what the sizing predicted.",
-      "The lesson I did not expect is that the serving stack is not a free choice. Same weights, same GPU, same port: vLLM refused the 35B and SGLang served it, because the checkpoint carried a vision tower the text loader would not skip. Picking the runtime is part of sizing the deployment, not a detail after it.",
-      "Five of the failures were not model problems at all. They were platform ones: SSH to a 10.x address that only exists inside the VPC, a VM created with no public IP, an SSH key comment pasted into the username field, a public key the textarea wrapped onto two lines, and a default vllm serve with no arguments quietly starting Qwen3-0.6B on 0.0.0.0. A dynamic public IP also disappeared the first time I stopped the VM. Every one of those is friction a first-time user hits before the GPU ever matters.",
-      "The cost trap was storage, not compute. I took a 1280 GiB boot disk where 200 GiB was recommended, and that disk keeps billing while the VM exists, including while it is stopped. Stopping the VM takes the GPU to zero and leaves the disk running.",
-      "Weights stay in the Hugging Face cache on the boot disk, so a restart reloads from disk instead of pulling tens of gigabytes again. Compile and warmup still cost a few minutes.",
-      "These are open weights with the refusal behaviour removed, which is a category you can only run yourself. That is the plainest answer I have to why anyone rents a GPU instead of calling a hosted API, and I now have it first-hand rather than as an argument.",
-      "The write-up is the reusable part. Anyone repeating this on Nebius can skip the Python.h dead end, size the card in one read, know which disk number to change, and know to reach for SGLang when a checkpoint carries weights their loader will not take.",
+      "Both models served on one H200, and both answered through the tunnel. For model 1, GPU memory stayed at approximately 120 GB of 144 GB. This agrees with the size I calculated.",
+      "The server software is not a free choice. The weights, the GPU and the port were the same for model 2. vLLM refused it and SGLang served it. The cause is the vision tower in the checkpoint. Select the server software when you size the deployment, not after it.",
+      "Five failures were not model problems. They were platform problems. I used SSH to a 10.x address, which exists only inside the VPC. I made a VM with no public address. I put the SSH key comment in the username field. The form wrapped my public key onto two lines. A vllm serve command with no arguments started Qwen3-0.6B on 0.0.0.0. The dynamic public address also went away when I stopped the VM. A new user finds all of this before the GPU is important.",
+      "The cost trap is the disk, not the GPU. I selected a 1280 GiB boot disk, and the recommendation is 200 GiB. The disk bills while the VM exists, also when the VM is stopped. When you stop the VM, the GPU cost becomes zero and the disk cost continues.",
+      "The weights stay in the Hugging Face cache on the boot disk. A restart reads them from the disk and does not download them again. The compile and warmup steps still take some minutes.",
+      "Both models have their refusal behaviour removed. You can only run this class of model yourself. This is the clearest reason I know to rent a GPU instead of a call to a hosted API. I know it now from use, not from an argument.",
+      "The written record is the part that other people can use. If you repeat this on Nebius, you can avoid the Python.h error. You can size the GPU in one read. You know which disk number to change. You know to use SGLang when a checkpoint contains weights that your loader refuses.",
     ],
   },
   {
