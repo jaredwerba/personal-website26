@@ -142,7 +142,7 @@ export const CAPABILITIES: Capability[] = [
     group: "Inference",
     label: "vLLM, SGLang, and sizing the GPU to the model",
     proof:
-      "I served two models on one Nebius H200. Model 1 is an uncensored Qwen 27B, and I served it with vLLM 0.27.1. Model 2 is an abliterated Qwen 35B mixture of experts, and I served it with SGLang. I sized the GPU before I rented it. Model 1 has 55.6 GB of weights, and it needs 70 to 80 GB with the KV cache. I selected one H200 with 141 GB. I did not select the 8-GPU shape or the L40S with 48 GB. I set each option and did not accept the defaults. These are BF16, a context of 16384 tokens, four concurrent sequences, and 0.85 GPU memory use. I also set the Triton prefill backend and MTP speculative decoding with three draft tokens. I listened on 127.0.0.1 behind an SSH tunnel, because vLLM listens on 0.0.0.0 by default. Model 2 is the reason I use two servers. vLLM refused its vision-tower weights, and SGLang loaded the same repository with no change.",
+      "I served two models on one Nebius H200. Model 1 is an uncensored Qwen 27B, and I served it with vLLM 0.27.1. Model 2 is an abliterated Qwen 35B mixture of experts, and I served it with SGLang. I sized the GPU before I rented it. Model 1 has 55.6 GB of weights, and it needs 70 to 80 GB with the KV cache. I selected one H200 with 141 GB. I did not select the 8-GPU shape or the L40S with 48 GB. I set each option and did not accept the defaults. These are BF16, a context of 16384 tokens, four concurrent sequences, and 0.85 GPU memory use. I also set the Triton prefill backend and MTP speculative decoding with three draft tokens. I listened on 127.0.0.1 behind an SSH tunnel, because vLLM listens on 0.0.0.0 by default. Model 2 is the reason I use two servers. vLLM refused its vision-tower weights, and SGLang loaded the same repository with no change. Then I measured the serving. A concurrency sweep from 1 to 64 showed my first configuration capping the card at four sequences and about 375 tokens a second. Raising that one flag gave 2,128 tokens a second at 32 concurrent, with time to first token down from 21.1 seconds to 3.8.",
   },
   {
     group: "Inference",
@@ -773,7 +773,14 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     tier: 1,
     accent: "cyan",
     status: "SERVED // VM STOPPED",
-    signals: ["vLLM", "SGLang", "GPU sizing", "Model serving", "Nebius AI Cloud"],
+    signals: [
+      "vLLM",
+      "SGLang",
+      "Batching measured",
+      "GPU sizing",
+      "Model serving",
+      "Nebius AI Cloud",
+    ],
     stack: [
       "Nebius AI Cloud",
       "H200 SXM",
@@ -806,6 +813,12 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "I wrote the record while the work was still moving: an overview, a status file to restart from, and one note per stretch of work. Its spine is a numbered failure list, and every entry carries a cause and a fix.",
     ],
     outcome: [
+      "Then I measured the serving instead of assuming it. I swept concurrency from 1 to 64 on one H200, twice: once with the four-sequence limit I first shipped, and once with sixty-four. 576 requests, no failures.",
+      "The first configuration was leaving the card idle. At four sequences the server pins at about 375 tokens a second however many callers arrive, so the fifth caller onward only waits. Time to first token doubled with every doubling of load: 2.8 seconds, then 5.4, then 10.8, then 21.1.",
+      "One flag fixed both halves at once. At 32 concurrent requests, throughput went from 381 to 2,128 tokens a second, and time to first token went from 21.1 seconds to 3.8. That is 5.6 times the work and 5.5 times the speed, out of the same GPU. Throughput and latency usually trade against each other. They only move together like this when the old setting was starving the hardware.",
+      "Peak measured throughput is 2,848 tokens a second, at 64 concurrent requests. Per-stream output holds between 87 and 104 tokens a second up to 16 concurrent, so sixteen people can share the card without noticing that they do.",
+      "The next limit is not that flag. vLLM reports a maximum concurrency of 36.94x for 16,384-token requests, and that is the KV cache rather than the sequence cap. Aggregate throughput was still rising at 64, but only by 34 percent over 32, which is what approaching that wall looks like. Context length and memory utilisation are the next levers.",
+      "How it was measured, so it can be checked. The harness runs on the VM against localhost, never through the SSH tunnel: Boston to us-central1 adds more round trip than the quantity being measured. Token counts come from the server\'s own usage block, not from counting chunks. Fixed 256-token output, temperature 0, two discarded warmup requests per run. Three requests per concurrency level, so this is a measurement and not a benchmark.",
       "Both models served on the one H200 and answered through the tunnel. Model 1 settled at roughly 120 GB of the 144 GB the card reports, which is the number I sized for. The weights sit in the Hugging Face cache on the boot disk, so a restart reads them instead of downloading them again. Compile and warmup still take minutes: the second start is cheaper, not free.",
       "The serving stack is not a free choice. Same weights, same GPU, same port: vLLM refused model 2 and SGLang served it, over a vision tower riding along in a checkpoint you would file as text-only. Pick the server when you size the deployment, not after the download finishes.",
       "Five of my failures had nothing to do with the models: SSH to a 10.x address that exists only inside the VPC; a VM created with no public address; the SSH key comment pasted into the username field; a form that wrapped my public key onto two lines; and a bare serve command that quietly started Qwen/Qwen3-0.6B, vLLM's default, on 0.0.0.0. The dynamic public address also disappeared the moment I stopped the VM. A new customer can hit any of these before the GPU ever matters, which is why each one is written down with its cause and its fix.",

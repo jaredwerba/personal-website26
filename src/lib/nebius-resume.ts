@@ -40,7 +40,7 @@ export const HEADER = {
 export const SUMMARY: string[] = [
   "I spent ten years at Oracle selling and architecting cloud infrastructure — every OCI IaaS and PaaS product, including GPU compute for training and inference. I ran discovery, architecture reviews, live demos and POC scoping myself. My title was account executive and solutions engineer, combined. I escalated to specialists only when the scope demanded it. That is the customer-facing half of this job, and I have done it for a decade.",
   "You sent me a take-home assignment. The core task was an agent that solves a crossword. I built the test harness before I built the agent, because I wanted to know whether it was good or merely lucky. Then I kept going. I raced the same model against a second provider. I tested 13 models. I ran a full 13x13 grid, 60 entries, end to end.",
-  "Then I put my own money into it. I rented a Nebius H200 and served two models on it. Model 1 is an uncensored Qwen 27B, on vLLM. Model 2 is an abliterated Qwen 35B, on SGLang. I needed two servers, because vLLM refused the second checkpoint.",
+  "Then I put my own money into it. I rented a Nebius H200, served two models on it, and measured what it actually delivered. Model 1 is an uncensored Qwen 27B, on vLLM. Model 2 is an abliterated Qwen 35B, on SGLang. I needed two servers, because vLLM refused the second checkpoint.",
   "I want this job specifically. Not an AI job. This one, at Nebius, because the product is the thing I have been reading about since before it was a market.",
 ];
 
@@ -69,11 +69,11 @@ export const GAPS: Gap[] = [
       "This is the most mechanical gap on the list. I know the objects and why they exist. I do not have the practice of operating them.",
   },
   {
-    gap: "Multi-tenant serving and batching",
+    gap: "Serving for other people",
     standing:
-      "I served two large models on one H200. I sized the GPU before I rented it. But I served them for one person, at four concurrent sequences, behind an SSH tunnel. I have no continuous-batching work. I have no tokens-per-second figure I would defend.",
+      "I have measured the batching now. I swept one H200 from 1 to 64 concurrent requests. My first configuration capped the card at four sequences and about 375 tokens a second. One flag took that to 2,128 tokens a second at 32 concurrent, and cut time to first token from 21.1 seconds to 3.8. What I have still not done is serve anyone but myself. No authentication. No rate limits. No tenancy. Nobody has ever paged me about it.",
     plan:
-      "The measurement is a few hours on a GPU I know how to rent. Until I run it, I will not imply I know the shape of that curve.",
+      "The measurement gap is closed, and the numbers are on this page. The operational gap is not, and that is the half I would be learning from your team.",
   },
   {
     gap: "Distributed systems at real scale",
