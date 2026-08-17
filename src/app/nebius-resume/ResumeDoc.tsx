@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { AGG_MAX, SWEEP, SWEEP_META, TTFT_MAX, TUNED } from "@/lib/h200-sweep";
+import { SPEED, SPEED_META } from "@/lib/h200-sweep";
 import {
   BACKGROUND,
   CAPABILITIES,
@@ -103,109 +103,37 @@ function Links({ links }: { links?: ProjectLink[] }) {
 
 
 /**
- * The H200 sweep, as a figure. Two panels, two series each: the configuration
- * that shipped first, and the one flag that changed. CSS bars rather than a
- * chart library — the data is seven rows and it has to print cleanly.
+ * One comparison, not a report. Two bars, four numbers: what the server did
+ * before I tuned it, and after. The full seven-level sweep lives with the
+ * write-up; a hiring manager needs the point, not the dataset.
  */
-function Bars({
-  a,
-  b,
-  max,
-  unit,
-}: {
-  a: number | null;
-  b: number;
-  max: number;
-  unit: string;
-}) {
-  const w = (v: number) => `${Math.max(1.5, (v / max) * 100)}%`;
-  return (
-    <div className="rs-bars">
-      <div className="rs-bars__row">
-        <span className="rs-bars__track">
-          {a === null ? (
-            <span className="rs-bars__none">not run</span>
-          ) : (
-            <span className="rs-bars__fill rs-bars__fill--old" style={{ width: w(a) }} />
-          )}
-        </span>
-        <span className="rs-bars__val">{a === null ? "—" : `${a}${unit}`}</span>
-      </div>
-      <div className="rs-bars__row">
-        <span className="rs-bars__track">
-          <span className="rs-bars__fill rs-bars__fill--new" style={{ width: w(b) }} />
-        </span>
-        <span className="rs-bars__val rs-bars__val--new">{b}{unit}</span>
-      </div>
-    </div>
-  );
-}
-
-function SweepFigure() {
+function SpeedFigure() {
+  const max = Math.max(SPEED.before.tokensPerSecond, SPEED.after.tokensPerSecond);
   return (
     <figure className="rs-fig">
       <figcaption className="rs-fig__cap">
-        One H200, one model, two configurations. The only difference is
-        <code>--max-num-seqs</code>. {SWEEP_META.requests} requests,{" "}
-        {SWEEP_META.failures} failures.
+        Speed before and after tuning, with {SPEED_META.concurrency} people asking
+        at once. Same GPU, same model, one setting changed.
       </figcaption>
-
-      <div className="rs-fig__key">
-        <span><i className="rs-key rs-key--old" /> max-num-seqs 4 (shipped first)</span>
-        <span><i className="rs-key rs-key--new" /> max-num-seqs 64 (after tuning)</span>
-      </div>
-
-      <p className="rs-fig__title">Output tokens per second — higher is better</p>
-      <div className="rs-fig__grid">
-        {SWEEP.map((r) => (
-          <Fragment key={`agg-${r.concurrency}`}>
-            <span className="rs-fig__label">{r.concurrency} concurrent</span>
-            <Bars a={r.aggA} b={r.aggB} max={AGG_MAX} unit="" />
-          </Fragment>
-        ))}
-      </div>
-
-      <p className="rs-fig__title">Time to first token, p50 — lower is better</p>
-      <div className="rs-fig__grid">
-        {SWEEP.map((r) => (
-          <Fragment key={`ttft-${r.concurrency}`}>
-            <span className="rs-fig__label">{r.concurrency} concurrent</span>
-            <Bars a={r.ttftA} b={r.ttftB} max={TTFT_MAX} unit="s" />
-          </Fragment>
-        ))}
-      </div>
-
+      {[SPEED.before, SPEED.after].map((r, i) => (
+        <div key={r.label} className={`rs-speed${i === 1 ? " rs-speed--after" : ""}`}>
+          <span className="rs-speed__label">{r.label}</span>
+          <span className="rs-speed__track">
+            <span
+              className="rs-speed__fill"
+              style={{ width: `${(r.tokensPerSecond / max) * 100}%` }}
+            />
+          </span>
+          <span className="rs-speed__num">{r.tokensPerSecond.toLocaleString()} tok/s</span>
+          <span className="rs-speed__wait">{r.waitSeconds}s wait</span>
+        </div>
+      ))}
       <p className="rs-fig__note">
-        At four sequences the server stops gaining work above four callers, and
-        the wait grows instead. One flag moved both lines at once. The next
-        limit is the KV cache, which vLLM reports as {SWEEP_META.kvCeiling}.
+        <code>{SPEED_META.flag}</code> went from four requests at a time to
+        sixty-four. Throughput and waiting time usually trade against each other.
+        They both improved here, because the old setting was leaving the card
+        idle. {SPEED_META.requests} requests measured, {SPEED_META.failures} failures.
       </p>
-
-      <p className="rs-fig__title">What I changed</p>
-      <div className="rs-tablewrap">
-        <table className="rs-table">
-          <thead>
-            <tr>
-              <th>Flag</th>
-              <th>From</th>
-              <th>To</th>
-              <th>Why it matters</th>
-            </tr>
-          </thead>
-          <tbody>
-            {TUNED.map((t) => (
-              <tr key={t.flag} className={t.from === t.to ? "rs-unchanged" : undefined}>
-                <td className="rs-mono rs-nowrap">{t.flag}</td>
-                <td className="rs-nowrap">{t.from}</td>
-                <td className="rs-nowrap">
-                  {t.from === t.to ? <span className="rs-same">unchanged</span> : <strong>{t.to}</strong>}
-                </td>
-                <td>{t.effect}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
     </figure>
   );
 }
@@ -238,7 +166,7 @@ function ProjectCard({ project, open }: { project: NebiusProject; open?: boolean
           ))}
         </ul>
 
-        {project.id === "18" ? <SweepFigure /> : null}
+        {project.id === "18" ? <SpeedFigure /> : null}
 
         <p className="rs-label">{operates ? "How I use it" : "Outcome"}</p>
         <ul>

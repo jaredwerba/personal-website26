@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { AGG_MAX, SWEEP, SWEEP_META, TTFT_MAX, TUNED } from "@/lib/h200-sweep";
+import { SPEED, SPEED_META } from "@/lib/h200-sweep";
 import {
   BACKGROUND,
   OVERVIEW,
@@ -188,115 +188,40 @@ function DocShell({
 
 
 /* ─────────────────────────────────────────────────────────────
-   H200 sweep, drawn in the console's own idiom: a bar is a run
-   of cells, the way a mainframe readout would print it. No SVG,
-   no chart library, no client JavaScript.
+   One comparison, not a report. Two bars: the setting I started
+   with, and the setting I finished with. A bar is a run of lit
+   cells, in the console's own idiom — no SVG, no chart library,
+   no client JavaScript.
    ───────────────────────────────────────────────────────────── */
 
-function SweepBar({ value, max, dim }: { value: number | null; max: number; dim?: boolean }) {
-  if (value === null) {
-    return <span className="nbx-bar nbx-bar--none">not run</span>;
-  }
-  const pct = Math.max(1.5, (value / max) * 100);
+function SpeedChart() {
+  const max = Math.max(SPEED.before.tokensPerSecond, SPEED.after.tokensPerSecond);
+  const rows = [SPEED.before, SPEED.after];
   return (
-    <span className={`nbx-bar${dim ? " nbx-bar--dim" : ""}`}>
-      <span className="nbx-bar__fill" style={{ width: `${pct}%` }} />
-    </span>
-  );
-}
-
-function SweepChart() {
-  return (
-    <section className="ac-block nbx-sweep">
+    <section className="ac-block nbx-speed">
       <h3 className="ac-block__title">
-        THROUGHPUT vs CONCURRENCY &mdash; ONE H200, TWO CONFIGURATIONS
+        SPEED, BEFORE AND AFTER &mdash; {SPEED_META.concurrency} PEOPLE ASKING AT ONCE
       </h3>
-
-      <div className="nbx-sweep__key">
-        <span><i className="nbx-swatch nbx-swatch--dim" /> max-num-seqs 4</span>
-        <span><i className="nbx-swatch" /> max-num-seqs 64</span>
-        <span className="ac-push">{SWEEP_META.requests} requests, {SWEEP_META.failures} failures</span>
-      </div>
-
-      <table className="ac-table ac-table--dense nbx-sweeptable">
-        <thead>
-          <tr>
-            <th>Conc</th>
-            <th>Output tokens per second</th>
-            <th className="nbx-sweep__num">seqs 4</th>
-            <th className="nbx-sweep__num">seqs 64</th>
-          </tr>
-        </thead>
-        <tbody>
-          {SWEEP.map((r) => (
-            <tr key={r.concurrency}>
-              <td className="ac-table__num">{r.concurrency}</td>
-              <td className="nbx-sweep__bars">
-                <SweepBar value={r.aggA} max={AGG_MAX} dim />
-                <SweepBar value={r.aggB} max={AGG_MAX} />
-              </td>
-              <td className="nbx-sweep__num">{r.aggA === null ? "\u2014" : r.aggA.toFixed(0)}</td>
-              <td className="nbx-sweep__num nbx-sweep__num--hi">{r.aggB.toFixed(0)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <h3 className="ac-block__title nbx-sweep__second">
-        TIME TO FIRST TOKEN, p50 &mdash; LOWER IS BETTER
-      </h3>
-      <table className="ac-table ac-table--dense nbx-sweeptable">
-        <thead>
-          <tr>
-            <th>Conc</th>
-            <th>Seconds before the first token</th>
-            <th className="nbx-sweep__num">seqs 4</th>
-            <th className="nbx-sweep__num">seqs 64</th>
-          </tr>
-        </thead>
-        <tbody>
-          {SWEEP.map((r) => (
-            <tr key={r.concurrency}>
-              <td className="ac-table__num">{r.concurrency}</td>
-              <td className="nbx-sweep__bars">
-                <SweepBar value={r.ttftA} max={TTFT_MAX} dim />
-                <SweepBar value={r.ttftB} max={TTFT_MAX} />
-              </td>
-              <td className="nbx-sweep__num">{r.ttftA === null ? "\u2014" : `${r.ttftA.toFixed(1)}s`}</td>
-              <td className="nbx-sweep__num nbx-sweep__num--hi">{r.ttftB.toFixed(1)}s</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      <p className="ac-prose nbx-sweep__foot">
-        Both charts are the same two runs. At four sequences the card stops
-        gaining work above concurrency 4, and the wait grows instead. Raising one
-        flag moved both lines at once. The next limit is the KV cache, which vLLM
-        reports as {SWEEP_META.kvCeiling}.
+      {rows.map((r, i) => (
+        <div key={r.label} className={`nbx-speed__row${i === 1 ? " nbx-speed__row--after" : ""}`}>
+          <span className="nbx-speed__label">{r.label}</span>
+          <span className="nbx-speed__track">
+            <span
+              className="nbx-speed__fill"
+              style={{ width: `${(r.tokensPerSecond / max) * 100}%` }}
+            />
+          </span>
+          <span className="nbx-speed__num">
+            {r.tokensPerSecond.toLocaleString()} tok/s
+          </span>
+          <span className="nbx-speed__wait">{r.waitSeconds}s wait</span>
+        </div>
+      ))}
+      <p className="ac-prose nbx-speed__foot">
+        One setting changed: {SPEED_META.flag}, from four requests at a time to
+        sixty-four. Same GPU, same model. {SPEED_META.requests} requests measured,{" "}
+        {SPEED_META.failures} failures.
       </p>
-
-      <h3 className="ac-block__title nbx-sweep__second">WHAT I CHANGED</h3>
-      <table className="ac-table ac-table--dense ac-table--prose nbx-tuned">
-        <thead>
-          <tr>
-            <th>Flag</th>
-            <th className="nbx-sweep__num">From</th>
-            <th className="nbx-sweep__num">To</th>
-            <th>Why it matters</th>
-          </tr>
-        </thead>
-        <tbody>
-          {TUNED.map((t) => (
-            <tr key={t.flag} className={t.from === t.to ? undefined : "ac-table__row--active"}>
-              <td className="nbx-tuned__flag">{t.flag}</td>
-              <td className="nbx-sweep__num">{t.from}</td>
-              <td className="nbx-sweep__num">{t.to}</td>
-              <td>{t.effect}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </section>
   );
 }
@@ -333,7 +258,7 @@ function ProjectDoc({ project }: { project: NebiusProject }) {
         <p className="ac-prose">{project.problem}</p>
       </section>
       <ListBlock label={labels.mid} items={project.built} />
-      {project.id === "18" ? <SweepChart /> : null}
+      {project.id === "18" ? <SpeedChart /> : null}
       <ListBlock label={labels.end} items={project.outcome} />
     </DocShell>
   );

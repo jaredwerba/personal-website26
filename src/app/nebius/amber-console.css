@@ -3680,55 +3680,40 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
    and the theme column earns its place back on a wide, quiet page. */
 
 /* ===========================================================================
-   H200 sweep readout. A bar is a lit run of cells, the way a mainframe
-   readout prints one. Two series per row: the old configuration dim, the new
-   one bright — hierarchy is brightness here, never hue, which is also the
-   framework's rule.
+   H200 speed readout. Two bars, one point: what one setting was costing.
+   A bar is a run of lit cells wearing the same scanline as the rest of the
+   console. Hierarchy is brightness, never hue — the framework's own rule.
    =========================================================================== */
 
-.ac-root .nbx-sweep { margin-top: var(--ac-space-5); }
-.ac-root .nbx-sweep__second { margin-top: var(--ac-space-6); }
+.ac-root .nbx-speed { margin-top: var(--ac-space-5); }
 
-.ac-root .nbx-sweep__key {
-  display: flex;
-  flex-wrap: wrap;
+.ac-root .nbx-speed__row {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr) 7rem 6rem;
   align-items: center;
-  gap: var(--ac-space-4);
+  gap: var(--ac-space-3);
+  margin-bottom: var(--ac-space-2);
+}
+.ac-root .nbx-speed__label {
   font-family: var(--ac-font-micro);
   font-size: var(--ac-type-micro);
   letter-spacing: var(--ac-tracking-micro);
   text-transform: uppercase;
   color: var(--ac-ink-dim);
-  margin-bottom: var(--ac-space-3);
 }
-.ac-root .nbx-swatch {
-  display: inline-block;
-  width: 14px;
-  height: 8px;
-  margin-right: 6px;
-  vertical-align: middle;
-  background: var(--ac-fill);
-  box-shadow: var(--ac-glow-box);
-}
-.ac-root .nbx-swatch--dim { background: var(--ac-stroke-dim); box-shadow: none; }
+.ac-root .nbx-speed__row--after .nbx-speed__label { color: var(--ac-ink-bright); }
 
-/* The bars. Two stacked per cell so the pair reads as one row. */
-.ac-root .nbx-sweep__bars { padding-top: 4px; padding-bottom: 4px; }
-.ac-root .nbx-bar {
-  display: block;
-  height: 9px;
-  margin: 2px 0;
+.ac-root .nbx-speed__track {
+  height: 14px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--ac-stroke-dim);
   position: relative;
   overflow: hidden;
 }
-.ac-root .nbx-bar__fill {
+.ac-root .nbx-speed__fill {
   position: absolute;
   inset: 0 auto 0 0;
-  background: var(--ac-fill);
-  /* The same scanline the rest of the console wears, so a bar looks lit
-     rather than painted. */
+  background-color: var(--ac-stroke-dim);
   background-image: repeating-linear-gradient(
     90deg,
     transparent,
@@ -3736,62 +3721,25 @@ ac-console[data-index-open] .ac-rail__inner { display: block; }
     rgba(0, 0, 0, 0.4) 3px,
     rgba(0, 0, 0, 0.4) 4px
   );
+}
+.ac-root .nbx-speed__row--after .nbx-speed__fill {
+  background-color: var(--ac-fill);
   box-shadow: var(--ac-glow-box);
 }
-.ac-root .nbx-bar--dim .nbx-bar__fill {
-  background-color: var(--ac-stroke-dim);
-  box-shadow: none;
+
+.ac-root .nbx-speed__num,
+.ac-root .nbx-speed__wait { text-align: right; white-space: nowrap; color: var(--ac-ink-dim); }
+.ac-root .nbx-speed__row--after .nbx-speed__num {
+  color: var(--ac-ink-bright);
+  text-shadow: var(--ac-glow-text);
 }
-.ac-root .nbx-bar--none {
-  display: block;
-  height: 9px;
-  margin: 2px 0;
-  font-family: var(--ac-font-micro);
-  font-size: 0.62rem;
-  line-height: 9px;
-  color: var(--ac-ink-faint);
-  letter-spacing: var(--ac-tracking-micro);
-  text-transform: uppercase;
-}
-
-.ac-root .nbx-sweep__num { text-align: right; white-space: nowrap; }
-.ac-root .nbx-sweep__num--hi { color: var(--ac-ink-bright); text-shadow: var(--ac-glow-text); }
-.ac-root .nbx-sweep__foot { margin-top: var(--ac-space-3); color: var(--ac-ink-dim); }
-.ac-root .nbx-tuned__flag { white-space: nowrap; color: var(--ac-ink-bright); }
-
-/* Column widths. These tables sit inside .ac-table-scroll, whose generic rules
-   assume a three or four column ledger, so they are named to the same
-   specificity and win on order. */
-.ac-root .ac-table-scroll .nbx-sweeptable th:first-child,
-.ac-root .ac-table-scroll .nbx-sweeptable td:first-child { width: 3.5rem; }
-.ac-root .ac-table-scroll .nbx-sweeptable th:nth-child(2),
-.ac-root .ac-table-scroll .nbx-sweeptable td:nth-child(2) { width: auto; }
-.ac-root .ac-table-scroll .nbx-sweeptable th:nth-child(3),
-.ac-root .ac-table-scroll .nbx-sweeptable td:nth-child(3),
-.ac-root .ac-table-scroll .nbx-sweeptable th:last-child,
-.ac-root .ac-table-scroll .nbx-sweeptable td:last-child { width: 5rem; }
-
-.ac-root .ac-table-scroll .nbx-tuned th:first-child,
-.ac-root .ac-table-scroll .nbx-tuned td:first-child { width: 12rem; }
-.ac-root .ac-table-scroll .nbx-tuned th:nth-child(2),
-.ac-root .ac-table-scroll .nbx-tuned td:nth-child(2),
-.ac-root .ac-table-scroll .nbx-tuned th:nth-child(3),
-.ac-root .ac-table-scroll .nbx-tuned td:nth-child(3) { width: 5.5rem; }
-.ac-root .ac-table-scroll .nbx-tuned th:last-child,
-.ac-root .ac-table-scroll .nbx-tuned td:last-child { width: auto; }
+.ac-root .nbx-speed__foot { margin-top: var(--ac-space-3); color: var(--ac-ink-dim); }
 
 @media (max-width: 640px) {
-  /* The bars carry the shape; the raw seqs-4 column can go. */
-  .ac-root .ac-table-scroll .nbx-sweeptable th:nth-child(3),
-  .ac-root .ac-table-scroll .nbx-sweeptable td:nth-child(3) { display: none; }
-  .ac-root .ac-table-scroll .nbx-sweeptable th:first-child,
-  .ac-root .ac-table-scroll .nbx-sweeptable td:first-child { width: 2.6rem; }
-  .ac-root .ac-table-scroll .nbx-sweeptable th:last-child,
-  .ac-root .ac-table-scroll .nbx-sweeptable td:last-child { width: 4.2rem; }
-  .ac-root .ac-table-scroll .nbx-tuned th:first-child,
-  .ac-root .ac-table-scroll .nbx-tuned td:first-child { width: 8.5rem; }
-  .ac-root .ac-table-scroll .nbx-tuned th:nth-child(2),
-  .ac-root .ac-table-scroll .nbx-tuned td:nth-child(2),
-  .ac-root .ac-table-scroll .nbx-tuned th:nth-child(3),
-  .ac-root .ac-table-scroll .nbx-tuned td:nth-child(3) { display: none; }
+  .ac-root .nbx-speed__row {
+    grid-template-columns: 3.4rem minmax(0, 1fr) 5.4rem;
+    gap: var(--ac-space-2);
+  }
+  /* The wait figure moves under the bar rather than off the edge. */
+  .ac-root .nbx-speed__wait { grid-column: 2 / -1; text-align: left; font-size: 0.8em; }
 }
