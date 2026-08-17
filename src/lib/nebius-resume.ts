@@ -39,10 +39,8 @@ export const HEADER = {
 /** The elevator version. Every claim below is linked further down the page. */
 export const SUMMARY: string[] = [
   "I spent ten years at Oracle selling and architecting cloud infrastructure — every OCI IaaS and PaaS product, including GPU compute for training and inference. I ran discovery, architecture reviews, live demos and POC scoping myself. My title was account executive and solutions engineer, combined. I escalated to specialists only when the scope demanded it. That is the customer-facing half of this job, and I have done it for a decade.",
-  "You sent me a take-home assignment. The core task was an agent that solves a crossword. I built that, and then I kept going. I raced the same model against a second provider. I tested 13 models. I ran a full 13x13 grid, 60 entries, end to end.",
+  "You sent me a take-home assignment. The core task was an agent that solves a crossword. I built the test harness before I built the agent, because I wanted to know whether it was good or merely lucky. Then I kept going. I raced the same model against a second provider. I tested 13 models. I ran a full 13x13 grid, 60 entries, end to end.",
   "Then I put my own money into it. I rented a Nebius H200 and served two models on it. Model 1 is an uncensored Qwen 27B, on vLLM. Model 2 is an abliterated Qwen 35B, on SGLang. I needed two servers, because vLLM refused the second checkpoint.",
-  "One of them is in commercial use. A Boston running coach runs his booking and pipeline on GoalsRun and sells sessions through it.",
-  "I will not claim depth I do not have. I have never run Kubernetes in production. I have not shipped an SDK. My serving work is for one operator, not for many. What I do have is a decade of reading the same subject in public. InfiniBand in 2019. RDMA in 2020. RoCE in 2024. Ultra Ethernet in 2025. And a habit of building the thing instead of bookmarking it.",
   "I want this job specifically. Not an AI job. This one, at Nebius, because the product is the thing I have been reading about since before it was a market.",
 ];
 
@@ -104,8 +102,8 @@ export const GAPS: Gap[] = [
 export const START_HERE: { id: string; name: string; why: string }[] = [
   {
     id: "01",
-    name: "Nebius-XWord",
-    why: "The agent, and the eval harness I built before choosing anything. An empty solver must score 0% and an oracle solver 100%, or the scorer itself is broken. It also found a gap in your model catalog: DeepSeek V4 Flash advertises no tool support, so it cannot drive a tool-calling agent.",
+    name: "Nebius-XWord — start with the eval harness",
+    why: "I built the harness before I chose a model. Four solvers run through one scorer. An empty solver must score 0% and an oracle solver must score 100%, or the scorer itself is broken. A third solver fills real interlocking words while ignoring every clue, and scores about 9% — that is the floor, and anything above it is what the model contributed by reading. Then the agent: a hand-built LangGraph, four tools, and a stop rule that fires on a submit call rather than on silence. Measuring first also found a gap in your catalog: DeepSeek V4 Flash advertises no tool support, so it cannot drive a tool-calling agent at all.",
   },
   {
     id: "18",

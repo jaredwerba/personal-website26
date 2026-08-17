@@ -45,6 +45,15 @@ export const CAPABILITIES: Capability[] = [
   // ── AI Applications ──────────────────────────────────────────────────────
   {
     group: "AI Applications",
+    label: "Evaluation",
+    proof:
+      "The eval harness runs four solvers through one scorer. An empty solver must score 0%. An oracle solver must score 100%. If either misses, the scorer is broken. The resume orchestrator gate is a different thing: it is rule-based, it reports document defects, and it refuses to judge quality. I built a model self-score into it once, then deleted it, because a model grading its own output is not a test.",
+    links: [
+      { label: "XWORD.SOURCE", href: "https://github.com/jaredwerba/Nebius-XWord" },
+    ],
+  },
+  {
+    group: "AI Applications",
     label: "Agentic systems and tool calling",
     proof:
       "Nebius-XWord is a hand-built LangGraph agent. It has four tools, and a stop rule that fires on a submit call, not on silence. LinkedIn-Automator is the one that ran in production, against a live third-party site, and it stopped itself when it should have. career-ops and my resume skills give a model a defined tool surface, and they hold it to that surface.",
@@ -64,15 +73,6 @@ export const CAPABILITIES: Capability[] = [
         primary: true,
         note: "Vercel password: fernwood2027",
       },
-    ],
-  },
-  {
-    group: "AI Applications",
-    label: "Evaluation",
-    proof:
-      "The eval harness runs four solvers through one scorer. An empty solver must score 0%. An oracle solver must score 100%. If either misses, the scorer is broken. The resume orchestrator gate is a different thing: it is rule-based, it reports document defects, and it refuses to judge quality. I built a model self-score into it once, then deleted it, because a model grading its own output is not a test.",
-    links: [
-      { label: "XWORD.SOURCE", href: "https://github.com/jaredwerba/Nebius-XWord" },
     ],
   },
   {
