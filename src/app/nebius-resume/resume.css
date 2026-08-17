@@ -295,8 +295,23 @@
   background: var(--bg);
 }
 .rs-btn:hover { background: var(--bg-2); text-decoration: none; border-color: var(--ink-3); }
-.rs-btn--primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-.rs-btn--primary:hover { background: #094a8c; color: #fff; }
+
+/* The colour has to be set through `a.rs-btn`, not `.rs-btn`. Nearly every
+   button here is an anchor, and the scoped link rule `.rs a` is (0,1,1) while a
+   bare `.rs-btn--primary` is (0,1,0) — so the link colour won and the filled
+   buttons rendered blue text on a blue fill. Naming the element in the selector
+   takes it to (0,2,1) and settles it. */
+.rs a.rs-btn,
+.rs button.rs-btn { color: var(--link); }
+.rs .rs-btn--primary,
+.rs a.rs-btn--primary,
+.rs button.rs-btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.rs a.rs-btn--primary:hover,
+.rs button.rs-btn--primary:hover { background: #094a8c; color: #fff; }
 .rs-note-sm { font-size: 12px; color: var(--ink-3); }
 
 /* --- Ledger ------------------------------------------------------------- */

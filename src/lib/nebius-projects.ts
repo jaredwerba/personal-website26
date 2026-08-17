@@ -557,11 +557,12 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
   {
     id: "09",
     name: "GOALSRUN",
-    tagline: "Booking and pipeline for an elite Boston runner's coaching business.",
+    tagline:
+      "A profitable SaaS. Booking and pipeline for an elite Boston runner's coaching business.",
     tier: 2,
     accent: "green",
-    status: "LIVE",
-    signals: ["Scheduled jobs", "WebAuthn"],
+    status: "LIVE // PROFITABLE SAAS",
+    signals: ["Profitable SaaS", "Scheduled jobs", "WebAuthn"],
     stack: ["Next.js", "Drizzle", "Postgres", "better-auth", "Vercel Cron"],
     problem:
       "A coach taking bookings by DM loses sessions to scheduling friction and has no view of their own pipeline. Slots also have to exist far enough ahead that someone can plan around them.",
@@ -570,6 +571,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "Passkey login, a partners and sponsors surface, and two admin views: one for running the day, one for running the business.",
     ],
     outcome: [
+      "It is a profitable SaaS. It earns more than it costs to run, which makes it the one claim on this page that a market made rather than I did.",
       "73 commits on a real feature-branch workflow. Each commit message names the exact production bug it fixes.",
     ],
     links: [{ label: "LIVE.SITE", href: "https://www.goalslopes.run", primary: true }],

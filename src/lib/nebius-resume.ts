@@ -40,6 +40,7 @@ export const HEADER = {
 export const SUMMARY: string[] = [
   "I spent ten years at Oracle selling and architecting cloud infrastructure — every OCI IaaS and PaaS product, including GPU compute for training and inference. I ran discovery, architecture reviews and POC scoping myself, as a combined account executive and solutions engineer, and I escalated to specialists only when scope demanded it. That is the customer-facing half of this job, and I have done it for a decade.",
   "The engineering half I have been building on my own, in public, and I would rather show it than describe it. A tool-calling agent and the eval harness I wrote to judge it. An agent that ran in production against a live third-party site and stopped itself when someone replied. A 27B model served on a rented Nebius H200 with vLLM, and a 35B abliterated model served with SGLang on the same card after vLLM refused its checkpoint.",
+  "One of them earns money. GoalsRun is a profitable SaaS — a booking and pipeline product for an elite Boston runner's coaching business, running on a daily cron with passkey login. It is the only thing on this page that a market validated instead of me.",
   "I am not going to claim depth I do not have. I have never run Kubernetes in production, I have not shipped an SDK, and my serving work is single-operator rather than multi-tenant. What I do have is a decade of reading the same subject in public — InfiniBand in 2019, RDMA in 2020, RoCE in 2024, Ultra Ethernet in 2025 — and a habit of building the thing rather than bookmarking it.",
   "I want this job specifically. Not an AI job. This one, at Nebius, because the product is the thing I have been reading about since before it was a market.",
 ];
@@ -123,6 +124,11 @@ export const VERIFY: { label: string; detail: string; href?: string }[] = [
   {
     label: "Running software",
     detail: "Twelve deployments are live right now. Every one is linked from its project below.",
+  },
+  {
+    label: "A product that earns",
+    detail: "GoalsRun is a profitable SaaS, built and run by me, for a real coaching business.",
+    href: "https://www.goalslopes.run",
   },
   {
     label: "The hackathon result",
