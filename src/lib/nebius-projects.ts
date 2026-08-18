@@ -146,7 +146,7 @@ export const CAPABILITIES: Capability[] = [
     group: "Inference",
     label: "vLLM, SGLang, and sizing the GPU to the model",
     proof:
-      "I served two models on one Nebius H200. Model 1 is an uncensored Qwen 27B, and I served it with vLLM 0.27.1. Model 2 is an abliterated Qwen 35B mixture of experts, and I served it with SGLang. I sized the GPU before I rented it. Model 1 has 55.6 GB of weights, and it needs 70 to 80 GB with the KV cache. I selected one H200 with 141 GB. I did not select the 8-GPU shape or the L40S with 48 GB. I set each option and did not accept the defaults. These are BF16, a context of 16384 tokens, four concurrent sequences, and 0.85 GPU memory use. Model 2 is the reason I use two servers. vLLM refused its vision-tower weights, and SGLang loaded the same repository with no change. Then I measured the serving. A concurrency sweep from 1 to 64 showed my first configuration capping the card at four sequences and about 375 tokens a second. Raising that one flag gave 2,128 tokens a second at 32 concurrent, with time to first token down from 21.1 seconds to 3.8.",
+      "I served two models on one Nebius H200. Model 1 is an uncensored Qwen 27B, and I served it with vLLM 0.27.1. Model 2 is an abliterated Qwen 35B mixture of experts, and I served it with SGLang. I sized the GPU before I rented it. Model 1 has 55.6 GB of weights, and it needs 70 to 80 GB with the KV cache. I selected one H200 with 141 GB. I did not select the 8-GPU shape or the L40S with 48 GB. I set each option and did not accept the defaults. These are BF16, a context of 16384 tokens, four concurrent sequences, and 0.85 GPU memory use. Model 2 is the reason I use two servers. vLLM refused its vision-tower weights, and SGLang loaded the same repository with no change. Then I measured the serving. A concurrency sweep from 1 to 64 showed my first configuration capping the card at four sequences and 381 tokens a second. Raising that one flag gave 2,128 tokens a second at 32 concurrent, with time to first token down from 21.1 seconds to 3.8.",
   },
   {
     group: "Inference",
@@ -620,7 +620,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     ],
     outcome: [
       "Running in production on its own domain, with the booking flow, auth and scheduled jobs all live.",
-      "The Whoop client is the direct product of running someone else's Whoop MCP server daily the Whoop MCP server. Using their implementation made the tradeoffs in mine obvious.",
+      "The Whoop client is the direct product of running someone else's Whoop MCP server daily. Using their implementation made the tradeoffs in mine obvious.",
     ],
   },
   {
@@ -727,7 +727,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     ],
     outcome: [
       "I run it as a connected MCP server most days, and that is where my practical feel for the protocol comes from: how a tool's schema shapes what a model will actually call, how much description a tool needs before it gets used correctly, and what token lifecycle management looks like when an agent rather than a human is the consumer.",
-      "It set the bar for my own Whoop OAuth client on jwerba.com on jwerba.com. Using someone else's implementation daily made the tradeoffs in mine much clearer.",
+      "It set the bar for my own Whoop OAuth client on jwerba.com. Using someone else's implementation daily made the tradeoffs in mine much clearer.",
     ],
     links: [
       { label: "SOURCE", href: "https://github.com/shashankswe2020-ux/whoop-mcp" },
