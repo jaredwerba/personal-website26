@@ -458,6 +458,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "One part failed and I own it. I built an acceptance-rate tracker, its scraper broke, and it reported zero every time. Knowing which of your own numbers to trust is part of the job.",
     ],
     links: [
+      { label: "WATCH.THE.DEMO", href: "https://www.jwerba.com/software" },
       { label: "SOURCE", href: "https://github.com/jaredwerba/linkedin-automator" },
     ],
   },
