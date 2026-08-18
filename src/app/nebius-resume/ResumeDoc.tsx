@@ -11,8 +11,6 @@ import {
   type TweetLedgerEntry,
 } from "@/lib/nebius-projects";
 import {
-  GAPS,
-  GAPS_LEAD,
   HEADER,
   SECTIONS,
   START_HERE,
@@ -49,6 +47,10 @@ const WORK_GROUPS: { title: string; note: string; ids: string[] }[] = [
 ];
 
 const byId = new Map(NEBIUS_PROJECTS.map((p) => [p.id, p]));
+
+/** Look sections up by id. Positional access silently relabels everything
+ *  after any section that gets removed. */
+const sec = (id: string) => SECTIONS.find((x) => x.id === id) ?? { label: "", blurb: undefined };
 
 /** Claim level, read off the copy rather than stored twice. */
 function claimOf(proof: string): { tag: string; cls: string } {
@@ -309,8 +311,8 @@ export default function ResumeDoc() {
           {/* ── Against your bar ── */}
           <Section
             id="bar"
-            label={SECTIONS[1].label}
-            blurb={SECTIONS[1].blurb}
+            label={sec("bar").label}
+            blurb={sec("bar").blurb}
           >
             <div className="rs-note">
               <p className="rs-note__label">How to read the claim column</p>
@@ -376,22 +378,8 @@ export default function ResumeDoc() {
             </div>
           </Section>
 
-          {/* ── The gaps ── */}
-          <Section id="honest" label={SECTIONS[2].label} blurb={SECTIONS[2].blurb}>
-            <p>{GAPS_LEAD}</p>
-            {GAPS.map((g) => (
-              <div key={g.gap} className="rs-card">
-                <div className="rs-card__body">
-                  <p className="rs-label">{g.gap}</p>
-                  <p>{g.standing}</p>
-                  {g.plan ? <p className="rs-note-sm">{g.plan}</p> : null}
-                </div>
-              </div>
-            ))}
-          </Section>
-
           {/* ── Work ── */}
-          <Section id="work" label={SECTIONS[3].label} blurb={SECTIONS[3].blurb}>
+          <Section id="work" label={sec("work").label} blurb={sec("work").blurb}>
             <p className="rs-note-sm">
               {NEBIUS_PROJECTS.length} projects · {liveCount} deployments running right
               now · every heading below expands.
@@ -417,7 +405,7 @@ export default function ResumeDoc() {
           </Section>
 
           {/* ── Ledger ── */}
-          <Section id="record" label={SECTIONS[4].label} blurb={SECTIONS[4].blurb}>
+          <Section id="record" label={sec("record").label} blurb={sec("record").blurb}>
             <p>
               I have posted what I was reading since 2017. It is not a portfolio, and
               it does not prove I can build anything. What it proves is that the
@@ -492,7 +480,7 @@ export default function ResumeDoc() {
           </Section>
 
           {/* ── Background ── */}
-          <Section id="background" label={SECTIONS[5].label} blurb={SECTIONS[5].blurb}>
+          <Section id="background" label={sec("background").label} blurb={sec("background").blurb}>
             <ul>
               {BACKGROUND.map((b, i) => (
                 <li key={i}>{b}</li>
@@ -511,7 +499,7 @@ export default function ResumeDoc() {
           </Section>
 
           {/* ── Verify ── */}
-          <Section id="verify" label={SECTIONS[6].label}>
+          <Section id="verify" label={sec("verify").label}>
             <table className="rs-table">
               <tbody>
                 {VERIFY.map((v) => (
