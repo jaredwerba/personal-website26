@@ -73,13 +73,17 @@ export const CAPABILITIES: Capability[] = [
         primary: true,
         note: "Vercel password: fernwood2027",
       },
+      {
+        label: "CAREER-OPS.DASHBOARD",
+        href: "https://careerops-jobboard-public.vercel.app",
+      },
     ],
   },
   {
     group: "AI Applications",
     label: "RAG and retrieval",
     proof:
-      "COVE is RAG end to end over live dispensary menus. A trimmed slice — strain-matched, deduped, eight per shop — goes into the prompt at request time. Separately, I sold Cohere ReRank at Oracle as a retrieval solution. That is a sold claim, not a built one, and it is where I learned what re-ranking changes about the text that reaches a prompt.",
+      "COVE is RAG end to end over live dispensary menus. Live inventory menus from Leafly are saved to a database first, and answers are grounded in that data once it is integrated. A trimmed slice — strain-matched, deduped, eight per shop — goes into the prompt at request time. Separately, I sold Cohere ReRank at Oracle as a retrieval solution. That is a sold claim, not a built one, and it is where I learned what re-ranking changes about the text that reaches a prompt.",
     links: [
       { label: "COVEBUD.COM", href: "https://www.covebud.com", primary: true },
       { label: "COHERE.RERANK", href: "https://cohere.com/rerank" },
@@ -170,7 +174,7 @@ export const CAPABILITIES: Capability[] = [
     group: "Integrations",
     label: "OAuth and webhooks, built",
     proof:
-      "I wrote OAuth 2.0 by hand, on jwerba.com and against the WHOOP API. I built signed inbound webhooks in Venus. I integrated Google Solar, NREL, and Stripe Connect in Train247 and Sunday Energy.",
+      "I knew to use OAuth 2.0 and webhooks. I wrote OAuth 2.0 on jwerba.com and against the WHOOP API. I built signed inbound webhooks in Venus. I integrated Google Solar, NREL, and Stripe Connect in Train247 and Sunday Energy.",
     links: [
       { label: "SUNDAY-ENERGY", href: "https://sunday-energy.vercel.app", primary: true },
     ],
@@ -351,7 +355,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "A pipeline that reads 6-channel EEG at 250Hz from an OpenBCI Ultracortex headset, runs it through NeuroLM, and outputs an attention score, an engagement score and a 512-number embedding for every 1 to 10 second window.",
       "Content matching. The system compares a live embedding against embeddings from past videos and suggests the content that best holds that person's attention.",
       "A wearable camera on a Seeed XIAO ESP32S3 board. It takes a photo the moment attention or engagement crosses a threshold, pairing the neural signal with what the person was actually looking at.",
-      "brain-storm.ai, the public site. I built and shipped it alone in the six days after the event: 28 commits, the v0.0/v1.0 roadmap, signup, analytics, animation and a full mobile pass.",
+      "brain-storm.ai, the public site. I built the entire site in six hours, right after we got the POC working: signup, analytics, animation and a full mobile pass. The UI was a driving factor in why it blew out the competition.",
       "The hard problems were physical. EEG readings corrupted mid-capture. The capture software was unreliable. Wiring model output into a live frontend took real work, and so did getting WiFi up on the XIAO board.",
     ],
     outcome: [
@@ -363,6 +367,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     ],
     links: [
       { label: "LIVE.SITE", href: "https://www.brain-storm.ai", primary: true },
+      { label: "LIVE.DEMO", href: "https://www.brain-storm.ai/upload" },
       { label: "DEVPOST", href: "https://devpost.com/software/brainstorm-jcko3f" },
       { label: "SOURCE", href: "https://github.com/jaredwerba/aughacks" },
     ],
@@ -478,7 +483,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "A nightly cron syncs every shop, writes one blob per shop to Redis with a 90-day expiry, and isolates failures per shop: one dead menu records an error against that shop and the run continues.",
       "Only a trimmed slice reaches the model — strain-matched items, deduped to the cheapest price per strain, capped at eight per shop. A 700-item menu contributes about a line of text. The rest of the context is the user's saved preferences and the three nearest licensed stores by real distance when location is shared.",
       "Every read is wrapped so a failure returns empty rather than throwing. If Redis is unreachable the assistant loses stock data and keeps answering.",
-      "The system prompt is sectioned — persona, style, format, safety, data — so one can be tuned without disturbing the others. Safety is enforced there: 21 or older, no medical or dosing advice, no speculation beyond the injected data. Temperature pinned at 0.7, output capped at 800 tokens.",
+      "The system prompt is sectioned — persona, style, format, safety, data — so one can be tuned without disturbing the others. Safety is enforced there, and the system prompt adheres to all Vermont state regulations: 21 or older, no medical or dosing advice, no speculation beyond the injected data. Temperature pinned at 0.7, output capped at 800 tokens.",
     ],
     outcome: [
       "At peak the pipeline held about 2,055 products across 10 dispensaries, roughly 1,439 of them through the Leafly connector. Verified end to end: a sync run reporting 681 normalized products, trail badges showing count and sync age, and the assistant answering 'where can I find Blue Dream right now' with two named shops and their prices.",
@@ -615,7 +620,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
   },
   {
     id: "11",
-    name: "EQUINOX PERSONAL TRAINERS — BOOKING SYSTEM",
+    name: "PERSONAL TRAINER TEMPLATE",
     tagline: "One client site turned into a reusable template. Second client live in two days.",
     tier: 2,
     accent: "cyan",
@@ -657,6 +662,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     ],
     outcome: [
       "Running on a schedule through launchd since July: 7,598 job rows across 2,220 companies and 28 job-board systems.",
+      "I use my home AI lab, with Hermes, to crawl new job postings.",
       "The scheduling fix has its own story. The job ran once at 8am, and if the machine was asleep the run simply did not happen, with no warning. That cost six days before I caught it.",
     ],
     links: [
@@ -665,6 +671,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
         href: "https://careerops-jobboard-public.vercel.app",
         primary: true,
       },
+      { label: "SOURCE", href: "https://github.com/santifer/career-ops" },
     ],
   },
   {
