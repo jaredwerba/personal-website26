@@ -135,6 +135,12 @@
 .rs-sec { scroll-margin-top: 84px; padding-top: 34px; margin-top: 34px; border-top: 1px solid var(--rule); }
 .rs-sec:first-of-type { border-top: 0; margin-top: 0; padding-top: 0; }
 
+/* Retired section ids stay linkable. #honest pointed at a section that has
+   since been removed; the argument it made now lives in the claim column of
+   "Against your bar", so the old link lands there. Zero height, so it changes
+   nothing about the layout, and .rs-main is plain block flow with no gap. */
+.rs-anchor { display: block; height: 0; scroll-margin-top: 84px; }
+
 .rs-h2 {
   display: flex;
   align-items: center;

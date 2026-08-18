@@ -62,21 +62,27 @@ function claimOf(proof: string): { tag: string; cls: string } {
 
 function Section({
   id,
+  alias,
   label,
   blurb,
   children,
 }: {
   id: string;
+  /** A retired id that used to point somewhere else. Keeps old links working. */
+  alias?: string;
   label: string;
   blurb?: string;
   children: React.ReactNode;
 }) {
   return (
-    <section className="rs-sec" id={id} data-section>
-      <h2 className="rs-h2">{label}</h2>
-      {blurb ? <p className="rs-blurb">{blurb}</p> : null}
-      {children}
-    </section>
+    <>
+      {alias ? <span id={alias} className="rs-anchor" aria-hidden="true" /> : null}
+      <section className="rs-sec" id={id} data-section>
+        <h2 className="rs-h2">{label}</h2>
+        {blurb ? <p className="rs-blurb">{blurb}</p> : null}
+        {children}
+      </section>
+    </>
   );
 }
 
@@ -311,6 +317,7 @@ export default function ResumeDoc() {
           {/* ── Against your bar ── */}
           <Section
             id="bar"
+            alias="honest"
             label={sec("bar").label}
             blurb={sec("bar").blurb}
           >

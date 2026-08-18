@@ -3,10 +3,10 @@
 import { useEffect } from "react";
 
 /**
- * Progressive enhancement for the resume. Two jobs, both of which the page reads
- * fine without: highlight the current section in the contents, and filter the
- * ledger. Section ids stay in the markup, so #honest and friends remain
- * linkable without a control on the page.
+ * Progressive enhancement for the resume. Two jobs, both of which the page
+ * reads fine without: highlight the current section in the contents, and
+ * filter the ledger. Retired section ids are handled in the markup instead,
+ * as real anchors — see .rs-anchor.
  *
  * Registered from a client component that renders null, so the page itself
  * stays a server component and keeps its robots: noindex metadata.
@@ -66,7 +66,6 @@ export default function ResumeRuntime() {
 
     /* ── Ledger filter ─────────────────────────────────────────────────── */
     const onClick = (event: MouseEvent) => {
-      /* ── Ledger filter ───────────────────────────────────────────────── */
       const f = (event.target as HTMLElement).closest<HTMLElement>("[data-filter]");
       if (!f) return;
       const mode = f.getAttribute("data-filter");
