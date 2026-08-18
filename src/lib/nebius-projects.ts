@@ -79,7 +79,7 @@ export const CAPABILITIES: Capability[] = [
     group: "AI Applications",
     label: "RAG and retrieval",
     proof:
-      "COVE is RAG end to end over live dispensary menus. A trimmed slice — strain-matched, deduped, eight per shop — goes into the prompt at request time. A separate retrieval pipeline uses Cohere ReRank, which reorders results by relevance after the first search returns them.",
+      "COVE is RAG end to end over live dispensary menus. A trimmed slice — strain-matched, deduped, eight per shop — goes into the prompt at request time. Separately, I sold Cohere ReRank at Oracle as a retrieval solution. That is a sold claim, not a built one, and it is where I learned what re-ranking changes about the text that reaches a prompt.",
     links: [
       { label: "COVEBUD.COM", href: "https://www.covebud.com", primary: true },
       { label: "COHERE.RERANK", href: "https://cohere.com/rerank" },
@@ -142,7 +142,7 @@ export const CAPABILITIES: Capability[] = [
     group: "Inference",
     label: "vLLM, SGLang, and sizing the GPU to the model",
     proof:
-      "I served two models on one Nebius H200. Model 1 is an uncensored Qwen 27B, and I served it with vLLM 0.27.1. Model 2 is an abliterated Qwen 35B mixture of experts, and I served it with SGLang. I sized the GPU before I rented it. Model 1 has 55.6 GB of weights, and it needs 70 to 80 GB with the KV cache. I selected one H200 with 141 GB. I did not select the 8-GPU shape or the L40S with 48 GB. I set each option and did not accept the defaults. These are BF16, a context of 16384 tokens, four concurrent sequences, and 0.85 GPU memory use. I also set the Triton prefill backend and MTP speculative decoding with three draft tokens. I listened on 127.0.0.1 behind an SSH tunnel, because vLLM listens on 0.0.0.0 by default. Model 2 is the reason I use two servers. vLLM refused its vision-tower weights, and SGLang loaded the same repository with no change. Then I measured the serving. A concurrency sweep from 1 to 64 showed my first configuration capping the card at four sequences and about 375 tokens a second. Raising that one flag gave 2,128 tokens a second at 32 concurrent, with time to first token down from 21.1 seconds to 3.8.",
+      "I served two models on one Nebius H200. Model 1 is an uncensored Qwen 27B, and I served it with vLLM 0.27.1. Model 2 is an abliterated Qwen 35B mixture of experts, and I served it with SGLang. I sized the GPU before I rented it. Model 1 has 55.6 GB of weights, and it needs 70 to 80 GB with the KV cache. I selected one H200 with 141 GB. I did not select the 8-GPU shape or the L40S with 48 GB. I set each option and did not accept the defaults. These are BF16, a context of 16384 tokens, four concurrent sequences, and 0.85 GPU memory use. Model 2 is the reason I use two servers. vLLM refused its vision-tower weights, and SGLang loaded the same repository with no change. Then I measured the serving. A concurrency sweep from 1 to 64 showed my first configuration capping the card at four sequences and about 375 tokens a second. Raising that one flag gave 2,128 tokens a second at 32 concurrent, with time to first token down from 21.1 seconds to 3.8.",
   },
   {
     group: "Inference",

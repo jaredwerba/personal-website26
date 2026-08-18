@@ -16,7 +16,7 @@ export type ResumeSection = {
 
 export const SECTIONS: ResumeSection[] = [
   { id: "summary", label: "In one minute" },
-  { id: "bar", label: "Against your bar", blurb: "Your five technical areas, in your order, with the evidence for each." },
+  { id: "bar", label: "Against your bar", blurb: "The five areas in your job posting, in your order, and what I have built against each one." },
   { id: "honest", label: "What I would have to learn", blurb: "The gaps, named before you find them." },
   { id: "work", label: "Selected work", blurb: "Eighteen projects. What the problem was, what I built, what came of it." },
   { id: "record", label: "The public record", blurb: "153 dated posts. The interconnect thread runs seven years." },
@@ -39,9 +39,8 @@ export const HEADER = {
 /** The elevator version. Every claim below is linked further down the page. */
 export const SUMMARY: string[] = [
   "I spent ten years at Oracle selling and architecting cloud infrastructure — every OCI IaaS and PaaS product, including GPU compute for training and inference. I ran discovery, architecture reviews, live demos and POC scoping myself. My title was account executive and solutions engineer, combined. I escalated to specialists only when the scope demanded it. That is the customer-facing half of this job, and I have done it for a decade.",
-  "You sent me a take-home assignment. The core task was an agent that solves a crossword. I built the test harness before I built the agent, because I wanted to know whether it was good or merely lucky. Then I kept going. I raced the same model against a second provider. I tested 13 models. I ran a full 13x13 grid, 60 entries, end to end.",
-  "Then I put my own money into it. I rented a Nebius H200, served two models on it, and measured what it actually delivered. Model 1 is an uncensored Qwen 27B, on vLLM. Model 2 is an abliterated Qwen 35B, on SGLang. I needed two servers, because vLLM refused the second checkpoint.",
-  "I want this job specifically. Not an AI job. This one, at Nebius, because the product is the thing I have been reading about since before it was a market.",
+  "I rented a Nebius H200, served two models on it, and measured what it actually delivered. Model 1 is an uncensored Qwen 27B, on vLLM. Model 2 is an abliterated Qwen 35B, on SGLang. I needed two servers, because vLLM refused the second checkpoint.",
+  "I have been interested in high performance computing since before it was an industry, and I have a public track record that shows it. InfiniBand in 2019. RDMA in 2020. RoCE in 2024. That is why I want this job at Nebius, and not simply an AI job.",
 ];
 
 /**
@@ -93,8 +92,7 @@ export const GAPS: Gap[] = [
     gap: "Years with the title engineer",
     standing:
       "Ten years of my resume says account executive. The work was technical: architecture reviews, POC scoping, live demos, Oracle Cloud Architect certified twice, the first AE at Oracle to earn it. The title was not technical, and I will not pretend it was.",
-    plan:
-      "The projects on this page are my argument, and you can inspect all of them. I would rather be judged on those than on a job title.",
+    plan: "",
   },
 ];
 

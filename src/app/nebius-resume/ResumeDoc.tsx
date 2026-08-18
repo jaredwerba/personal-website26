@@ -262,7 +262,7 @@ export default function ResumeDoc() {
               <p key={i}>{p}</p>
             ))}
 
-            <h3 className="rs-h3">If you only open three things</h3>
+            <h3 className="rs-h3">Three projects most relevant to this role</h3>
             <div className="rs-cards">
               {START_HERE.map((s) => {
                 const p = byId.get(s.id);
@@ -319,8 +319,7 @@ export default function ResumeDoc() {
                 <span className="rs-tag rs-tag--sold">Sold</span> is Oracle work I
                 architected and sold but did not operate.{" "}
                 <span className="rs-tag rs-tag--ops">Operate</span> is software I run
-                daily that someone else wrote. I keep these separate on purpose —
-                nothing here should fail a follow-up question.
+                daily that someone else wrote. I keep these separate on purpose.
               </p>
             </div>
 
@@ -385,7 +384,7 @@ export default function ResumeDoc() {
                 <div className="rs-card__body">
                   <p className="rs-label">{g.gap}</p>
                   <p>{g.standing}</p>
-                  <p className="rs-note-sm">{g.plan}</p>
+                  {g.plan ? <p className="rs-note-sm">{g.plan}</p> : null}
                 </div>
               </div>
             ))}
