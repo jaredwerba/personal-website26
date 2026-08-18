@@ -1,15 +1,17 @@
 import { Fragment } from "react";
 import { SPEED, SPEED_META } from "@/lib/h200-sweep";
 import {
-  BACKGROUND,
-  CAPABILITIES,
-  NEBIUS_PROJECTS,
   TWEET_LEDGER_FULL,
   TWEET_THEMES,
   type NebiusProject,
   type ProjectLink,
   type TweetLedgerEntry,
 } from "@/lib/nebius-projects";
+import {
+  RESUME_BACKGROUND as BACKGROUND,
+  RESUME_CAPABILITIES as CAPABILITIES,
+  RESUME_PROJECTS as NEBIUS_PROJECTS,
+} from "@/lib/nebius-resume-content";
 import {
   HEADER,
   SECTIONS,
@@ -326,9 +328,9 @@ export default function ResumeDoc() {
               <p>
                 <span className="rs-tag rs-tag--built">Built</span> is code I wrote.{" "}
                 <span className="rs-tag rs-tag--sold">Sold</span> is Oracle work I
-                architected and sold but did not operate.{" "}
+                architected and sold but didn&rsquo;t operate.{" "}
                 <span className="rs-tag rs-tag--ops">Operate</span> is software I run
-                daily that someone else wrote. I keep these separate on purpose.
+                daily that someone else wrote.
               </p>
             </div>
 
@@ -414,12 +416,12 @@ export default function ResumeDoc() {
           {/* ── Ledger ── */}
           <Section id="record" label={sec("record").label} blurb={sec("record").blurb}>
             <p>
-              I have posted what I was reading since 2017. It is not a portfolio, and
-              it does not prove I can build anything. What it proves is that the
-              interest is old and the direction was right:{" "}
+              I&rsquo;ve posted what I was reading since 2017. It doesn&rsquo;t prove
+              I can build anything — it shows the interest is old and the direction
+              was right:{" "}
               <strong>InfiniBand in 2019, RDMA in July 2020, GPT-3 in August 2020,
               RoCE for distributed training in 2024, Ultra Ethernet in 2025.</strong>{" "}
-              Every row links to the original post, and X shows the exact timestamp.
+              Every row links to the original post, and X shows the timestamp.
             </p>
             <div className="rs-filter" data-ledger-filter>
               <button type="button" data-filter="rel" aria-pressed="true">
@@ -494,13 +496,14 @@ export default function ResumeDoc() {
               ))}
             </ul>
             <div className="rs-note">
-              <p className="rs-note__label">Why this is relevant rather than a detour</p>
+              <p className="rs-note__label">Why Oracle matters here</p>
               <p>
                 A Forward Deployed Engineer sits with a partner&rsquo;s engineers and
-                makes their product work on someone else&rsquo;s platform. I have done
-                the customer-facing half of that for ten years, on infrastructure, with
-                CTOs, under a quota. What I have added since is the engineering half.
-                Most candidates have to learn the first part on the job.
+                makes their product work on someone else&rsquo;s platform. I&rsquo;ve
+                done the customer-facing half of that for ten years — on
+                infrastructure, with CTOs, under a quota. The engineering half is
+                what I&rsquo;ve added since. Most candidates have to learn the first
+                part on the job.
               </p>
             </div>
           </Section>
@@ -538,9 +541,8 @@ export default function ResumeDoc() {
               <a href="/nebius">console version of this page</a>
             </p>
             <p className="rs-note-sm">
-              Written for one conversation. Unlisted and not indexed. Every fact on this
-              page comes from the same source file as the console version, so the two
-              cannot disagree.
+              Written for one conversation. Unlisted and not indexed. The console
+              version shows the same work.
             </p>
           </footer>
         </main>
