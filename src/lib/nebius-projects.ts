@@ -206,6 +206,7 @@ export const CAPABILITIES: Capability[] = [
         label: "CAREER-OPS.DASHBOARD",
         href: "https://careerops-jobboard-public.vercel.app",
       },
+      { label: "MY.FORK", href: "https://github.com/jaredwerba/career-ops" },
     ],
   },
   {
@@ -238,6 +239,9 @@ export const CAPABILITIES: Capability[] = [
       { label: "DAVIDWILLFIT.COM", href: "https://www.davidwillfit.com", primary: true },
       { label: "NICKSCALIHEALTH.COM", href: "https://www.nickscalihealth.com", primary: true },
       { label: "LUNARFORGE", href: "https://space-forge-taupe.vercel.app/eb", primary: true },
+      { label: "COVEBUD.COM", href: "https://www.covebud.com", primary: true },
+      { label: "TRAIN247.FIT", href: "https://train247.fit", primary: true },
+      { label: "GOALSRUN", href: "https://www.goalslopes.run", primary: true },
     ],
   },
 ];
@@ -672,6 +676,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
         primary: true,
       },
       { label: "SOURCE", href: "https://github.com/santifer/career-ops" },
+      { label: "MY.FORK", href: "https://github.com/jaredwerba/career-ops" },
     ],
   },
   {
