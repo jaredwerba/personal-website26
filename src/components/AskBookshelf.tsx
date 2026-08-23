@@ -219,10 +219,55 @@ export default function AskBookshelf() {
         )}
 
         {!loading && !result && !error && (
-          <div className="text-nerv-mid-gray/70">
-            Ask a question about 15 years of my reading — 459 books, 2,821 Kindle
-            highlights. Genie turns it into SQL and runs it live against Delta
-            tables in my Databricks lakehouse.
+          <div className="text-nerv-mid-gray/70 space-y-3">
+            <p>
+              Ask a question about 15 years of my reading — 459 books, 2,821 Kindle
+              highlights. Genie turns it into SQL and runs it live against Delta
+              tables in my Databricks lakehouse.
+            </p>
+
+            <div>
+              <div className="text-[9px] tracking-[0.2em] text-nerv-cyan/70 mb-1">
+                DATABRICKS SERVICES IN USE
+              </div>
+              <ul className="space-y-0.5 text-[10px]">
+                <li>
+                  <span className="text-nerv-orange/80">GENIE</span> — makes SQL
+                  from English questions
+                </li>
+                <li>
+                  <span className="text-nerv-orange/80">SERVERLESS SQL WAREHOUSE</span>{" "}
+                  — runs the queries
+                </li>
+                <li>
+                  <span className="text-nerv-orange/80">UNITY CATALOG</span> —
+                  controls access to the data (workspace.reading)
+                </li>
+                <li>
+                  <span className="text-nerv-orange/80">DELTA LAKE</span> — stores
+                  the tables
+                </li>
+                <li>
+                  <span className="text-nerv-orange/80">UC VOLUMES</span> — holds
+                  the raw CSV and JSON files
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <div className="text-[9px] tracking-[0.2em] text-nerv-cyan/70 mb-1">
+                HOW THIS WORKS
+              </div>
+              {/* Written in ASD-STE100 Simplified Technical English. */}
+              <ol className="space-y-0.5 text-[10px] list-none">
+                <li>1. You write a question in English.</li>
+                <li>2. The website sends your question to Databricks Genie.</li>
+                <li>3. Genie makes an SQL query from your question.</li>
+                <li>4. A serverless SQL warehouse runs the query on Delta tables.</li>
+                <li>5. Unity Catalog controls the access to the tables.</li>
+                <li>6. The website shows the answer, the SQL, and the data.</li>
+              </ol>
+            </div>
           </div>
         )}
       </div>
