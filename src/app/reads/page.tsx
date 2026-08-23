@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Badge } from "@mdrbx/nerv-ui";
 import Highlights from "@/components/Highlights";
+import AskBookshelf from "@/components/AskBookshelf";
 
 interface BookEntry {
   title: string;
@@ -143,11 +144,12 @@ function SortIndicator({ active, dir }: { active: boolean; dir: SortDir }) {
   return <span className="text-nerv-orange ml-1">{dir === "asc" ? "↑" : "↓"}</span>;
 }
 
-type Tab = "books" | "highlights";
+type Tab = "books" | "highlights" | "ask";
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "books", label: "BOOKS" },
   { id: "highlights", label: "HIGHLIGHTS" },
+  { id: "ask", label: "ASK" },
 ];
 
 export default function ReadsPage() {
@@ -160,6 +162,8 @@ export default function ReadsPage() {
   // Highlights are ~900 KB, so they only load once someone opens the tab. Once
   // mounted they stay mounted, which keeps the shuffle and scroll on tab flips.
   const [highlightsOpened, setHighlightsOpened] = useState(false);
+  // Ask stays mounted once opened so an in-flight Genie answer survives tab flips.
+  const [askOpened, setAskOpened] = useState(false);
 
   useEffect(() => {
     fetch("/goodreads.csv")
@@ -224,6 +228,7 @@ export default function ReadsPage() {
               onClick={() => {
                 setTab(id);
                 if (id === "highlights") setHighlightsOpened(true);
+                if (id === "ask") setAskOpened(true);
               }}
               aria-pressed={active}
               className={`relative px-3 py-1.5 font-nerv-display text-[11px] tracking-[0.18em] transition-colors ${
@@ -244,6 +249,12 @@ export default function ReadsPage() {
       {highlightsOpened && (
         <div hidden={tab !== "highlights"}>
           <Highlights />
+        </div>
+      )}
+
+      {askOpened && (
+        <div hidden={tab !== "ask"}>
+          <AskBookshelf />
         </div>
       )}
 
