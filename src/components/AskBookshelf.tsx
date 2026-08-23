@@ -228,44 +228,28 @@ export default function AskBookshelf() {
 
             <div>
               <div className="text-[9px] tracking-[0.2em] text-nerv-cyan/70 mb-1">
-                DATABRICKS SERVICES IN USE
-              </div>
-              <ul className="space-y-0.5 text-[10px]">
-                <li>
-                  <span className="text-nerv-orange/80">GENIE</span> — makes SQL
-                  from English questions
-                </li>
-                <li>
-                  <span className="text-nerv-orange/80">SERVERLESS SQL WAREHOUSE</span>{" "}
-                  — runs the queries
-                </li>
-                <li>
-                  <span className="text-nerv-orange/80">UNITY CATALOG</span> —
-                  controls access to the data (workspace.reading)
-                </li>
-                <li>
-                  <span className="text-nerv-orange/80">DELTA LAKE</span> — stores
-                  the tables
-                </li>
-                <li>
-                  <span className="text-nerv-orange/80">UC VOLUMES</span> — holds
-                  the raw CSV and JSON files
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <div className="text-[9px] tracking-[0.2em] text-nerv-cyan/70 mb-1">
                 HOW THIS WORKS
               </div>
               {/* Written in ASD-STE100 Simplified Technical English. */}
               <ol className="space-y-0.5 text-[10px] list-none">
-                <li>1. You write a question in English.</li>
-                <li>2. The website sends your question to Databricks Genie.</li>
-                <li>3. Genie makes an SQL query from your question.</li>
-                <li>4. A serverless SQL warehouse runs the query on Delta tables.</li>
-                <li>5. Unity Catalog controls the access to the tables.</li>
-                <li>6. The website shows the answer, the SQL, and the data.</li>
+                <li>
+                  1. You write a question in English. The website sends it to{" "}
+                  <span className="text-nerv-orange/80">GENIE</span>.
+                </li>
+                <li>
+                  2. <span className="text-nerv-orange/80">GENIE</span> makes an
+                  SQL query and sends it to a{" "}
+                  <span className="text-nerv-orange/80">
+                    SERVERLESS SQL WAREHOUSE
+                  </span>
+                  .
+                </li>
+                <li>
+                  3. The warehouse runs the query on{" "}
+                  <span className="text-nerv-orange/80">DELTA LAKE</span> tables.{" "}
+                  <span className="text-nerv-orange/80">UNITY CATALOG</span>{" "}
+                  controls the access to the data.
+                </li>
               </ol>
             </div>
           </div>
