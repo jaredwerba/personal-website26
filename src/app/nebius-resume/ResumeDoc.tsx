@@ -29,7 +29,7 @@ const WORK_GROUPS: { title: string; note: string; ids: string[] }[] = [
   {
     title: "Agentic systems and evaluation",
     note: "Where my depth is. Every one of these is code I wrote.",
-    ids: ["01", "03", "04", "13", "05"],
+    ids: ["01", "19", "03", "04", "13", "05"],
   },
   {
     title: "Inference and GPU",
@@ -279,6 +279,11 @@ export default function ResumeDoc() {
                 if (!p) return null;
                 const primary = (p.links ?? []).find((l) => l.primary);
                 const source = (p.links ?? []).find((l) => /github/.test(l.href));
+                // The model repos are the evidence for project 18, not a
+                // footnote, so every Hugging Face link surfaces up here too.
+                const weights = (p.links ?? []).filter(
+                  (l) => l !== primary && l !== source && /huggingface\.co/.test(l.href),
+                );
                 return (
                   <div key={s.id} className="rs-card">
                     <div className="rs-card__body">
@@ -305,6 +310,17 @@ export default function ResumeDoc() {
                             Source
                           </a>
                         ) : null}
+                        {weights.map((w) => (
+                          <a
+                            key={w.href}
+                            className="rs-btn"
+                            href={w.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {w.label}
+                          </a>
+                        ))}
                         <a className="rs-btn" href={`#p-${s.id}`}>
                           Read the write-up
                         </a>

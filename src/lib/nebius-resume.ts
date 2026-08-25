@@ -18,7 +18,7 @@ export type ResumeSection = {
 export const SECTIONS: ResumeSection[] = [
   { id: "summary", label: "In one minute" },
   { id: "bar", label: "Against your bar", blurb: "The five areas in your job posting, in your order, and what I've built against each one." },
-  { id: "work", label: "Selected work", blurb: "Eighteen projects. What the problem was, what I built, what came of it." },
+  { id: "work", label: "Selected work", blurb: "Nineteen projects. What the problem was, what I built, what came of it." },
   { id: "record", label: "The public record", blurb: "153 dated posts. The interconnect thread runs seven years." },
   { id: "background", label: "Background", blurb: "Ten years at Oracle, on the other side of this conversation." },
   { id: "verify", label: "How to check any of this" },
@@ -39,7 +39,7 @@ export const HEADER = {
 /** The elevator version. Every claim below is linked further down the page. */
 export const SUMMARY: string[] = [
   "I spent ten years at Oracle selling and architecting cloud infrastructure — every OCI IaaS and PaaS product, including GPU compute for training and inference. I ran discovery, architecture reviews, live demos and POC scoping myself, and escalated to specialists only when the scope demanded it. My title was account executive and solutions engineer, combined. That's the customer-facing half of this job, and I've done it for a decade.",
-  "I rented a Nebius H200 with my own money, sized the card before I rented it, and served two models on it: an uncensored Qwen 27B on vLLM and an abliterated Qwen 35B on SGLang — two servers, because vLLM refused the second checkpoint. Then I measured what it actually delivered, and tuning one setting took it from 381 tokens a second to 2,128.",
+  "I rented a Nebius H200 with my own money, sized the card before I rented it, and served two models on it: AEON-7/Qwen3.8-27B-AEON-ULTIMATE-UNCENSORED-BF16 on vLLM and Youssofal/Qwen3.6-35B-A3B-Abliterated-Heretic-BF16 on SGLang — two servers, because vLLM refused the second checkpoint. Then I measured what it actually delivered, and tuning one setting took it from 381 tokens a second to 2,128.",
   "I've been reading and posting about this stack — interconnects, GPUs, HPC — since 2017, and the public record below has the dated posts. That's why I want this job at Nebius specifically, and not just an AI job.",
 ];
 
@@ -48,12 +48,12 @@ export const START_HERE: { id: string; name: string; why: string }[] = [
   {
     id: "01",
     name: "Nebius-XWord — start with the eval harness",
-    why: "I built the harness before I chose a model. Four solvers run through one scorer. An empty solver must score 0% and an oracle solver must score 100%, or the scorer itself is broken. A third solver fills real interlocking words while ignoring every clue and scores about 9% — that's the floor, and anything above it is what the model contributed by reading. Then the agent: a hand-built LangGraph, four tools, and a stop rule that fires on a submit call rather than on silence. Measuring first also turned up a gap in your catalog: DeepSeek V4 Flash advertises no tool support, so it can't drive a tool-calling agent at all.",
+    why: "I built the harness before I chose a model. Four solvers run through one scorer. An empty solver must score 0% and an oracle solver must score 100%, or the scorer itself is broken. A third solver fills real interlocking words while ignoring every clue and scores about 9% — that's the floor, and anything above it is what the model contributed by reading. Then the agent: a hand-built LangGraph, four tools, and a stop rule that fires on a submit call rather than on silence. Measuring first also drove the model choice: I screened your live catalog for tool support before I ran anything, then raced the survivors.",
   },
   {
     id: "18",
     name: "H200 Model Serve",
-    why: "Two models on one rented Nebius H200. vLLM for the 27B, SGLang for the 35B after vLLM refused its vision-tower weights. Five of the ten things that stopped me were platform friction rather than model problems, and each one is written down with its cause and its fix.",
+    why: "Two models on one rented Nebius H200. vLLM for the 27B, SGLang for the 35B after vLLM refused its vision-tower weights. Both are linked to their exact Hugging Face repos. I sized the card before renting it, then one server flag took throughput from 381 tokens a second to 2,128.",
   },
   {
     id: "04",

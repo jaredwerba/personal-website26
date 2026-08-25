@@ -25,7 +25,7 @@ type Section = { id: string; title: string; docs: string[] };
 const SECTIONS: Section[] = [
   { id: "overview", title: "Overview / Live Systems", docs: ["overview", "capabilities", "background"] },
   { id: "record", title: "Public Record", docs: ["ledger"] },
-  { id: "agentic", title: "Agentic Systems & Evaluation", docs: ["01", "03", "04", "13", "05"] },
+  { id: "agentic", title: "Agentic Systems & Evaluation", docs: ["01", "19", "03", "04", "13", "05"] },
   // Inference gets its own section rather than sitting under prototypes: it is
   // a named area of their technical bar, and one of these two ran on their
   // hardware.
@@ -53,6 +53,8 @@ const HINTS = [
   "GPT-3",
   "RoCE",
   "OAuth",
+  "Token Factory",
+  "quiz",
 ];
 
 const KIND_LABELS = {

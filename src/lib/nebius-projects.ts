@@ -100,7 +100,15 @@ export const CAPABILITIES: Capability[] = [
     group: "AI Applications",
     label: "LLM APIs",
     proof:
-      "I build against five providers: Nebius Token Factory, Vercel AI Gateway, OpenAI, Anthropic, and Cohere.",
+      "I build against five providers: Nebius Token Factory, Vercel AI Gateway, OpenAI, Anthropic, and Cohere. FDE Prep is a live Token Factory app: a hard quiz, a structured JSON judge, and a mock interviewer on DeepSeek V4 Pro.",
+    links: [
+      {
+        label: "FDE PREP",
+        href: "https://nebius-fde-prep.vercel.app",
+        primary: true,
+        display: "FDE Prep",
+      },
+    ],
   },
 
   // ── Software Engineering ─────────────────────────────────────────────────
@@ -146,7 +154,7 @@ export const CAPABILITIES: Capability[] = [
     group: "Inference",
     label: "vLLM, SGLang, and sizing the GPU to the model",
     proof:
-      "I served two models on one Nebius H200. Model 1 is an uncensored Qwen 27B, and I served it with vLLM 0.27.1. Model 2 is an abliterated Qwen 35B mixture of experts, and I served it with SGLang. I sized the GPU before I rented it. Model 1 has 55.6 GB of weights, and it needs 70 to 80 GB with the KV cache. I selected one H200 with 141 GB. I did not select the 8-GPU shape or the L40S with 48 GB. I set each option and did not accept the defaults. These are BF16, a context of 16384 tokens, four concurrent sequences, and 0.85 GPU memory use. Model 2 is the reason I use two servers. vLLM refused its vision-tower weights, and SGLang loaded the same repository with no change. Then I measured the serving. A concurrency sweep from 1 to 64 showed my first configuration capping the card at four sequences and 381 tokens a second. Raising that one flag gave 2,128 tokens a second at 32 concurrent, with time to first token down from 21.1 seconds to 3.8.",
+      "I served two models on one Nebius H200. Model 1 is an uncensored Qwen 27B, and I served it with vLLM 0.27.1. Model 2 is an abliterated Qwen 35B mixture of experts, and I served it with SGLang. I sized the GPU before I rented it. Weights are parameters times bytes per parameter, so Model 1 at BF16 is 27.8 billion × 2 = 55.6 GB, and 70 to 80 GB with the KV cache. I selected one H200 with 141 GB. I did not select the 8-GPU shape or the L40S with 48 GB. I set each option and did not accept the defaults. These are BF16, a context of 16384 tokens, four concurrent sequences, and 0.85 GPU memory use. Model 2 is the reason I use two servers. vLLM refused its vision-tower weights, and SGLang loaded the same repository with no change. Then I measured the serving. A concurrency sweep from 1 to 64 showed my first configuration capping the card at four sequences and 381 tokens a second. Raising that one flag gave 2,128 tokens a second at 32 concurrent, with time to first token down from 21.1 seconds to 3.8.",
   },
   {
     group: "Inference",
@@ -280,9 +288,9 @@ export type NebiusProject = {
 
 /** Top framing. What this page is, and where the strongest evidence sits. */
 export const OVERVIEW: string[] = [
-  "This is a technical brief for one conversation. Eighteen projects, ordered by how much they bear on the Forward Deployed Engineer role, not by date. Every entry answers the same three questions: what problem I was solving, what I personally built, and what came of it.",
-  "Where the strongest evidence sits, if you only read three: Nebius-XWord is the agent and the eval harness I built to judge it, and it found a gap in the Nebius model catalog along the way. BrainStorm.ai took first place at an MIT-hosted hackathon, running a real model on real hardware. LinkedIn-Automator is the one that ran in production against a live third-party site, and stopped itself when it should have.",
-  "One of these ran on your hardware. I sized and rented an H200, and I served two models on it. I served an uncensored Qwen 27B with vLLM, and an abliterated Qwen 35B with SGLang, because the second checkpoint stopped the first server. I wrote down each place where I stopped. Half of the problems came from the platform, not from the models. That record is under H200 Model Serve.",
+  "This is a technical brief for one conversation. Nineteen projects, ordered by how much they bear on the Forward Deployed Engineer role, not by date. Every entry answers the same three questions: what problem I was solving, what I personally built, and what came of it.",
+  "Where the strongest evidence sits, if you only read three: Nebius-XWord is the agent and the eval harness I built to judge it, and the model choice came out of measurement rather than a guess. BrainStorm.ai took first place at an MIT-hosted hackathon, running a real model on real hardware. LinkedIn-Automator is the one that ran in production against a live third-party site, and stopped itself when it should have.",
+  "One of these ran on your hardware. I sized and rented an H200, and I served two models on it. I served an uncensored Qwen 27B with vLLM, and an abliterated Qwen 35B with SGLang, because the second checkpoint stopped the first server. I isolated why that checkpoint needed a second server, and I measured what the card delivered. That record is under H200 Model Serve.",
   "There is also a public trail. I have posted what I was reading since 2017. InfiniBand in 2019. RDMA and GPT-3 in 2020. The dated posts sit under Public Record.",
   "Everything with a live link is running now. Opening one is faster than reading about it.",
 ];
@@ -304,7 +312,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     tier: 1,
     accent: "orange",
     status: "LIVE",
-    signals: ["Agentic systems", "Tool calling", "Evaluation", "LLM APIs", "Python", "Platform gap found"],
+    signals: ["Agentic systems", "Tool calling", "Evaluation", "LLM APIs", "Python", "Model selection"],
     stack: [
       "Python",
       "LangGraph",
@@ -319,7 +327,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "Split the authority. A Python engine owns the grid — slots, numbering, crossing rules. The model owns only the answers. A wrong answer gets rejected with a reason, and the model tries again. The model can fail. It cannot corrupt state.",
       "Wrote the graph myself in LangGraph instead of using its prebuilt agent, because my stop condition is different: the run has to end on a submit tool call, not on the model going quiet. Three nodes — agent, tools, and a nudge node that pushes the model back to tool calls when it answers in prose. The nudge is capped at three, so a model that never calls a tool still terminates.",
       "Built the eval harness before choosing anything. Four solvers run through one scorer. An empty solver must score 0% and an oracle solver must score 100% — if either misses, the scorer itself is broken. A third solver fills real interlocking words while ignoring every clue; it scores about 9%. Anything above that line is what the model contributed by reading clues rather than by fitting the grid.",
-      "Chose models by measurement. Reading the live Nebius catalog first turned up a gap: DeepSeek V4 Flash advertises no tool support, so it cannot drive a tool-calling agent at all. I screened 13 candidates, then ran the survivors through 5 models across 2 services, 4 puzzles, 2 runs each. The README publishes every failure beside every pass.",
+      "Chose models by measurement. I read the live Nebius catalog first and screened on tool support, because a model without it cannot drive a tool loop. I screened 13 candidates, then ran the survivors through 5 models across 2 services, 4 puzzles, 2 runs each. The README publishes every failure beside every pass.",
       "Capped the context window after measuring what it cost not to. Resending the whole history each turn makes token cost grow with the square of the turn count — one 40-turn solve burned 1.09 million tokens. The cap keeps the system prompt, the opening grid, and the most recent messages. It also drops any tool result whose matching call fell outside the window, because the API rejects a tool message with no call attached.",
       "Measured the prompt itself. One instruction told the agent to call get_state first, which wasted a turn — the opening message already contains the grid. Another made it confirm before submitting, which spent 200 seconds rechecking a grid the engine had already validated. Removing both took one solve from 420 seconds to 153.",
     ],
@@ -334,6 +342,42 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     links: [
       { label: "LIVE.DEMO", href: "https://nebius-xword.vercel.app", primary: true },
       { label: "SOURCE", href: "https://github.com/jaredwerba/Nebius-XWord" },
+    ],
+  },
+  {
+    id: "19",
+    name: "FDE PREP",
+    tagline: "A Token Factory app I built to drill the FDE loop. Quiz, eval, mock interviewer.",
+    tier: 1,
+    accent: "orange",
+    status: "LIVE",
+    signals: ["LLM APIs", "Evaluation", "Token Factory", "Structured output"],
+    stack: [
+      "Next.js",
+      "Nebius Token Factory",
+      "DeepSeek V4 Pro",
+      "Vercel",
+    ],
+    problem:
+      "I had a Friday loop for Forward Deployed Engineer. Reading the docs is not the job. The job is to ship something on the platform, measure it, and leave an artifact a partner can open.",
+    built: [
+      "A live gym on Token Factory. The mock interviewer and the rubric judge call DeepSeek V4 Pro through the OpenAI-compatible API, with structured JSON for the score.",
+      "A 24-question quiz with clickable answers that lock on the first pick. The traps are the ones people say in the room: mixing AI Cloud and Token Factory, treating a dedicated endpoint as a reservation, calling Fast a smaller model.",
+      "An eval suite with baselines. An empty answer must score weak. A gold spoken answer must score strong. Mixing the two products must fail. If any of those miss, the judge is the thing that is broken.",
+    ],
+    outcome: [
+      "Running now at nebius-fde-prep.vercel.app. Open the quiz. The judge uses the same Token Factory model as the crossword race.",
+      "What outlasts the interview: a Token Factory-backed eval loop I can point a customer at, and a quiz that encodes the product split.",
+    ],
+    links: [
+      {
+        label: "FDE PREP",
+        href: "https://nebius-fde-prep.vercel.app",
+        primary: true,
+        display: "FDE Prep",
+      },
+      { label: "QUIZ", href: "https://nebius-fde-prep.vercel.app/quiz" },
+      { label: "SOURCE", href: "https://github.com/jaredwerba/nebius-fde-prep" },
     ],
   },
   {
@@ -811,7 +855,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
     problem:
       "I wanted to run two open-weight Qwen models. One is uncensored. One is abliterated. Both have their refusal behaviour removed, and that is a class of model you can only run yourself. My laptop cannot load either one. So I rented a GPU from Nebius and paid for it out of my own pocket.",
     built: [
-      "I worked out the GPU before I rented anything. The weights are 55.6 GB. With the KV cache the model needs 70 to 80 GB. One H200 has 141 GB, so one card was enough. I did not need a cluster and I did not need the eight-GPU shape. That was one calculation, and it saved most of the bill.",
+      "I worked out the GPU before I rented anything. Weights are parameters times bytes per parameter. BF16 is two bytes, so 27.8 billion parameters × 2 = 55.6 GB. With the KV cache the model needs 70 to 80 GB. One H200 has 141 GB, so one card was enough. I did not need a cluster and I did not need the eight-GPU shape. That was one calculation, and it saved most of the bill.",
       "I served the first model with vLLM. That is the usual choice and it worked.",
       "vLLM would not serve the second model. It pulled down 65 GiB, then stopped with an error about a module named visual. The checkpoint carries a vision tower, and the text loader takes the language experts and refuses the vision weights. I served the same model with SGLang instead, on the same GPU and the same port. It loaded with no change at all.",
       "The first model kept cutting its answers off in the middle. I raised the output token cap and the answers finished.",
@@ -821,8 +865,7 @@ export const NEBIUS_PROJECTS: NebiusProject[] = [
       "Both models served, and both answered.",
       "The speed change was larger than I expected. With 32 people asking at once, the server went from 381 tokens a second to 2,128. The wait before the first word dropped from 21 seconds to under 4. Usually you trade one for the other. Here both improved, because the old setting was leaving the card idle.",
       "Then I deleted the VM and the disk. The weights are a public download.",
-      "Half of what slowed me down was not the models. It was the platform. An address that only works inside the VPC. A machine built with no public IP. A key comment pasted into a username box. I wrote every one of them down with the cause and the fix, because the next person hits them too.",
-      "That write-up is the part that outlasts the rental. It is a runbook, a numbered list of failures, and a small benchmark script that needs nothing installed.",
+      "That write-up is the part that outlasts the rental. It is a runbook: how I sized the card, the two serving stacks, and a small benchmark script that needs nothing installed.",
     ],
   },
   {
