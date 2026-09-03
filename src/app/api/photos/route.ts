@@ -1,22 +1,11 @@
 import { NextResponse } from "next/server";
-import { readdir } from "fs/promises";
-import { join } from "path";
+import { listPhotos } from "@/lib/photos";
 
-const PHOTO_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".gif", ".webp", ".avif"]);
+export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const photosDir = join(process.cwd(), "public", "photos");
-
   try {
-    const files = await readdir(photosDir);
-    const photos = files
-      .filter((f) => {
-        const ext = f.slice(f.lastIndexOf(".")).toLowerCase();
-        return PHOTO_EXTENSIONS.has(ext) && !f.startsWith(".");
-      })
-      .sort()
-      .map((f) => `/photos/${f}`);
-
+    const photos = await listPhotos();
     return NextResponse.json({ photos });
   } catch {
     return NextResponse.json({ photos: [] });
