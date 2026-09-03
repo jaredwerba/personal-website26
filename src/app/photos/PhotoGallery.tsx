@@ -2,8 +2,9 @@
 
 import { useState, useEffect, useCallback, useRef, memo } from "react";
 import Image from "next/image";
-import { Button } from "@mdrbx/nerv-ui";
+import { Badge, Button } from "@mdrbx/nerv-ui";
 import { motion, AnimatePresence, type PanInfo } from "framer-motion";
+import { shuffled } from "@/lib/shuffle";
 
 const INITIAL_COUNT = 6;
 const BATCH_COUNT = 6;
@@ -45,6 +46,7 @@ const PhotoThumb = memo(function PhotoThumb({
 });
 
 export default function PhotoGallery({ photos }: { photos: string[] }) {
+  const [order, setOrder] = useState(photos);
   const [visibleCount, setVisibleCount] = useState(() =>
     Math.min(INITIAL_COUNT, photos.length),
   );
@@ -52,31 +54,45 @@ export default function PhotoGallery({ photos }: { photos: string[] }) {
   const [swipeDirection, setSwipeDirection] = useState(0);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
+  const shufflePhotos = useCallback(() => {
+    setOrder((current) => {
+      let next = shuffled(current);
+      if (next[0] === current[0] && current.length > 1) {
+        next = shuffled(current);
+      }
+      return next;
+    });
+    setVisibleCount(Math.min(INITIAL_COUNT, photos.length));
+    setSelectedIndex(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [photos.length]);
+
   useEffect(() => {
+    if (visibleCount >= order.length) return;
     const el = sentinelRef.current;
     if (!el) return;
     const io = new IntersectionObserver(
       (entries) => {
         if (!entries[0]?.isIntersecting) return;
-        setVisibleCount((n) => Math.min(n + BATCH_COUNT, photos.length));
+        setVisibleCount((n) => Math.min(n + BATCH_COUNT, order.length));
       },
       { rootMargin: "800px 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [photos.length]);
+  }, [visibleCount, order.length]);
 
   const goNext = useCallback(() => {
     setSwipeDirection(1);
-    setSelectedIndex((i) => (i === null ? i : (i + 1) % photos.length));
-  }, [photos.length]);
+    setSelectedIndex((i) => (i === null ? i : (i + 1) % order.length));
+  }, [order.length]);
 
   const goPrev = useCallback(() => {
     setSwipeDirection(-1);
     setSelectedIndex((i) =>
-      i === null ? i : (i - 1 + photos.length) % photos.length,
+      i === null ? i : (i - 1 + order.length) % order.length,
     );
-  }, [photos.length]);
+  }, [order.length]);
 
   const handleDragEnd = useCallback(
     (_: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
@@ -103,12 +119,24 @@ export default function PhotoGallery({ photos }: { photos: string[] }) {
     setSelectedIndex(index);
   }, []);
 
-  const visible = photos.slice(0, visibleCount);
-  const hasMore = visibleCount < photos.length;
-  const selectedSrc = selectedIndex !== null ? photos[selectedIndex] : null;
+  const visible = order.slice(0, visibleCount);
+  const hasMore = visibleCount < order.length;
+  const selectedSrc = selectedIndex !== null ? order[selectedIndex] : null;
 
   return (
     <>
+      <div className="flex items-center gap-3">
+        <h2 className="font-nerv-display text-2xl md:text-3xl tracking-[0.16em] text-nerv-orange">
+          PHOTOS
+        </h2>
+        <Badge label={`${order.length}`} variant="success" size="sm" />
+        <div className="ml-auto">
+          <Button variant="terminal" size="sm" onClick={shufflePhotos}>
+            SHUFFLE
+          </Button>
+        </div>
+      </div>
+
       <div className="flex flex-col gap-2 md:gap-3">
         {visible.map((photo, i) => (
           <PhotoThumb
@@ -132,7 +160,7 @@ export default function PhotoGallery({ photos }: { photos: string[] }) {
             onClick={() => setSelectedIndex(null)}
           >
             <div className="absolute top-4 left-4 font-nerv-mono text-xs text-nerv-mid-gray z-10">
-              {selectedIndex + 1} / {photos.length}
+              {selectedIndex + 1} / {order.length}
             </div>
 
             <div className="absolute top-3 right-3 z-10">
