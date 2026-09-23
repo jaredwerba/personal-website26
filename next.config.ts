@@ -8,6 +8,14 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
+        source: "/jobs",
+        destination: "https://careerops-jobboard-public.vercel.app/jobs",
+      },
+      {
+        source: "/jobs/",
+        destination: "https://careerops-jobboard-public.vercel.app/jobs/",
+      },
+      {
         source: "/deepgram",
         destination: "https://deepgram-voice-agent-cyan.vercel.app/deepgram",
       },
