@@ -1,4 +1,9 @@
 {
+  "rewrites": [
+    { "source": "/jobs", "destination": "https://careerops-jobboard-public.vercel.app/jobs" },
+    { "source": "/jobs/", "destination": "https://careerops-jobboard-public.vercel.app/jobs/" },
+    { "source": "/jobs/:path*", "destination": "https://careerops-jobboard-public.vercel.app/jobs/:path*" }
+  ],
   "crons": [
     {
       "path": "/api/cron/whoop-monthly",
