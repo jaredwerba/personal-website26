@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /ai
+Disallow: /ai/
+Disallow: /ai26.html

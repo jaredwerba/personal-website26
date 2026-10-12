@@ -54,6 +54,19 @@ const nextConfig: NextConfig = {
       fallback: [],
     };
   },
+  async headers() {
+    const noindex = [
+      {
+        key: "X-Robots-Tag",
+        value: "noindex, nofollow, noarchive, nosnippet",
+      },
+    ];
+    return [
+      { source: "/ai", headers: noindex },
+      { source: "/ai/", headers: noindex },
+      { source: "/ai26.html", headers: noindex },
+    ];
+  },
 };
 
 export default nextConfig;
