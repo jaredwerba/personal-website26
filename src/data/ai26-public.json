@@ -1,0 +1,986 @@
+{
+  "generated_at": "2026-10-12T16:41:18Z",
+  "gate": {
+    "rule": "Hold by default. Publish a note only when the outcome names a software artifact that was built, fixed, or shipped. Questions, life, health, mail, money, and career admin stay on the machine.",
+    "scanned_notes": 755,
+    "published": 79,
+    "held": 676
+  },
+  "attempts": [
+    {
+      "date": "2026-10-12",
+      "time": "11:00",
+      "projects": [
+        "deepgram-voice-agent"
+      ],
+      "attempt": "Pushed feat/live-flux to origin. Tracking origin/feat/live-flux. Working tree clean. Did not merge and did not deploy. GitHub offered https://github.com/jaredwerba/deepgram-voice-agent/pull/new/feat/live-flux",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "time": "22:23",
+      "projects": [
+        "Nebius-Physical-AI-Dog-Trax",
+        "Dog-VV00P3"
+      ],
+      "attempt": "Created [path] and public https://github.com/jaredwerba/Nebius-Physical-AI-Dog-Trax. main is 6202e46, which names the project and sits on top of 448bd07. Dog-VV00P3 was not changed and is still on visual-diary. upstream\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "time": "22:19",
+      "projects": [
+        "Dog-VV00P3"
+      ],
+      "attempt": "pace-check passed. Branch visual-diary commit 448bd07 was pushed. Pull request https://github.com/jaredwerba/Dog-VV00P3/pull/1 is open against main. origin/main is still 3576c5c. README on the branch now says Rest, a 3\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "time": "20:17",
+      "projects": [
+        "deepgram-voice-agent"
+      ],
+      "attempt": "Updated the October 9 changelog line to \"The conversation now records. A booked call is saved to a database, with a Deepgram Text Intelligence summary.\" Commit c0fdc9b pushed to jaredwerba/deepgram-voice-agent main. Liv\u2026",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "time": "19:35",
+      "projects": [
+        "deepgram-voice-agent"
+      ],
+      "attempt": "Replaced the sentence with a profile row: photo, Prepared for, Steve Carter, Sales Leadership. The page title sits under it. Committed 4866393 and pushed main. Live www.jwerba.com/deepgram no longer has the AGENTS block\u2026",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "time": "19:12",
+      "projects": [
+        "deepgram-voice-agent"
+      ],
+      "attempt": "Restyled the sales page as a phone-width iOS screen, rewrote the intro and the cost note, centered the mic with the level under it, defaulted Orpheus, changed the email to a recap plus the booked invite, and linked www.\u2026",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "time": "17:35",
+      "projects": [
+        "deepgram-voice-agent"
+      ],
+      "attempt": "Added the prepared-for line and Steve's photo at the top of the sales page, and a changelog in the app footer: October 9, 2026, the agent can schedule a meeting and email the user a calendar invite. Checked on a 390px p\u2026",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "time": "17:01",
+      "projects": [
+        "deepgram-voice-agent"
+      ],
+      "attempt": "Verified locally: unit checks, production build, voice smoke, AWS objection with no invite, Reset during Thinking returns to Ready, tomorrow at 3pm and tomorrow with no clock, desktop .ics download, iPhone-sized layout\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "time": "16:52",
+      "projects": [
+        "deepgram-voice-agent"
+      ],
+      "attempt": "Reproduced the break locally in Chrome: calendar card appears immediately, Reset while the reply is still thinking left Send disabled. Fixed reset to return to Ready (or Listening if the mic is on) and to ignore the in-\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "time": "16:44",
+      "projects": [
+        "deepgram-voice-agent"
+      ],
+      "attempt": "Wrote and pushed [path] on feature/calendar-invite at 8358a65. It covers the calendar invite, why the voice path stayed REST, files, phone layout, and what not to break. Not merged.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "time": "15:05",
+      "projects": [
+        "deepgram-voice-agent"
+      ],
+      "attempt": "Shipped on branch feature/calendar-invite (feature commit 2fbebc4, log update 135e492), pushed to origin, not merged to main. Vercel preview Ready at https://deepgram-voice-agent-corx108g3-jared-werbas-projects.vercel.a\u2026",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-10-05",
+      "time": "20:21",
+      "projects": [
+        "Dog-VV00P2",
+        "Noop"
+      ],
+      "attempt": "Account wall removed for this unconfigured build and the new app is installed and running on the phone. Strap connection itself was already working before this change.",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-10-05",
+      "time": "19:24",
+      "projects": [
+        "dog-pace",
+        "Asherlc__whoop-ble-swift"
+      ],
+      "attempt": "Private Dog-VV00P created and pushed. WhoopBLE stored-motion commit pushed to the existing fork. Working tree clean on both repos.",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-10-02",
+      "time": "19:43",
+      "projects": [
+        "dog-pace"
+      ],
+      "attempt": "swift build completed. pace-check passed. The iOS target DogPace.xcodeproj was not compiled and nothing was installed on a phone.",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-09-28",
+      "time": "20:34",
+      "projects": [
+        "ghostty",
+        "omarchy"
+      ],
+      "attempt": "Wrote themes/Osaka Jade into both Ghostty theme directories and set theme = Osaka Jade in the live config. ghostty +list-themes shows \"Osaka Jade (user)\". ghostty +show-config resolves background #111c18, foreground #c1\u2026",
+      "tags": [
+        "ops",
+        "learning"
+      ]
+    },
+    {
+      "date": "2026-09-28",
+      "time": "19:13",
+      "projects": [
+        "hermes-agent",
+        "AI26"
+      ],
+      "attempt": "Set model.default=grok-4.7, agent.reasoning_effort=xhigh, OpenRouter fallback x-ai/grok-4.7, MoA consult aggregator grok-4.7. Left cron.model as GLM-5.3/Token Factory. Patched agent/model_metadata.py and agent/reasoning\u2026",
+      "tags": [
+        "ops",
+        "code"
+      ]
+    },
+    {
+      "date": "2026-09-28",
+      "time": "00:48",
+      "projects": [
+        "personal-website26"
+      ],
+      "attempt": "Removed the three nav items and their icons/hard-nav branch. Sidebar.tsx matches git HEAD again. Production deploy personal-website26-7sjbwjt5k aliased to https://www.jwerba.com. Live JS footer labels are CONTACT, READS\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-09-25",
+      "time": "12:06",
+      "projects": [
+        "deepgram-voice-agent"
+      ],
+      "attempt": "Nothing new to commit. main matches origin/main at 307ffe2 fix(ui): even the spacing and name the language model, already pushed to https://github.com/jaredwerba/deepgram-voice-agent.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-09-25",
+      "time": "10:39",
+      "projects": [
+        "deepgram-voice-agent"
+      ],
+      "attempt": "Shipped 968a12a to main. Live chunk 1t550a0z-ndn5.js contains voice-beam and thinking-orb. Packages voice-glow 0.2.1 and thinking-orbs 0.3.2. VoiceBeam wraps the mic and composer, level from levelNow, processing during\u2026",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-09-24",
+      "time": "17:59",
+      "projects": [
+        "deepgram-voice-agent",
+        "personal-website26"
+      ],
+      "attempt": "Reverted NERV UI to the pre-theme layout, restyled with Deepgram tokens, added official mark+wordmark, defaulted scenario to oci-ae. Pushed 4a6f4d9 to jaredwerba/deepgram-voice-agent main. Vercel production Ready. Verif\u2026",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-09-23",
+      "time": "16:49",
+      "projects": [
+        "deepgram-voice-agent",
+        "personal-website26"
+      ],
+      "attempt": "Shipped: deepgram app under /deepgram (e85d9f6) + personal site rewrite (7e261ab) - live and verified at www.jwerba.com/deepgram. His uncommitted WIP preserved untouched. Mic on www domain not directly re-proven (machin\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-09-23",
+      "time": "16:24",
+      "projects": [
+        "deepgram-voice-agent"
+      ],
+      "attempt": "Two commits pushed and deployed (811365f, 34304ed); prod verified 'Starting mic' -> 'Listening'. Two test Chrome windows left open on the desktop for Jared (one flagged fast-mic instance, one plain) \u2014 his call to close.\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-09-23",
+      "time": "12:25",
+      "projects": [
+        "deepgram-voice-agent"
+      ],
+      "attempt": "Shipped 3 commits to deepgram-voice-agent main: 861249a (the reported bug), 51d96e1 (interview react-hooks/refs lint, repo lint green again), 799197f (chat max_tokens 2000 + reasoning_content fallback). Vercel deploy Re\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "time": "19:45",
+      "projects": [
+        "deepgram-voice-agent"
+      ],
+      "attempt": "Shipped scripts/smoke.mjs (5,514 bytes, only file created in the repo; nothing else modified, no npm/dev/server commands run). Script handles WAV generation fallback, per-check error isolation (network failures become F\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "time": "19:44",
+      "projects": [
+        "deepgram-voice-agent"
+      ],
+      "attempt": "Wrote exactly one file, [path] (5093 bytes), replacing the stock create-next-app readme. ASCII architecture diagram, routes table, env table, voices list, streaming upgrade path, and troubleshooting all included per spe\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-09-22",
+      "time": "19:27",
+      "projects": [
+        "deepgram-voice-agent",
+        "hermes",
+        "AI26"
+      ],
+      "attempt": "Coordination shipped: canonical fleet briefs in both silo inboxes. Repo/Vercel unchanged and healthy (private repo, live URL, key safe). App still boilerplate \u2014 the build itself is blocked on the main agent.",
+      "tags": [
+        "ops",
+        "code"
+      ]
+    },
+    {
+      "date": "2026-09-21",
+      "time": "14:32",
+      "projects": [
+        "hermes-agent"
+      ],
+      "attempt": "Hermes at v0.21.4 / c7c2df1a, Up to date. Node workspaces installed, web UI built, gateway launchd current.",
+      "tags": [
+        "ops",
+        "code"
+      ]
+    },
+    {
+      "date": "2026-09-19",
+      "time": "15:30",
+      "projects": [
+        "AI26",
+        "hermes-agent"
+      ],
+      "attempt": "Verified live: all five are installed. Default still grok-4.6. MoA consult exists but session provider is off (correct). Three crons active. Overnight file not written yet (first fire 03:00). Shared brain wired in SOUL/\u2026",
+      "tags": [
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-09-19",
+      "time": "15:22",
+      "projects": [
+        "AI26",
+        "hermes-agent",
+        "xword",
+        "nebiusFDE"
+      ],
+      "attempt": "Shipped. Interactive default still grok-4.6/xai-oauth. Three crons active. Collect exercised (alerts=1 lock). Triage job fired in background. Overnight first run 2026-09-20 03:00. Did not touch xword source.",
+      "tags": [
+        "ops",
+        "code"
+      ]
+    },
+    {
+      "date": "2026-09-19",
+      "time": "13:14",
+      "projects": [
+        "hermes-agent"
+      ],
+      "attempt": "Update complete. Fallback: OpenRouter x-ai/grok-4.6 then Nebius GLM-5.3. Installed docker-management + instructor. ast-grep on PATH. Did not install Docker.app, messaging, MCP, or TypeSafe key.",
+      "tags": [
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-09-19",
+      "time": "13:06",
+      "projects": [
+        "xword",
+        "personal-website26",
+        "nebiusFDE"
+      ],
+      "attempt": "Shipped public repo and production Vercel app. Site rewrite is in the working tree, not production. Live solve waits on Tavily and LangSmith keys. Offline eval floors/ceilings recorded.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-09-19",
+      "time": "12:36",
+      "projects": [
+        "nebiusFDE",
+        "Nebius-XWord",
+        "jev",
+        "nebius-token-factory"
+      ],
+      "attempt": "Shipped a new puzzle and a Jev+TF solver in nebiusFDE. Live run used Gateway Jev + Token Factory, no OpenRouter. Puzzle exists; solve did not reach 100%. Honest leftover recipe in docs/jev-token-factory.md.",
+      "tags": [
+        "code",
+        "learning"
+      ]
+    },
+    {
+      "date": "2026-09-17",
+      "time": "18:44",
+      "projects": [
+        "careerops",
+        "careerops-jobboard-public"
+      ],
+      "attempt": "Shipped. www.jwerba.com/jobs header has more breathing room; desktop Career Ops untouched.",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-09-17",
+      "time": "18:34",
+      "projects": [
+        "careerops",
+        "careerops-jobboard-public",
+        "personal-website26"
+      ],
+      "attempt": "Shipped split: desktop table unchanged, /jobs is mobile. Daily --public rebuilds both.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-09-17",
+      "time": "18:26",
+      "projects": [
+        "careerops",
+        "careerops-jobboard-public"
+      ],
+      "attempt": "Shipped. careerops-jobboard-public.vercel.app is the original table board again. Mobile UI stashed, not discarded. jwerba.com/jobs currently matches because it rewrites to that project.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-09-17",
+      "time": "18:20",
+      "projects": [
+        "careerops",
+        "careerops-jobboard-public"
+      ],
+      "attempt": "Shipped. Search filters the public board; posted date is a month/day column beside Apply. Live at www.jwerba.com/jobs.",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-09-17",
+      "time": "15:45",
+      "projects": [
+        "careerops",
+        "careerops-jobboard-public"
+      ],
+      "attempt": "Shipped date-posted sorting (plus company/title) on the public board. Live at www.jwerba.com/jobs.",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-09-17",
+      "time": "15:38",
+      "projects": [
+        "careerops",
+        "personal-website26",
+        "careerops-jobboard-public"
+      ],
+      "attempt": "Shipped. https://www.jwerba.com/jobs and the Vercel alias both serve the mobile-first board. Website nav not live yet.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-09-17",
+      "time": "14:54",
+      "projects": [
+        "careerops",
+        "careerops-jobboard-public"
+      ],
+      "attempt": "Shipped. Production https://careerops-jobboard-public.vercel.app now shows Jared Werba Career Ops with the tagline. Generator updated so the next daily scan publish will not revert the copy. Generator change is uncommit\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-09-03",
+      "time": "19:58",
+      "projects": [
+        "personal-website26"
+      ],
+      "attempt": "Shipped. SHUFFLE is live on www.jwerba.com/photos.",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-09-03",
+      "time": "19:52",
+      "projects": [
+        "personal-website26"
+      ],
+      "attempt": "Shipped to production. jwerba.com/photos now paints six photos in the first HTML. Country list is no longer a loading screen.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "time": "23:18",
+      "projects": [
+        "wedding",
+        "vendor-scout"
+      ],
+      "attempt": "STE-100 rewrite fully complete and deployed; every document rewritten AND checked.",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "time": "23:17",
+      "projects": [
+        "wedding"
+      ],
+      "attempt": "Shipped: 4 edits applied in place; node scripts/validate-cookbook.mjs passes (10 recipes valid).",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "time": "23:16",
+      "projects": [
+        "wedding"
+      ],
+      "attempt": "9 small edits: aligned refuse/refusal to reject/rejection in body prose, replaced figurative 'caught'/'temptation' with 'detected'/'risk', fixed one agentless passive ('The town is printed on...'). validate-cookbook.mjs\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "time": "23:15",
+      "projects": [
+        "wedding"
+      ],
+      "attempt": "Shipped: 9 edits, node scripts/validate-cookbook.mjs passes (10 recipes valid).",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "time": "23:10",
+      "projects": [
+        "wedding",
+        "vendor-scout"
+      ],
+      "attempt": "Cookbook + V1->V2 page fully in Simplified Technical English, deployed.",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "time": "21:56",
+      "projects": [
+        "wedding"
+      ],
+      "attempt": "Shipped: three prose blocks rewritten in app/compare/page.tsx, typecheck clean.",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "time": "21:55",
+      "projects": [
+        "wedding",
+        "venus-cookbook"
+      ],
+      "attempt": "Shipped: ~65 prose sentences rewritten in recipe 05; terms standardized to 'scout' (over 'specialist') and 'the root agent' (over 'planner/root'); JSON validated; only the two named files touched.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "time": "21:55",
+      "projects": [
+        "wedding",
+        "venus"
+      ],
+      "attempt": "Shipped: README and recipe.json rewritten in STE, JSON re-validated, diff verified to leave headings/code/tables untouched; one over-length sentence caught on the verification pass and split.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "time": "21:54",
+      "projects": [
+        "wedding",
+        "venus"
+      ],
+      "attempt": "Shipped: ~70 narrative sentences rewritten across README.md and recipe.json; JSON still valid; a sentence-length audit script found and fixed one 27-word sentence. Standardized 'scout' over 'specialist', 'price table' o\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "time": "20:51",
+      "projects": [
+        "wedding"
+      ],
+      "attempt": "Shipped: travel radius fully removed from Venus runtime (6 files, -280/+16), verify green, pushed as 95e4c23 to production. Code review of the log commit: clean, zero findings.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "time": "13:41",
+      "projects": [
+        "wedding",
+        "vendor-scout"
+      ],
+      "attempt": "Atomic gate shipped, verify 8/8, deploy + probe in flight.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "time": "13:33",
+      "projects": [
+        "wedding",
+        "vendor-scout"
+      ],
+      "attempt": "Gate fix shipped; probe re-running with the approved venue tap pending three buttons appearing.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "time": "12:29",
+      "projects": [
+        "wedding",
+        "vendor-scout"
+      ],
+      "attempt": "Shipped 25dba60: kickoff section now states a turn may only end as the full presentation (streamed, saved, gated) or a question; get_research's note, when every specialist is settled, says present NOW in THIS turn. Veri\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-31",
+      "time": "12:16",
+      "projects": [
+        "wedding",
+        "vendor-scout"
+      ],
+      "attempt": "Shipped 8c9a66f + 4cd3b88: disableTool() shadows for scout ask_question, scout web_fetch, root todo; instructions pin questions to exactly two moments (brief check + tier pick, never process); scout told it has nobody t\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-30",
+      "time": "19:23",
+      "projects": [
+        "wedding",
+        "vendor-scout"
+      ],
+      "attempt": "Shipped and verified: 3 commits (df84880, 7a8f4c5, d702898) pushed to main, npm run verify (7 gates) exit 0, docs:log idempotent, D's fixture proof passed both directions, deploy verification running against production\u2026",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-08-30",
+      "time": "15:11",
+      "projects": [
+        "wedding",
+        "vendor-scout",
+        "Venus"
+      ],
+      "attempt": "Shipped to production. Git push origin main succeeded. Vercel production Ready. Live checks passed. MCP list_deployments 403'd (CLI worked).",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-30",
+      "time": "14:28",
+      "projects": [
+        "wedding",
+        "vendor-scout"
+      ],
+      "attempt": "Shipped. Live at https://vendor-scout-xi.vercel.app/compare. Cookbook dirty files left for Fable.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-30",
+      "time": "11:00",
+      "projects": [
+        "wedding",
+        "venus",
+        "cookbook"
+      ],
+      "attempt": "Shipped both files: [path] (269 lines) and recipe.json. All 16 relative links in the README resolve to real files; validate-cookbook.mjs reports no problems for the new directory. Deviated from the assignment on the Lic\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-30",
+      "time": "10:51",
+      "projects": [
+        "wedding",
+        "venus",
+        "nebius-cookbook"
+      ],
+      "attempt": "Stood down on 06. Reverted the License edit. Left three corrections in place and disclosed them: nextRecipe 'spend-round-trips-not-calls' added to recipe.json (was the only one of five recipes missing the chain link), t\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-30",
+      "time": "10:49",
+      "projects": [
+        "wedding",
+        "vendor-scout",
+        "venus"
+      ],
+      "attempt": "Shipped. cookbook/04-refuse-in-the-tool/README.md (249 lines) and recipe.json, both validated \u2014 recipe.json hand-checked against every constraint in cookbook/schema/recipe.schema.json, and all five relative links in the\u2026",
+      "tags": [
+        "code",
+        "learning"
+      ]
+    },
+    {
+      "date": "2026-08-29",
+      "time": "21:42",
+      "projects": [
+        "wedding",
+        "vendor-scout",
+        "Venus"
+      ],
+      "attempt": "Shipped. 15 findings verified against source, 13 fixed, 2 judged latent and explicitly declined with reasons. New test scripts/test-trace-fold.mjs (17 assertions, proven to fail on the regression it guards) wired into n\u2026",
+      "tags": [
+        "code",
+        "learning"
+      ]
+    },
+    {
+      "date": "2026-08-29",
+      "time": "08:05",
+      "projects": [
+        "wedding",
+        "vendor-scout"
+      ],
+      "attempt": "Shipped 18 commits since v17.1, all deployed to production and verified live. Final numbers: scout research quality 52/53 (98%), reply understanding 15/15 (100%), fast eve suite green, schema probe 30/30 for the models\u2026",
+      "tags": [
+        "code",
+        "learning",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-29",
+      "time": "07:16",
+      "projects": [
+        "wedding",
+        "vendor-scout"
+      ],
+      "attempt": "Shipped the revert and the schema removal. Production routing verified live: planner/scout/classifier on Qwen3-235B, judge on DeepSeek-V4-Pro. Final verification eval running to confirm the reverted scout is back at the\u2026",
+      "tags": [
+        "code",
+        "learning",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-28",
+      "time": "13:05",
+      "projects": [
+        "wedding",
+        "vendor-scout",
+        "nebius-fde-prep"
+      ],
+      "attempt": "Compile unblocked and pushed. Production deploy of the fix in flight. Runtime first-name turn not yet re-verified in the browser.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-28",
+      "time": "12:09",
+      "projects": [
+        "wedding"
+      ],
+      "attempt": "Shipped: G4.md section 7 written and trimmed from ~3,200 to a tighter version; every base-draft error in scope corrected (fail-open daily cap claim, missing search_failed/8-image cap, missing side-effect/cap lines on fo\u2026",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-28",
+      "time": "08:12",
+      "projects": [
+        "nebius-fde-prep"
+      ],
+      "attempt": "Shipped on main (7ade6f6). Homepage shows his slide on load. Concepts #2, Visuals last card, quiz, flashcard, coach truth. Desktop verified; mobile caption readable after the wrap fix. Vercel will auto-deploy.",
+      "tags": [
+        "code",
+        "learning"
+      ]
+    },
+    {
+      "date": "2026-08-28",
+      "time": "07:57",
+      "projects": [
+        "nebius-fde-prep"
+      ],
+      "attempt": "Shipped. Homepage hero live on main (045831f), pushed to origin. Local verified desktop+mobile; other routes untouched. Production at nebius-fde-prep.vercel.app will follow the Vercel auto-deploy from main.",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "time": "18:07",
+      "projects": [
+        "nebius-fde-prep"
+      ],
+      "attempt": "Deleted /receipts page, receipts.ts catalog, nav item, shell icon, home CTA to /receipts (now points at /day#briefing), Tuesday plan block, Friday 'Three receipts' card, FRIDAY_RECEIPTS, quiz topic label Receipts. Moved\u2026",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "time": "17:45",
+      "projects": [
+        "kavlabs-revamp"
+      ],
+      "attempt": "Shipped: flowhub.ts and cova.ts created, TypeScript compiles clean, index.ts (written by a sibling agent) already imports both. A few extraction gaps written around neutrally and flagged to the orchestrator.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "time": "17:45",
+      "projects": [
+        "kavlabs-revamp"
+      ],
+      "attempt": "Verified: all Tripleseat Events & Data Reference tables, FAQ text, and the four webhook Trigger Action groups (Event/Lead/Booking/Contact Actions) match the dump. One fix: removed the 'A ' I had previously interpolated\u2026",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "time": "17:44",
+      "projects": [
+        "kavlabs-revamp"
+      ],
+      "attempt": "Shipped: content.ts now carries all four full original article bodies; full-project npx tsc --noEmit exits 0.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "time": "17:44",
+      "projects": [
+        "kavlabs-revamp"
+      ],
+      "attempt": "Shipped: dutchie.ts patched with all 11 recovered property names plus the isActive fix; project-wide npx tsc --noEmit passes clean (exit 0). Rest of the tab cross-checked against the dump \u2014 no other discrepancies.",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "time": "17:43",
+      "projects": [
+        "kavlabs-revamp"
+      ],
+      "attempt": "Shipped: hubspot.ts written with 2 tabs (getting-started, events-data-reference), passes npx tsc --noEmit. Missing table cells left as plain text rather than invented.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "time": "17:41",
+      "projects": [
+        "kavlabs-revamp"
+      ],
+      "attempt": "Shipped: content.ts rewritten with structured blocks and full article bodies; tsc --noEmit passes clean.",
+      "tags": [
+        "code",
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "time": "16:18",
+      "projects": [
+        "AI26"
+      ],
+      "attempt": "Rebuilt site/index.html (246 KB \u2014 75 days, 2145 prompts, 48 notes) and opened it in the default browser. Shipped.",
+      "tags": [
+        "ops"
+      ]
+    },
+    {
+      "date": "2026-08-27",
+      "time": "12:56",
+      "projects": [
+        "nebius-fde-prep"
+      ],
+      "attempt": "Shipped gym module /movva (commit 5f23bd1, pushed main). Production https://nebius-fde-prep.vercel.app/movva returns 200 with Room rule + interview Qs. Wired flashcards (topic Movva), 5 quiz items, last-day block + 4 or\u2026",
+      "tags": [
+        "learning",
+        "code"
+      ]
+    },
+    {
+      "date": "2026-08-26",
+      "time": "20:43",
+      "projects": [
+        "nebius-fde-prep"
+      ],
+      "attempt": "Stopped persisting progress to localStorage; a refresh now starts with empty quiz/attempts/grades. In-tab navigation still keeps the current run until reload. Pushed to main for Vercel.",
+      "tags": [
+        "code"
+      ]
+    },
+    {
+      "date": "2026-08-26",
+      "time": "15:02",
+      "projects": [
+        "AI26"
+      ],
+      "attempt": "Shipped the vault at [path] (markdown journal + jsonl events + learnings.md + curiosity.md + summaries/). Installed global Grok rule ~/.grok/rules/ai26-journal.md (symlink to AGENT.md) and hooks ~/.grok/hooks/ai26-journ\u2026",
+      "tags": [
+        "ops",
+        "learning"
+      ]
+    }
+  ]
+}
