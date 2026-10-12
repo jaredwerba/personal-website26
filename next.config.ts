@@ -17,6 +17,18 @@ const nextConfig: NextConfig = {
           destination: "https://careerops-jobboard-public.vercel.app/jobs/",
         },
         {
+          source: "/xword",
+          destination: "https://xword-lime.vercel.app",
+        },
+        {
+          source: "/xword/",
+          destination: "https://xword-lime.vercel.app/",
+        },
+        {
+          source: "/xword/:path*",
+          destination: "https://xword-lime.vercel.app/:path*",
+        },
+        {
           source: "/deepgram",
           destination: "https://deepgram-voice-agent-cyan.vercel.app/deepgram",
         },
