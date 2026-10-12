@@ -13,8 +13,20 @@ type Attempt = {
   date: string;
   time: string;
   projects: string[];
-  attempt: string;
+  talked: string;
+  learned: string;
+  curious: string;
+  outcome: string;
+  why_ai: string;
+  tags: string[];
 };
+
+const NOTE_FIELDS: { key: keyof Attempt; label: string }[] = [
+  { key: "outcome", label: "OUTCOME" },
+  { key: "learned", label: "LEARNED" },
+  { key: "curious", label: "CURIOUS" },
+  { key: "why_ai", label: "WHY AI" },
+];
 
 const MODELS = ["Grok 4.7", "GLM", "Qwen", "Nemotron Ultra"];
 
@@ -147,6 +159,20 @@ const PARKED: Bot[] = [
     purpose: "Hidden. No description on the roster.",
   },
 ];
+
+function NoteField({ label, text }: { label: string; text: string }) {
+  if (!text) return null;
+  return (
+    <div className="grid grid-cols-[5.5rem_1fr] gap-3">
+      <div className="font-nerv-mono text-[10px] tracking-wider text-nerv-cyan/70 pt-1">
+        {label}
+      </div>
+      <p className="font-nerv-body text-sm text-nerv-white/90 leading-relaxed whitespace-pre-wrap">
+        {text}
+      </p>
+    </div>
+  );
+}
 
 function byDate(attempts: Attempt[]) {
   const groups: { date: string; rows: Attempt[] }[] = [];
@@ -299,26 +325,43 @@ export default function AiPage() {
           ATTEMPTS
         </h3>
         {groups.map((group) => (
-          <div key={group.date} className="space-y-3">
+          <div key={group.date} className="space-y-4">
             <h4 className="font-nerv-mono text-[11px] tracking-wider text-nerv-cyan">
               {group.date}
+              <span className="text-nerv-mid-gray"> · {group.rows.length} NOTES</span>
             </h4>
-            <ul className="space-y-4">
+            <ul className="space-y-6">
               {group.rows.map((row, i) => (
-                <li key={`${row.date}-${row.time}-${i}`} className="space-y-1">
+                <li key={`${row.date}-${row.time}-${i}`} className="space-y-3 border-t border-nerv-mid-gray/20 pt-3">
                   <div className="flex flex-wrap items-center gap-2">
                     {row.time && (
-                      <span className="font-nerv-mono text-[10px] text-nerv-mid-gray">
+                      <span className="font-nerv-mono text-[10px] text-nerv-orange tracking-wider">
                         {row.time}
                       </span>
                     )}
                     {row.projects.map((project) => (
                       <Badge key={project} label={project} variant="default" size="sm" />
                     ))}
+                    {row.tags.map((tag) => (
+                      <span key={tag} className="font-nerv-mono text-[10px] text-nerv-mid-gray tracking-wider">
+                        {tag.toUpperCase()}
+                      </span>
+                    ))}
                   </div>
-                  <p className="font-nerv-body text-sm text-nerv-white/90 leading-relaxed">
-                    {row.attempt}
-                  </p>
+                  {row.talked && (
+                    <p className="font-nerv-body text-sm md:text-base text-nerv-white/90 leading-relaxed whitespace-pre-wrap">
+                      {row.talked}
+                    </p>
+                  )}
+                  <div className="space-y-2">
+                    {NOTE_FIELDS.map((field) => (
+                      <NoteField
+                        key={field.key}
+                        label={field.label}
+                        text={String(row[field.key] ?? "")}
+                      />
+                    ))}
+                  </div>
                 </li>
               ))}
             </ul>

@@ -66,15 +66,6 @@ function IconTrending() {
   );
 }
 
-function IconAi() {
-  return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-      <circle cx="12" cy="12" r="3" />
-      <path d="M12 3v3M12 18v3M3 12h3M18 12h3" />
-    </svg>
-  );
-}
-
 function IconX() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -97,7 +88,6 @@ const NAV_ITEMS: NavItem[] = [
   { id: "photos", label: "PHOTOS", href: "/photos", icon: <IconCamera /> },
   { id: "health", label: "HEALTH", href: "/health", icon: <IconHeart /> },
   { id: "software", label: "SOFTWARE", href: "/software", icon: <IconCode /> },
-  { id: "ai", label: "AI", href: "/ai", icon: <IconAi /> },
   { id: "sales", label: "SALES", href: "/sales", icon: <IconTrending /> },
   { id: "x", label: "X", href: "https://x.com/jaredwerba", icon: <IconX />, external: true },
   { id: "linkedin", label: "LINKEDIN", href: "https://www.linkedin.com/in/jwerba", icon: <IconLinkedin />, external: true },
@@ -165,7 +155,7 @@ export default function Sidebar({ children }: { children: React.ReactNode }) {
 
       {/* Bottom nav bar */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 bg-nerv-black border-t border-nerv-mid-gray/20 safe-bottom">
-        <div className="flex items-center justify-around px-2 py-1 overflow-x-auto">
+        <div className="flex items-center justify-around px-2 py-1">
           {NAV_ITEMS.map((item) => (
             <NavIcon key={item.id} item={item} active={activeId === item.id} />
           ))}

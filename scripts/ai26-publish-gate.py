@@ -157,14 +157,21 @@ def classify(note: dict) -> tuple[bool, str]:
     return True, "building-attempt"
 
 
+def clean_field(text: str, limit: int = 4000) -> str:
+    """Public note text. Keeps paragraph breaks. Does not invent a summary."""
+    raw = text or ""
+    raw = EMAIL.sub("[redacted]", raw)
+    raw = re.sub(r"/Users/jkw/\S+", "[path]", raw)
+    raw = re.sub(r"https?://\S+", lambda m: m.group(0).split("?")[0], raw)
+    lines = [re.sub(r"[ \t]+", " ", line).strip() for line in raw.splitlines()]
+    cleaned = re.sub(r"\n{3,}", "\n\n", "\n".join(lines)).strip()
+    if len(cleaned) > limit:
+        cleaned = cleaned[: limit - 1].rstrip() + "…"
+    return cleaned
+
+
 def public_line(outcome: str) -> str:
-    line = re.sub(r"\s+", " ", outcome).strip()
-    line = EMAIL.sub("[redacted]", line)
-    line = re.sub(r"/Users/jkw/\S+", "[path]", line)
-    line = re.sub(r"https?://\S+", lambda m: m.group(0).split("?")[0], line)
-    if len(line) > 220:
-        line = line[:219].rstrip() + "…"
-    return line
+    return clean_field(outcome, limit=220)
 
 
 def projects_of(note: dict) -> list[str]:
@@ -228,7 +235,11 @@ def bake(notes: list[dict]) -> dict:
                 "date": note.get("local_date") or "",
                 "time": local_time(note.get("ts") or ""),
                 "projects": projects_of(note),
-                "attempt": public_line(note.get("outcome") or ""),
+                "talked": clean_field(note.get("talked") or ""),
+                "learned": clean_field(note.get("learned") or ""),
+                "curious": clean_field(note.get("curious") or ""),
+                "outcome": clean_field(note.get("outcome") or ""),
+                "why_ai": clean_field(note.get("why_ai") or ""),
                 "tags": [t for t in (note.get("tags") or []) if t in ("code", "ops", "learning")],
             }
         )
