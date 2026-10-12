@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { shuffled } from "@/lib/shuffle";
 
 interface HighlightBook {
   title: string;
@@ -42,6 +43,33 @@ function featurableIndices(items: HighlightItem[]): number[] {
     .map((item, i) => (item.text.length >= MIN_FEATURE_LENGTH ? i : -1))
     .filter((i) => i >= 0);
   return long.length > 0 ? long : items.map((_, i) => i);
+}
+
+/**
+ * Deal a section round-robin across books. A Fisher-Yates pass still clumps
+ * when one title owns most of the theme; this keeps the first screen mixed.
+ * Book order and the quotes inside each book are shuffled, so reopening is new.
+ */
+function mixedByBook(items: HighlightItem[]): HighlightItem[] {
+  const groups = new Map<number, HighlightItem[]>();
+  for (const item of items) {
+    const deck = groups.get(item.b);
+    if (deck) deck.push(item);
+    else groups.set(item.b, [item]);
+  }
+  const decks = shuffled([...groups.values()]).map((deck) => shuffled(deck));
+  const out: HighlightItem[] = [];
+  let progressed = true;
+  while (progressed) {
+    progressed = false;
+    for (const deck of decks) {
+      const next = deck.pop();
+      if (!next) continue;
+      out.push(next);
+      progressed = true;
+    }
+  }
+  return out;
 }
 
 function pickFrom(indices: number[], avoid: number | null): number | null {
@@ -124,6 +152,10 @@ export default function Highlights() {
   const [featured, setFeatured] = useState<number | null>(null);
   /** null = the theme grid; otherwise the open theme's id. */
   const [openTheme, setOpenTheme] = useState<string | null>(null);
+  /** Theme quotes, mixed across books. Set on open so tab flips keep the order. */
+  const [themeItems, setThemeItems] = useState<HighlightItem[]>([]);
+  /** Bumped on each mix so the quote scroller remounts at the top. */
+  const [mixKey, setMixKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -167,14 +199,30 @@ export default function Highlights() {
     );
   }, [data, query]);
 
-  /** Highlights of the open theme, primary matches first, then cross-listed. */
-  const themeItems = useMemo(() => {
-    if (!data || !openTheme) return [];
-    return [
-      ...data.items.filter((i) => i.t === openTheme),
-      ...data.items.filter((i) => i.t !== openTheme && i.also.includes(openTheme)),
-    ];
-  }, [data, openTheme]);
+  const quotesForTheme = useCallback(
+    (id: string): HighlightItem[] => {
+      if (!data) return [];
+      return [
+        ...data.items.filter((item) => item.t === id),
+        ...data.items.filter((item) => item.t !== id && item.also.includes(id)),
+      ];
+    },
+    [data],
+  );
+
+  const openSection = useCallback(
+    (id: string) => {
+      setThemeItems(mixedByBook(quotesForTheme(id)));
+      setMixKey((n) => n + 1);
+      setOpenTheme(id);
+    },
+    [quotesForTheme],
+  );
+
+  const reshuffleTheme = useCallback(() => {
+    setThemeItems((current) => mixedByBook(current));
+    setMixKey((n) => n + 1);
+  }, []);
 
   if (error) {
     return (
@@ -272,6 +320,13 @@ export default function Highlights() {
             <span className="min-w-0 flex-1 truncate font-nerv-display text-[11px] tracking-[0.18em] text-nerv-orange">
               {theme.label.toUpperCase()}
             </span>
+            <button
+              type="button"
+              onClick={reshuffleTheme}
+              className="shrink-0 font-nerv-mono text-[10px] tracking-[0.15em] text-nerv-cyan transition-colors hover:text-nerv-orange"
+            >
+              [ SHUFFLE ]
+            </button>
             <span className="shrink-0 font-nerv-mono text-[9px] text-nerv-mid-gray">
               {themeItems.length}
             </span>
@@ -298,10 +353,15 @@ export default function Highlights() {
             )}
           </ScrollBox>
         ) : theme ? (
-          <ScrollBox>
+          <ScrollBox key={mixKey}>
             <ul>
               {themeItems.map((item, i) => (
-                <Quote key={i} item={item} book={data.books[item.b]} query="" />
+                <Quote
+                  key={`${item.b}-${item.loc}-${i}`}
+                  item={item}
+                  book={data.books[item.b]}
+                  query=""
+                />
               ))}
             </ul>
           </ScrollBox>
@@ -313,7 +373,7 @@ export default function Highlights() {
                 <button
                   key={t.id}
                   type="button"
-                  onClick={() => setOpenTheme(t.id)}
+                  onClick={() => openSection(t.id)}
                   className="group bg-nerv-black px-3 py-3 text-left transition-colors hover:bg-nerv-cyan/5"
                 >
                   <span className="flex items-baseline justify-between gap-2">
