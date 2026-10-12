@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
     return {
       beforeFiles: [
         {
+          source: "/ai",
+          destination: "/ai26.html",
+        },
+        {
+          source: "/ai/",
+          destination: "/ai26.html",
+        },
+        {
           source: "/jobs",
           destination: "https://careerops-jobboard-public.vercel.app/jobs",
         },
