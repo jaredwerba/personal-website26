@@ -49,6 +49,18 @@ const nextConfig: NextConfig = {
           destination:
             "https://deepgram-voice-agent-cyan.vercel.app/deepgram/:path*",
         },
+        {
+          source: "/AWS",
+          destination: "https://aws-ae-prep.vercel.app/AWS",
+        },
+        {
+          source: "/AWS/",
+          destination: "https://aws-ae-prep.vercel.app/AWS/",
+        },
+        {
+          source: "/AWS/:path*",
+          destination: "https://aws-ae-prep.vercel.app/AWS/:path*",
+        },
       ],
       afterFiles: [],
       fallback: [],
